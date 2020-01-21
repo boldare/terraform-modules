@@ -1,0 +1,18 @@
+# IDE
+.idea
+.vscode
+
+# Dependencies
+/bin
+
+# Terraform
+.terraform/
+.terragrunt-cache/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
