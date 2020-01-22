@@ -1,0 +1,64 @@
+{
+  "min_packer_version": "0.12.0",
+  "variables": {
+    "aws_region": "eu-central-1",
+    "vault_version": "1.2.3",
+    "consul_module_version": "v0.7.3",
+    "consul_version": "1.6.1",
+    "consul_download_url": "{{env `CONSUL_DOWNLOAD_URL`}}",
+    "vault_download_url": "{{env `VAULT_DOWNLOAD_URL`}}"
+  },
+  "builders": [
+    {
+      "ami_name": "cert-lambda-requirements-{{uuid}}",
+      "ami_description": "An Amazon Linux 2 AMI with Certbot Python requirements.",
+      "instance_type": "t2.micro",
+      "name": "amazon-linux-2-ami",
+      "region": "{{user `aws_region`}}",
+      "type": "amazon-ebs",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "architecture": "x86_64",
+          "name": "*amzn2-ami-hvm-*",
+          "block-device-mapping.volume-type": "gp2",
+          "root-device-type": "ebs"
+        },
+        "owners": ["amazon"],
+        "most_recent": true
+      },
+      "ssh_username": "ec2-user",
+      "force_deregister": true,
+      "force_delete_snapshot": true
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum install -y gcc zlib zlib-devel openssl openssl-devel python37",
+        "mkdir -p /tmp/cert-lambda"
+      ]
+    }, {
+      "type": "file",
+      "source": "{{template_dir}}/requirements.sh",
+      "destination": "/tmp/cert-lambda/requirements.sh",
+      "pause_before": "10s"
+    }, {
+      "type": "file",
+      "source": "{{template_dir}}/requirements.txt",
+      "destination": "/tmp/cert-lambda/requirements.txt"
+    }, {
+      "type": "shell",
+      "inline": [
+        "cd /tmp/cert-lambda",
+        "./requirements.sh"
+      ]
+    }, {
+      "type": "file",
+      "source": "/tmp/cert-lambda/requirements.zip",
+      "destination": "{{template_dir}}/requirements.zip",
+      "direction": "download"
+    }
+  ]
+}
