@@ -3,6 +3,12 @@ variable "iam_group" {
   description = "AWS IAM group name. Users assigned to group will be able to assume IAM role which is bound to Kubernetes role."
 }
 
+variable "iam_path" {
+  type        = string
+  default     = null
+  description = "AWS IAM base path for all resources created for namespace"
+}
+
 variable "iam_group_policies" {
   type        = map(string)
   default     = {}

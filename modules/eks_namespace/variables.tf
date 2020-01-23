@@ -26,3 +26,9 @@ variable "developers_iam_policies" {
   default     = {}
   description = "{ name: arn } map of policies to attach to developers group."
 }
+
+variable "iam_path" {
+  type        = string
+  default     = null
+  description = "AWS IAM base path for all resources created for namespace"
+}
