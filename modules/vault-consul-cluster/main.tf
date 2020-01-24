@@ -125,7 +125,7 @@ data "template_file" "user_data_vault_cluster" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "kms_s3_key" {
-  source = "../kms_key"
+  source = "../aws-kms-key"
 
   alias_name  = local.vault_s3_backend_name
   description = "Vault Encryption Key"

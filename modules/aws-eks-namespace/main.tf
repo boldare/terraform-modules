@@ -33,7 +33,7 @@ locals {
 }
 
 module "administrators" {
-  source = "../eks_iam_role_group"
+  source = "../aws-eks-iam-role-group"
 
   iam_role           = "${local.namespace_name}-admin"
   iam_path           = local.iam_path
@@ -85,7 +85,7 @@ locals {
 }
 
 module "developers" {
-  source = "../eks_iam_role_group"
+  source = "../aws-eks-iam-role-group"
 
   iam_role           = "${local.namespace_name}-developer"
   iam_path           = local.iam_path
