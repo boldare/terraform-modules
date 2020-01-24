@@ -10,7 +10,7 @@ module "developers" {
 
   name                 = "Developers"
   attached_policy_arns = [
-    module.authorization_policy.mfa_policy_arn,
+    module.authorization_policy.policy_arn,
     "arn:aws:iam::aws:policy/ReadOnlyAccess"
   ]
   users                = [

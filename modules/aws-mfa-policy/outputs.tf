@@ -1,3 +1,3 @@
-output "authorization_policy_arn" {
+output "policy_arn" {
   value = aws_iam_policy.authorization.arn
 }
