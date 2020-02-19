@@ -1,4 +1,4 @@
-# Cert Lambda
+# AWS Cert Lambda
 
 Complete infrastructure to provide certificates for a domain in a Route53 zone. Certificates are stored on S3 bucket (encrypted by KMS key).
 
@@ -7,7 +7,7 @@ Complete infrastructure to provide certificates for a domain in a Route53 zone. 
 ```hcl-terraform
 
 module "certbot_lambda" {
-  source = "../../modules/cert_lambda"
+  source = "github.com/boldare/terraform-modules//modules/aws-cert-lambda?ref=v0.1.0"
 
   name_prefix = "service"
 

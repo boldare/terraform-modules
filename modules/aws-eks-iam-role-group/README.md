@@ -1,4 +1,4 @@
-# eks_iam_role_group
+# AWS EKS IAM Role Group
 
 Defines AWS IAM group connected to Kubernetes Role.
 

@@ -4,10 +4,11 @@ data "aws_caller_identity" "current" {}
 # IAM ROLES AND PERMISSIONS
 # ----------------------------------------------------------------------------------------------------------------------
 module "group" {
-  source = "../aws_iam_user_group"
+  source = "../aws-iam-user-group"
 
   name  = var.iam_group
   users = var.iam_group_users
+  path  = var.iam_path
 
   attached_policy_arns = var.iam_group_policies
 }
@@ -25,6 +26,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
 
 resource "aws_iam_role" "iam_role" {
   name               = var.iam_role
+  path               = var.iam_path
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 

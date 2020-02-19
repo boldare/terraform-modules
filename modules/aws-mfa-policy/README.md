@@ -10,11 +10,9 @@ It also creates IAM policy which blocks all actions if user is not authorized us
 
 ```hcl-terraform
 module "authorization_policy" {
-  source = "../../modules/aws_authorization"
+  source = "github.com/boldare/terraform-modules//modules/aws-mfa-policy?ref=v0.1.0"
 
-  max_password_age = 120
-  minimum_password_length = 24
-  use_various_characters = false
+  name                             = "Authorization"
+  authorization_policy_path_prefix = "people/"
 }
-
 ```

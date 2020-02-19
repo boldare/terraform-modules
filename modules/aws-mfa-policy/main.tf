@@ -1,18 +1,4 @@
 # ----------------------------------------------------------------------------------------------------------------------
-# Minimal recommended password policy
-# ----------------------------------------------------------------------------------------------------------------------
-resource "aws_iam_account_password_policy" "long-passwords" {
-  minimum_password_length        = var.minimum_password_length
-  require_lowercase_characters   = var.use_various_characters
-  require_numbers                = var.use_various_characters
-  require_uppercase_characters   = var.use_various_characters
-  require_symbols                = var.use_various_characters
-  allow_users_to_change_password = true
-  max_password_age               = var.max_password_age
-  password_reuse_prevention      = 3
-}
-
-# ----------------------------------------------------------------------------------------------------------------------
 # FORCE MFA
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -29,7 +15,7 @@ data "aws_iam_policy_document" "authorization" {
       "iam:*SigningCertificate*"
     ]
     resources = [
-      "arn:aws:iam::*:user/$${aws:username}",
+      "arn:aws:iam::*:user/${var.authorization_policy_path_prefix}$${aws:username}",
     ]
   }
 
@@ -51,7 +37,7 @@ data "aws_iam_policy_document" "authorization" {
     ]
     resources = [
       "arn:aws:iam::*:mfa/*",
-      "arn:aws:iam::*:user/$${aws:username}"
+      "arn:aws:iam::*:user/${var.authorization_policy_path_prefix}$${aws:username}"
     ]
   }
 
@@ -65,8 +51,8 @@ data "aws_iam_policy_document" "authorization" {
       "iam:ResyncMFADevice"
     ]
     resources = [
-      "arn:aws:iam::*:mfa/$${aws:username}",
-      "arn:aws:iam::*:user/$${aws:username}"
+      "arn:aws:iam::*:mfa/${var.authorization_policy_path_prefix}$${aws:username}",
+      "arn:aws:iam::*:user/${var.authorization_policy_path_prefix}$${aws:username}"
     ]
   }
 
@@ -77,8 +63,8 @@ data "aws_iam_policy_document" "authorization" {
       "iam:DeactivateMFADevice"
     ]
     resources = [
-      "arn:aws:iam::*:mfa/$${aws:username}",
-      "arn:aws:iam::*:user/$${aws:username}"
+      "arn:aws:iam::*:mfa/${var.authorization_policy_path_prefix}$${aws:username}",
+      "arn:aws:iam::*:user/${var.authorization_policy_path_prefix}$${aws:username}"
     ]
     condition {
       test     = "Bool"
@@ -109,7 +95,7 @@ data "aws_iam_policy_document" "authorization" {
 }
 
 resource "aws_iam_policy" "authorization" {
-  name        = "AuthorizationPolicy"
-  description = "Authorization policy applicable for all human users."
+  name        = var.name
+  description = "MFA authorization policy applicable for all human users."
   policy      = data.aws_iam_policy_document.authorization.json
 }

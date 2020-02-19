@@ -5,6 +5,7 @@ resource "kubernetes_namespace" "namespace" {
 }
 locals {
   namespace_name = kubernetes_namespace.namespace.metadata[0].name
+  iam_path       = var.iam_path != null ? var.iam_path : "/${local.namespace_name}/"
 }
 
 
@@ -32,9 +33,10 @@ locals {
 }
 
 module "administrators" {
-  source = "../eks_iam_role_group"
+  source = "../aws-eks-iam-role-group"
 
   iam_role           = "${local.namespace_name}-admin"
+  iam_path           = local.iam_path
   iam_group          = "${local.namespace_name}-administrators"
   iam_group_policies = local.administrators_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
@@ -83,9 +85,10 @@ locals {
 }
 
 module "developers" {
-  source = "../eks_iam_role_group"
+  source = "../aws-eks-iam-role-group"
 
   iam_role           = "${local.namespace_name}-developer"
+  iam_path           = local.iam_path
   iam_group          = "${local.namespace_name}-developers"
   iam_group_policies = local.developers_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
@@ -123,4 +126,5 @@ module "developers" {
 
 resource "aws_iam_user" "ci" {
   name = "${local.namespace_name}-ci"
+  path = local.iam_path
 }
