@@ -6,7 +6,7 @@ EOF
   chmod 755 "/home/$SSH_USER/update_ssh_authorized_keys.sh"
   chown "$SSH_USER:$SSH_USER" "/home/$SSH_USER/update_ssh_authorized_keys.sh"
 
-  cat <<"EOF" >"/home/$SSH_USER/.ssh/config"
+  cat <<"EOF" >>"/home/$SSH_USER/.ssh/config"
 Host *
     StrictHostKeyChecking no
 EOF
@@ -17,7 +17,7 @@ EOF
   su "$SSH_USER" -c "/home/$SSH_USER/update_ssh_authorized_keys.sh"
 
   # Add to cron
-  cat <<EOF >/etc/cron.d/vault_schedule
+  cat <<EOF >>/etc/cron.d/update_ssh_keys_schedule
 ${keys_update_frequency} $SSH_USER /home/$SSH_USER/update_ssh_authorized_keys.sh >> /var/log/update_ssh_keys.log 2>&1
 EOF
   touch /var/log/update_ssh_keys.log
