@@ -35,7 +35,7 @@ sudo killall -1 vault
 EOF
 chmod 755 /usr/local/bin/update-vault-certs.sh
 
-cat <<"EOF" >/etc/cron.d/vault_schedule
+cat <<"EOF" >>/etc/cron.d/vault_schedule
 ${cert_refresh_cron} root /usr/local/bin/update-vault-certs.sh >> /var/log/update-vault-certs.log 2>&1
 EOF
 

@@ -1,7 +1,15 @@
+/**
+ * # AWS Cert Lambda
+ * AWS Cert Lambda module creates infrastructure that provides certificates for a domain in a Route53 zone.
+ * Certificates are stored on S3 bucket (encrypted by KMS key) and are verified using DNS method.
+ * It is based on `certbot` and `letsencrypt.org`. CloudWatch events are used to trigger lambda according
+ * to `refresh_frequency_cron` (once every 12 hours by default).
+ */
+
 locals {
   requirements_archive = "${path.module}/src/requirements.zip"
   script_archive       = "${path.module}/files/certbot.gen.zip"
-  function_name = "${var.name_prefix}-certbot-domain-refresh"
+  function_name        = "${var.name_prefix}-certbot-domain-refresh"
 }
 
 data "archive_file" "certbot" {
@@ -40,10 +48,10 @@ resource "aws_lambda_function" "certbot" {
 
   environment {
     variables = {
-      EMAIL      = var.owner_email
-      DOMAINS    = join(",", var.domain_names)
-      S3_BUCKET  = var.s3_bucket_name
-      S3_PREFIX  = var.s3_bucket_prefix
+      EMAIL     = var.owner_email
+      DOMAINS   = join(",", var.domain_names)
+      S3_BUCKET = var.s3_bucket_name
+      S3_PREFIX = var.s3_bucket_prefix
     }
   }
 }
