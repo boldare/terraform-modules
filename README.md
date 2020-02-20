@@ -9,7 +9,7 @@ If this repository contains a module you'd like to use, check out it's `README.m
 
 To include a module directly from this repository, use `github.com/boldare/terraform-modules//modules/<module-name>?ref=<tag-or-branch>` as `source` in Terraform module definition. For example:
 
-```hcl-terraform
+```tf
 module "namespace" {
   source = "github.com/boldare/terraform-modules//modules/aws-eks-namespace?ref=v0.1.0"
 

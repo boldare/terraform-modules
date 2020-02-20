@@ -8,7 +8,7 @@ It also creates IAM policy which blocks all actions if user is not authorized us
 
 ## Usage
 
-```hcl-terraform
+```tf
 module "authorization_policy" {
   source = "github.com/boldare/terraform-modules//modules/aws-mfa-policy?ref=v0.1.0"
 

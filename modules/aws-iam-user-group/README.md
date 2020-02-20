@@ -4,7 +4,7 @@ This module creates IAM user group, attaches users and policies to it.
 
 ## Usage
 
-```hcl-terraform
+```tf
 module "developers" {
   source = "github.com/boldare/terraform-modules//modules/aws-iam-user-group?ref=v0.1.0"
 
