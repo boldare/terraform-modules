@@ -15,11 +15,10 @@ variable "readers" {
   description = "List of identities that can only read inside all environments"
 }
 variable "environments" {
-  type = list(object({
-    name = string
+  type = map(object({
     managers = list(string),
     readers = list(string),
   }))
-  default = []
-  description = "List of environments, each with specific identities that can either modify or only read defined values"
+  default = {}
+  description = "Map of environments, each with specific identities that can either modify or only read defined values"
 }

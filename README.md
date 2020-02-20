@@ -38,17 +38,17 @@ module "namespace" {
 | [`aws-eks-iam-role-group`](./modules/aws-eks-iam-role-group) | Defines IAM-EKS binding, allowing IAM group users to perform specific set of operations on EKS cluster. |
 | [`aws-eks-namespace`](./modules/aws-eks-namespace) | Creates a namespace for Kubernetes project. Defines binding for IAM roles to allow access to EKS. Provides IAM policies that allow access to S3 buckets & ECR repositories prefixed by namespace name. |
 | [`aws-frontend`](./modules/aws-frontend) | Creates S3 bucket + CloudFormation + Route53 + Lambda@Edge setup allowing for nearly single-module SPA frontend app deployment. |
-| [`aws-iam-user-group`](./modules/aws-iam-user-group) |  |
-| [`aws-kms-key`](./modules/aws-kms-key) |  |
-| [`aws-mfa-policy`](./modules/aws-mfa-policy) |  |
-| [`aws-route53-zone-with-cert`](./modules/aws-route53-zone-with-cert) |  |
-| [`aws-s3-authorized-keys`](./modules/aws-s3-authorized-keys) |  |
-| [`aws-s3-bucket-private`](./modules/aws-s3-bucket-private) |  |
-| [`aws-users`](./modules/aws-users) |  |
-| [`vault-consul-cluster`](./modules/vault-consul-cluster) |  |
-| [`vault-gitlab-auth`](./modules/vault-gitlab-auth) |  |
-| [`vault-gitlab-user`](./modules/vault-gitlab-user) |  |
-| [`vault-group`](./modules/vault-group) |  |
+| [`aws-iam-user-group`](./modules/aws-iam-user-group) | Creates IAM user group, attaches users and policies to it. |
+| [`aws-kms-key`](./modules/aws-kms-key) | Creates KMS key with an alias and creates Key policy that allows to configure access using IAM. |
+| [`aws-mfa-policy`](./modules/aws-mfa-policy) | Creates Multi-Factor Authorization policy that can be attached to global user groups. |
+| [`aws-route53-zone-with-cert`](./modules/aws-route53-zone-with-cert) | Creates a hosted zone with ACM wildcard certificate attached. |
+| [`aws-s3-authorized-keys`](./modules/aws-s3-authorized-keys) | Stores SSH keys on S3 bucket providing a script for EC2 instances to pull synchronize those keys with bucket. |
+| [`aws-s3-bucket-private`](./modules/aws-s3-bucket-private) | Creates private S3 bucket, not accessible for other users. |
+| [`aws-users`](./modules/aws-users) | Creates a list of users within a specified IAM path. |
+| [`vault-consul-cluster`](./modules/vault-consul-cluster) | Creates Vault & Consul cluster running on EC2 instances. |
+| [`vault-gitlab-auth`](./modules/vault-gitlab-auth) | Creates GitLab authentication backend in Vault. |
+| [`vault-gitlab-user`](./modules/vault-gitlab-user) | Binds GitLab user with Vault entity. |
+| [`vault-group`](./modules/vault-group) | Creates a "namespace" for storing secrets in KV store in Vault. Supports multiple environments with read-only & read-write permissions. |
 
 
 ## Contributing
