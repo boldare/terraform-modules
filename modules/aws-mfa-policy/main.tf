@@ -1,6 +1,8 @@
-# ----------------------------------------------------------------------------------------------------------------------
-# FORCE MFA
-# ----------------------------------------------------------------------------------------------------------------------
+/**
+ * # AWS Multi-Factor Authentication Policy
+ *
+ * This module creates IAM policy which blocks all actions if user is not authenticated using MFA.
+ */
 
 data "aws_iam_policy_document" "authorization" {
   statement {

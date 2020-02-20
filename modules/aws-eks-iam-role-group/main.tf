@@ -1,3 +1,8 @@
+/**
+ * # AWS EKS IAM Role Group
+ * Defines AWS IAM group connected to Kubernetes Role.
+ */
+
 data "aws_caller_identity" "current" {}
 
 # ----------------------------------------------------------------------------------------------------------------------

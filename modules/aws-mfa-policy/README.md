@@ -1,18 +1,23 @@
-# aws_authorization
+# AWS Multi-Factor Authentication Policy
 
-This module creates IAM password policy for AWS account, which:
- - enforces usage of strong passwords
- - requires password rotation every X days
+This module creates IAM policy which blocks all actions if user is not authenticated using MFA.
 
-It also creates IAM policy which blocks all actions if user is not authorized using MFA.
+## Providers
 
-## Usage
+| Name | Version |
+|------|---------|
+| aws | n/a |
 
-```tf
-module "authorization_policy" {
-  source = "github.com/boldare/terraform-modules//modules/aws-mfa-policy?ref=v0.1.0"
+## Inputs
 
-  name                             = "Authorization"
-  authorization_policy_path_prefix = "people/"
-}
-```
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| authorization\_policy\_path\_prefix | Path that applies to all users in authorization policy. Must end with '/'. It's used to create Resource like 'arn:aws:iam::\*:user/authorization\_policy\_path\_prefix/${aws:username}'. | `string` | `""` | no |
+| name | Policy name | `string` | `"Authorization"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| policy\_arn | n/a |
+

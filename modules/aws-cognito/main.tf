@@ -1,3 +1,11 @@
+/**
+ * # AWS Cognito
+ * This module provides AWS Cognito User Pool in which SMS & e-mail settings are
+ * configured to opinionated reasonable defaults. One can specify message templates
+ * and attributes that can be included in Cognito database.
+ * An IAM policy for managing pool is provided as an output.
+ */
+
 resource "random_uuid" "cognito_external_id" {}
 
 # ----------------------------------------------------------------------------------------------------------------------
