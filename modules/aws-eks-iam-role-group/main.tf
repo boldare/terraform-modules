@@ -44,13 +44,6 @@ data "aws_iam_policy_document" "allow_assume_role_policy" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "role_policies" {
-  for_each = var.iam_group_policies
-
-  policy_arn = each.value
-  role       = aws_iam_role.iam_role.id
-}
-
 resource "aws_iam_group_policy" "assume_role" {
   group  = module.group.iam_group
   name   = "${aws_iam_role.iam_role.name}-assume-policy"
