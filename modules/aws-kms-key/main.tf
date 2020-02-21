@@ -1,3 +1,9 @@
+/**
+ * # AWS KMS Key
+ * This module creates KMS key, adds an alias and creates Key and IAM policies
+ */
+
+
 data "aws_caller_identity" "current" {}
 
 locals {

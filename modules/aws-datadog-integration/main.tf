@@ -1,10 +1,16 @@
+/**
+ * # AWS Datadog Integration
+ * Creates lambda function, role & policies necessary to run full Datadog monitoring for AWS account.
+ */
+
 locals {
-  name          = "datadog-log-forwarder"
-  archive_file  = "${path.module}/lambda.gen.zip"
-  runtime       = "python3.7"
-  layer_runtime = "Python37"
-  layer_version = 9
-  lambda_layer  = "arn:aws:lambda:${var.aws_region}:464622532012:layer:Datadog-${local.layer_runtime}:${local.layer_version}"
+  name               = "datadog-log-forwarder"
+  archive_file       = "${path.module}/lambda.gen.zip"
+  runtime            = "python3.7"
+  layer_runtime      = "Python37"
+  layer_version      = 9
+  datadog_account_id = "464622532012"
+  lambda_layer       = "arn:aws:lambda:${var.aws_region}:${local.datadog_account_id}:layer:Datadog-${local.layer_runtime}:${local.layer_version}"
 }
 
 # ----------------------------------------------------------------------------------------------------------------------

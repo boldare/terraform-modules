@@ -1,9 +1,27 @@
-# aws_datadog_integration
+# AWS Datadog Integration  
+Creates lambda function, role & policies necessary to run full Datadog monitoring for AWS account.
 
-Creates role & policies necessary to run full Datadog monitoring for AWS account.
+## Providers
 
-## Usage
+| Name | Version |
+|------|---------|
+| archive | n/a |
+| aws | n/a |
 
-```tf
+## Inputs
 
-```
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| api\_key | The Datadog API key associated with your Datadog Account. | `string` | n/a | yes |
+| aws\_account\_external\_id | AWS External Account ID sets a limit on who can access monitoring on your account. It's generated during AWS Datadog integration setup. | `string` | n/a | yes |
+| aws\_region | AWS region to place lambda in. Can be obtained from data.aws\_region. | `string` | n/a | yes |
+| site | Set it to datadoghq.eu for Datadog EU site. | `string` | `"datadoghq.com"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| integration\_iam\_role | n/a |
+| lambda\_arn | n/a |
+| lambda\_iam\_role | n/a |
+

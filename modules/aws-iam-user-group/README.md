@@ -1,21 +1,25 @@
-# AWS IAM User Group
-
+AWS IAM User Group  
 This module creates IAM user group, attaches users and policies to it.
 
-## Usage
+## Providers
 
-```tf
-module "developers" {
-  source = "github.com/boldare/terraform-modules//modules/aws-iam-user-group?ref=v0.1.0"
+| Name | Version |
+|------|---------|
+| aws | n/a |
 
-  name                 = "Developers"
-  attached_policy_arns = [
-    module.authorization_policy.policy_arn,
-    "arn:aws:iam::aws:policy/ReadOnlyAccess"
-  ]
-  users                = [
-    "developer-iam-user-1",
-    "developer-iam-user-2"
-  ]
-}
-```
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:-----:|
+| attached\_policy\_arns | n/a | `map(string)` | n/a | yes |
+| name | n/a | `string` | n/a | yes |
+| path | You can optionally give an optional path to the group. You can use a single path, or nest multiple paths as if they were a folder structure. For example, you could use the nested path /division\_abc/subdivision\_xyz/product\_1234/engineering/ to match your company's organizational structure. | `string` | `"/"` | no |
+| users | n/a | `list(string)` | n/a | yes |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| iam\_group | n/a |
+| iam\_group\_arn | n/a |
+
