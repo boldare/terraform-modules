@@ -12,7 +12,7 @@ variable "iam_path" {
 variable "iam_group_policies" {
   type        = map(string)
   default     = {}
-  description = "AWS IAM group policies to be attached in {name: arn} map format."
+  description = "AWS IAM group policies to be attached to group and role in {name: arn} map format."
 }
 
 variable "iam_group_users" {
