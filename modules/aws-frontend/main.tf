@@ -1,3 +1,12 @@
+provider "aws" {
+  alias = "hosted_zone"
+}
+
+provider "aws" {
+  alias  = "edge_lambda"
+  region = "us-east-1"
+}
+
 # ----------------------------------------------------------------------------------------------------------------------
 # S3 BUCKET STORING FRONTEND APP
 # ----------------------------------------------------------------------------------------------------------------------
@@ -58,7 +67,7 @@ resource "aws_route53_record" "certificate_validation" {
   records = [aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_value]
   ttl     = 60
 
-  provider = var.hosted_zone_provider
+  provider = aws.hosted_zone
 }
 
 resource "aws_acm_certificate_validation" "certificate_validation" {
@@ -194,7 +203,7 @@ resource "aws_route53_record" "distribution" {
     zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
   }
 
-  provider = var.hosted_zone_provider
+  provider = aws.hosted_zone
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -235,6 +244,8 @@ resource "aws_lambda_function" "edge_lambda" {
   filename         = data.archive_file.edge_lambda.output_path
   source_code_hash = data.archive_file.edge_lambda.output_base64sha256
   publish          = true
+
+  provider         = aws.edge_lambda
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
