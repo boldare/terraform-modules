@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias  = "edge_lambda"
+  alias  = "global"
   region = "us-east-1"
 }
 
@@ -56,6 +56,8 @@ resource "aws_acm_certificate" "certificate" {
   subject_alternative_names = var.alternative_domain_names
   validation_method         = "DNS"
   tags                      = var.tags
+
+  provider = aws.global
 }
 
 resource "aws_route53_record" "certificate_validation" {
@@ -73,6 +75,8 @@ resource "aws_route53_record" "certificate_validation" {
 resource "aws_acm_certificate_validation" "certificate_validation" {
   certificate_arn         = aws_acm_certificate.certificate.arn
   validation_record_fqdns = aws_route53_record.certificate_validation.*.fqdn
+
+  provider = aws.global
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -245,7 +249,7 @@ resource "aws_lambda_function" "edge_lambda" {
   source_code_hash = data.archive_file.edge_lambda.output_base64sha256
   publish          = true
 
-  provider         = aws.edge_lambda
+  provider = aws.global
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
