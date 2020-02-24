@@ -19,6 +19,11 @@ variable "hosted_zone_id" {
   description = "Route53 Zone ID to put DNS record for frontend app."
 }
 
+variable "hosted_zone_provider" {
+  default     = null
+  description = "AWS Terraform Provider for accessing Hosted Zone resources. Allows to manage domains on another account"
+}
+
 variable "comment" {
   type        = string
   default     = "Frontend application environment"
@@ -44,9 +49,9 @@ variable "wait_for_deployment" {
 }
 
 variable "content_security_policy" {
-  type    = map(string)
+  type        = map(string)
   description = "Content Security Policy header parameters."
-  default = {
+  default     = {
     "default-src" = "'self' blob:"
     "font-src"    = "'self'"
     "img-src"     = "'self'"

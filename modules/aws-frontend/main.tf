@@ -57,6 +57,8 @@ resource "aws_route53_record" "certificate_validation" {
   zone_id = var.hosted_zone_id
   records = [aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_value]
   ttl     = 60
+
+  provider = var.hosted_zone_provider
 }
 
 resource "aws_acm_certificate_validation" "certificate_validation" {
@@ -191,6 +193,8 @@ resource "aws_route53_record" "distribution" {
     name                   = aws_cloudfront_distribution.distribution.domain_name
     zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
   }
+
+  provider = var.hosted_zone_provider
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
