@@ -16,9 +16,9 @@ variable "iam_group_policies" {
 }
 
 variable "iam_group_users" {
-  type        = list(string)
-  default     = []
-  description = "Users to be added to IAM group"
+  type        = map(string)
+  default     = {}
+  description = "Users to be added to IAM group in { [internal id]: \"iam id\" } format"
 }
 
 variable "iam_role" {

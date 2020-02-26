@@ -29,7 +29,7 @@ resource "aws_iam_group_policy_attachment" "this" {
 # Assign selected users to the group
 # ----------------------------------------------------------------------------------------------------------------------
 resource "aws_iam_user_group_membership" "this" {
-  for_each = toset(var.users)
+  for_each = var.users
 
   groups = [aws_iam_group.this.id]
   user   = each.value

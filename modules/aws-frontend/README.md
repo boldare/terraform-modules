@@ -4,6 +4,8 @@
 |------|---------|
 | archive | n/a |
 | aws | n/a |
+| aws.global | n/a |
+| aws.hosted\_zone | n/a |
 | random | n/a |
 | template | n/a |
 

@@ -30,6 +30,7 @@ locals {
   concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
   concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
   )
+  administrators_group_users = concat([aws_iam_user.ci.name], var.administrators)
 }
 
 module "administrators" {
@@ -40,7 +41,7 @@ module "administrators" {
   iam_group          = "${local.namespace_name}-administrators"
   iam_group_policies = local.administrators_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users    = concat([aws_iam_user.ci.name], var.administrators)
+  iam_group_users    = zipmap(local.administrators_group_users, local.administrators_group_users)
 
   kubernetes_role       = "${local.namespace_name}-admin"
   kubernetes_namespace  = local.namespace_name
@@ -92,7 +93,7 @@ module "developers" {
   iam_group          = "${local.namespace_name}-developers"
   iam_group_policies = local.developers_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users    = var.developers
+  iam_group_users    = zipmap(var.developers, var.developers)
 
   kubernetes_role       = "${local.namespace_name}-developer"
   kubernetes_namespace  = local.namespace_name

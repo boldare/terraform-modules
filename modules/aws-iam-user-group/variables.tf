@@ -3,7 +3,8 @@ variable "name" {
 }
 
 variable "users" {
-  type = list(string)
+  type = map(string)
+  description = "Map of users with their respective internal keys. Can be { userid = \"userid\" }"
 }
 
 variable "attached_policy_arns" {
