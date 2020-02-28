@@ -6,12 +6,20 @@ output "administrators_group" {
   value = module.administrators.iam_group
 }
 
+output "administrator_role" {
+  value = module.administrators.iam_role
+}
+
 output "administrators_aws_auth_entry" {
   value = module.administrators.aws_auth_entry
 }
 
 output "developers_group" {
   value = module.administrators.iam_group
+}
+
+output "developer_role" {
+  value = module.developers.iam_role
 }
 
 output "developers_aws_auth_entry" {
