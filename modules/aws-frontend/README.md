@@ -1,3 +1,17 @@
+# AWS Frontend
+
+This module creates complete environment for frontend applications:
+- S3 bucket to store SPA files
+- CloudFront distribution to ensure fast access and caching
+- Lambda@Edge to ensure proper CORS headers
+- ACM certificate for HTTPS (created via `aws.global` provider)
+- Route53 entries to set user-friendly domain (created via `aws.hosted_zone` provider)
+
+You may want to set custom providers to deploy some parts of frontend:
+- S3 bucket & IAM policies is deployed using the default `aws` provider
+- Lambda@Edge & ACM certificate have to be created on `us-east-1` region (via `aws.global` provider),
+- Route53 entries can be on a different AWS account (via `aws.hosted_zone` provider)
+
 ## Providers
 
 | Name | Version |
@@ -27,8 +41,8 @@
 
 | Name | Description |
 |------|-------------|
-| cf\_distribution\_id | n/a |
-| deployer\_policy\_arn | n/a |
-| s3\_bucket | n/a |
-| s3\_bucket\_arn | n/a |
+| cf\_distribution\_id | CloudFront Distribution ID |
+| deployer\_policy\_arn | Policy that allows for performing S3 bucket actions & CloudFront invalidation. |
+| s3\_bucket | S3 Bucket Name |
+| s3\_bucket\_arn | S3 Bucket ARN |
 

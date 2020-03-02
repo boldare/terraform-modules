@@ -1,11 +1,27 @@
+/**
+ * # AWS Frontend
+ *
+ * This module creates complete environment for frontend applications:
+ * - S3 bucket to store SPA files
+ * - CloudFront distribution to ensure fast access and caching
+ * - Lambda@Edge to ensure proper CORS headers
+ * - ACM certificate for HTTPS (created via `aws.global` provider)
+ * - Route53 entries to set user-friendly domain (created via `aws.hosted_zone` provider)
+ *
+ * You may want to set custom providers to deploy some parts of frontend:
+ * - S3 bucket & IAM policies is deployed using the default `aws` provider
+ * - Lambda@Edge & ACM certificate have to be created on `us-east-1` region (via `aws.global` provider),
+ * - Route53 entries can be on a different AWS account (via `aws.hosted_zone` provider)
+ */
+
+provider "aws" {
+  alias  = "global"
+}
+
 provider "aws" {
   alias = "hosted_zone"
 }
 
-provider "aws" {
-  alias  = "global"
-  region = "us-east-1"
-}
 
 # ----------------------------------------------------------------------------------------------------------------------
 # S3 BUCKET STORING FRONTEND APP
@@ -60,6 +76,13 @@ resource "aws_acm_certificate" "certificate" {
   provider = aws.global
 }
 
+resource "aws_acm_certificate_validation" "certificate_validation" {
+  certificate_arn         = aws_acm_certificate.certificate.arn
+  validation_record_fqdns = aws_route53_record.certificate_validation.*.fqdn
+
+  provider = aws.global
+}
+
 resource "aws_route53_record" "certificate_validation" {
   count = length(var.alternative_domain_names)+1
 
@@ -70,13 +93,6 @@ resource "aws_route53_record" "certificate_validation" {
   ttl     = 60
 
   provider = aws.hosted_zone
-}
-
-resource "aws_acm_certificate_validation" "certificate_validation" {
-  certificate_arn         = aws_acm_certificate.certificate.arn
-  validation_record_fqdns = aws_route53_record.certificate_validation.*.fqdn
-
-  provider = aws.global
 }
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -20,10 +20,12 @@
 
 | Name | Description |
 |------|-------------|
+| administrator\_role | n/a |
 | administrators\_aws\_auth\_entry | n/a |
 | administrators\_group | n/a |
 | ci\_user | n/a |
 | ci\_user\_arn | n/a |
+| developer\_role | n/a |
 | developers\_aws\_auth\_entry | n/a |
 | developers\_group | n/a |
 | namespace | n/a |
