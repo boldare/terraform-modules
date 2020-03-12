@@ -36,14 +36,14 @@ variable "worker_groups" {
 
 variable "node_groups" {
   type        = any
-  description = "Managed EKS Node Groups"
-  default     = null
+  description = "Managed EKS Node Groups: Map of map of node groups to create."
+  default     = {}
 }
 
 variable "node_groups_defaults" {
   type        = any
-  description = "Managed EKS Node Groups Defaults"
-  default     = null
+  description = "Managed EKS Node Groups Defaults: Map of values to be applied to all node groups."
+  default     = {}
 }
 
 variable "worker_groups_launch_template" {
