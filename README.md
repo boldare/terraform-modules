@@ -43,7 +43,7 @@ module "namespace" {
 | [`aws-mfa-policy`](./modules/aws-mfa-policy) | Creates Multi-Factor Authorization policy that can be attached to global user groups. |
 | [`aws-route53-zone-with-cert`](./modules/aws-route53-zone-with-cert) | Creates a hosted zone with ACM wildcard certificate attached. |
 | [`aws-s3-authorized-keys`](./modules/aws-s3-authorized-keys) | Stores SSH keys on S3 bucket providing a script for EC2 instances to pull synchronize those keys with bucket. |
-| [`aws-s3-bucket-private`](./modules/aws-s3-bucket-private) | Creates private S3 bucket, not accessible for other users. |
+| [`aws-s3-bucket`](modules/aws-s3-bucket) | Creates S3 bucket. Allows for a couple of simplifications. |
 | [`aws-users`](./modules/aws-users) | Creates a list of users within a specified IAM path. |
 | [`vault-consul-cluster`](./modules/vault-consul-cluster) | Creates Vault & Consul cluster running on EC2 instances. |
 | [`vault-gitlab-auth`](./modules/vault-gitlab-auth) | Creates GitLab authentication backend in Vault. |

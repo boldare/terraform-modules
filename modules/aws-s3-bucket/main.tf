@@ -1,6 +1,13 @@
+/**
+ * # AWS S3 Bucket
+ * Creates a S3 bucket.
+ *
+ */
+
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.bucket_name
-  acl    = "private"
+  bucket        = var.bucket_name
+  acl           = var.acl
+  force_destroy = var.force_destroy
 
   server_side_encryption_configuration {
     rule {
@@ -63,4 +70,11 @@ resource "aws_iam_policy" "bucket_policy" {
   name        = "${var.bucket_name}-read-write"
   description = "Allows basic read and write access to ${var.bucket_name} bucket"
   policy      = data.aws_iam_policy_document.read_write_bucket_access.json
+}
+
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  count = var.bucket_policy != null ? 1 : 0
+
+  bucket = aws_s3_bucket.bucket.id
+  policy = var.bucket_policy
 }

@@ -23,11 +23,15 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~>8.1.0"
 
-  cluster_name                  = var.cluster_name
-  subnets                       = var.subnets
-  vpc_id                        = var.vpc_id
-  cluster_version               = var.cluster_version
-  worker_groups                 = var.worker_groups
+  cluster_name    = var.cluster_name
+  subnets         = var.subnets
+  vpc_id          = var.vpc_id
+  cluster_version = var.cluster_version
+
+  worker_groups        = var.worker_groups
+  node_groups          = var.node_groups
+  node_groups_defaults = var.node_groups_defaults
+
   worker_groups_launch_template = var.worker_groups_launch_template
   map_roles                     = concat(var.map_roles, local.admin_roles)
   map_users                     = local.admin_users

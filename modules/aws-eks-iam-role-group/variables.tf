@@ -43,6 +43,5 @@ variable "kubernetes_role_rules" {
     resources  = list(string)
     verbs      = list(string)
   }))
-  default     = []
   description = "RBAC rules for the role"
 }

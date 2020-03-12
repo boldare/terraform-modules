@@ -14,6 +14,8 @@
 | cluster\_name | n/a | `string` | n/a | yes |
 | cluster\_version | n/a | `string` | n/a | yes |
 | map\_roles | n/a | <pre>list(object({<br>    rolearn  = string<br>    username = string<br>    groups   = list(string)<br>  }))</pre> | n/a | yes |
+| node\_groups | Managed EKS Node Groups | `any` | n/a | yes |
+| node\_groups\_defaults | Managed EKS Node Groups Defaults | `any` | n/a | yes |
 | region | n/a | `string` | n/a | yes |
 | subnets | n/a | `list(string)` | n/a | yes |
 | vpc\_id | n/a | `string` | n/a | yes |

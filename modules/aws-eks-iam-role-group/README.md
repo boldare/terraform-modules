@@ -19,7 +19,7 @@ Defines AWS IAM group connected to Kubernetes Role.
 | iam\_role | AWS IAM role name. It is bound to Kubernetes role. | `string` | n/a | yes |
 | kubernetes\_namespace | If not specified, a ClusterRole will be created. Otherwise a Role will be scoped to a single Kubernetes Namespace. | `string` | n/a | yes |
 | kubernetes\_role | The name of Kubernetes Role to be created | `string` | n/a | yes |
-| kubernetes\_role\_rules | RBAC rules for the role | <pre>list(object({<br>    api_groups = list(string)<br>    resources  = list(string)<br>    verbs      = list(string)<br>  }))</pre> | `[]` | no |
+| kubernetes\_role\_rules | RBAC rules for the role | <pre>list(object({<br>    api_groups = list(string)<br>    resources  = list(string)<br>    verbs      = list(string)<br>  }))</pre> | n/a | yes |
 
 ## Outputs
 

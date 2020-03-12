@@ -34,6 +34,18 @@ variable "worker_groups" {
   default = []
 }
 
+variable "node_groups" {
+  type        = any
+  description = "Managed EKS Node Groups"
+  default     = null
+}
+
+variable "node_groups_defaults" {
+  type        = any
+  description = "Managed EKS Node Groups Defaults"
+  default     = null
+}
+
 variable "worker_groups_launch_template" {
   type    = any
   default = []

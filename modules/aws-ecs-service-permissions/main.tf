@@ -32,6 +32,8 @@ data "aws_iam_policy_document" "execution_role_secrets" {
 }
 
 resource "aws_iam_role_policy" "execution_role_secrets" {
+  count = length(var.secret_arns) > 0 ? 1 : 0
+
   name   = "Secrets"
   role   = aws_iam_role.execution_role.id
   policy = data.aws_iam_policy_document.execution_role_secrets.json
