@@ -15,7 +15,7 @@
  */
 
 provider "aws" {
-  alias  = "global"
+  alias = "global"
 }
 
 provider "aws" {
@@ -114,11 +114,6 @@ resource "aws_cloudfront_origin_access_identity" "s3" {
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
-  depends_on = [
-    aws_lambda_function.edge_lambda,
-    aws_iam_role.edge_lambda
-  ]
-
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
@@ -131,7 +126,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   origin {
     domain_name = aws_s3_bucket.bucket.bucket_domain_name
-    origin_id   = random_pet.s3_origin.id
+    origin_id   = local.s3_origin
 
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.s3.cloudfront_access_identity_path
@@ -259,11 +254,12 @@ resource "aws_lambda_function" "edge_lambda" {
   function_name    = "${var.name}-lambda-edge"
   handler          = "index.handler"
   role             = aws_iam_role.edge_lambda.arn
-  runtime          = "nodejs10.x" # Note: Node.js 12 isn't yet supported on Lambda@Edge
+  runtime          = "nodejs12.x"
   timeout          = 5
   filename         = data.archive_file.edge_lambda.output_path
   source_code_hash = data.archive_file.edge_lambda.output_base64sha256
   publish          = true
+  tags             = var.tags
 
   provider = aws.global
 }
