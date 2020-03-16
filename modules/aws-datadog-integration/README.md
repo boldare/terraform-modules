@@ -1,5 +1,6 @@
 # AWS Datadog Integration  
-Creates lambda function, role & policies necessary to run full Datadog monitoring for AWS account.
+Creates lambda function, role & policies necessary to run full Datadog monitoring for AWS account.  
+Source code for Lambda can be found at [DataDog/datadog-serverless-functions](https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/logs_monitoring) repository.
 
 ## Providers
 

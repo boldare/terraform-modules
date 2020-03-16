@@ -1,6 +1,7 @@
 /**
  * # AWS Datadog Integration
  * Creates lambda function, role & policies necessary to run full Datadog monitoring for AWS account.
+ * Source code for Lambda can be found at [DataDog/datadog-serverless-functions](https://github.com/DataDog/datadog-serverless-functions/tree/master/aws/logs_monitoring) repository.
  */
 
 locals {
@@ -8,7 +9,7 @@ locals {
   archive_file       = "${path.module}/lambda.gen.zip"
   runtime            = "python3.7"
   layer_runtime      = "Python37"
-  layer_version      = 9
+  layer_version      = 11
   datadog_account_id = "464622532012"
   lambda_layer       = "arn:aws:lambda:${var.aws_region}:${local.datadog_account_id}:layer:Datadog-${local.layer_runtime}:${local.layer_version}"
 }
