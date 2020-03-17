@@ -123,6 +123,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   comment             = var.comment
   price_class         = "PriceClass_All"
   wait_for_deployment = var.wait_for_deployment
+  web_acl_id          = var.web_acl_id
 
   origin {
     domain_name = aws_s3_bucket.bucket.bucket_domain_name

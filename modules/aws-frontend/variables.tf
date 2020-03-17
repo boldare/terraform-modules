@@ -56,3 +56,9 @@ variable "content_security_policy" {
     "worker-src"  = "blob:"
   }
 }
+
+variable "web_acl_id" {
+  type        = string
+  default     = null
+  description = "WebACL ID for enabling whitelist access to CloudFront distribution."
+}

@@ -36,6 +36,7 @@ You may want to set custom providers to deploy some parts of frontend:
 | name | Name of S3 bucket to store frontend app in. | `string` | n/a | yes |
 | tags | Tags that will be applied to all underlying resources that support it. | `map(string)` | `{}` | no |
 | wait\_for\_deployment | If enabled, the resource will wait for the CloudFront distribution status to change from InProgress to Deployed. | `bool` | `false` | no |
+| web\_acl\_id | WebACL ID for enabling whitelist access to CloudFront distribution. | `string` | n/a | yes |
 
 ## Outputs
 
