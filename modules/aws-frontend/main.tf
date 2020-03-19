@@ -236,6 +236,7 @@ data "template_file" "edge_lambda" {
   template = file("${path.module}/lambda.js")
   vars     = {
     csp_json_string = jsonencode(var.content_security_policy)
+    header_frame_options = var.header_frame_options
   }
 }
 
