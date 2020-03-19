@@ -62,3 +62,9 @@ variable "web_acl_id" {
   default     = null
   description = "WebACL ID for enabling whitelist access to CloudFront distribution."
 }
+
+variable "header_frame_options" {
+  type        = string
+  default     = "deny"
+  description = "X-Frame-Options header value"
+}

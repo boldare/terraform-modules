@@ -31,7 +31,7 @@ exports.handler = async (event, context) => {
   }
   setHeader(Header.STRICT_TRANSPORT_SECURITY, 'max-age=31536000');
   setHeader(Header.CONTENT_SECURITY_POLICY, cspValue);
-  setHeader(Header.FRAME_OPTIONS, 'deny');
+  setHeader(Header.FRAME_OPTIONS, `${header_frame_options}`);
   setHeader(Header.CONTENT_TYPE_OPTIONS, 'nosniff');
   setHeader(Header.REFERRER_POLICY, 'no-referrer');
 
