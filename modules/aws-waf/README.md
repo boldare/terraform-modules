@@ -13,7 +13,7 @@ It creates a Web Application Firewall rule that can be added to an existing CF d
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
-| allowed\_ips | List of whitelisted CIDR address blocks. | `list(string)` | n/a | yes |
+| allowed\_ips | List of whitelisted CIDR address blocks. | `list(string)` | `[]` | no |
 | name | n/a | `string` | n/a | yes |
 | tags | Tags that will be applied to all underlying resources that support it. | `map(string)` | `{}` | no |
 
