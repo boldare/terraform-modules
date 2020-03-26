@@ -22,12 +22,13 @@ provider "aws" {
   alias = "hosted_zone"
 }
 
-
 # ----------------------------------------------------------------------------------------------------------------------
 # S3 BUCKET STORING FRONTEND APP
 # ----------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket" "bucket" {
+  count = var.enabled ? 1 : 0
+
   bucket = var.name
   acl    = "private"
   versioning {
@@ -38,29 +39,33 @@ resource "aws_s3_bucket" "bucket" {
 }
 
 data "aws_iam_policy_document" "s3_policy" {
+  count = var.enabled ? 1 : 0
+
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.bucket[0].arn}/*"]
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.s3.iam_arn]
+      identifiers = [aws_cloudfront_origin_access_identity.s3[0].iam_arn]
     }
   }
   statement {
     actions   = ["s3:ListBucket"]
-    resources = [aws_s3_bucket.bucket.arn]
+    resources = [aws_s3_bucket.bucket[0].arn]
 
     principals {
       type        = "AWS"
-      identifiers = [aws_cloudfront_origin_access_identity.s3.iam_arn]
+      identifiers = [aws_cloudfront_origin_access_identity.s3[0].iam_arn]
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "bucket" {
-  bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.s3_policy.json
+  count = var.enabled ? 1 : 0
+
+  bucket = aws_s3_bucket.bucket[0].id
+  policy = data.aws_iam_policy_document.s3_policy[0].json
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -68,6 +73,8 @@ resource "aws_s3_bucket_policy" "bucket" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 resource "aws_acm_certificate" "certificate" {
+  count = var.enabled ? 1 : 0
+
   domain_name               = var.domain_name
   subject_alternative_names = var.alternative_domain_names
   validation_method         = "DNS"
@@ -77,19 +84,21 @@ resource "aws_acm_certificate" "certificate" {
 }
 
 resource "aws_acm_certificate_validation" "certificate_validation" {
-  certificate_arn         = aws_acm_certificate.certificate.arn
+  count = var.enabled ? 1 : 0
+
+  certificate_arn         = aws_acm_certificate.certificate[0].arn
   validation_record_fqdns = aws_route53_record.certificate_validation.*.fqdn
 
   provider = aws.global
 }
 
 resource "aws_route53_record" "certificate_validation" {
-  count = length(var.alternative_domain_names)+1
+  count = var.enabled ? length(local.domains) : 0
 
-  name    = aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_name
-  type    = aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_type
+  name    = aws_acm_certificate.certificate[0].domain_validation_options[count.index].resource_record_name
+  type    = aws_acm_certificate.certificate[0].domain_validation_options[count.index].resource_record_type
   zone_id = var.hosted_zone_id
-  records = [aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_value]
+  records = [aws_acm_certificate.certificate[0].domain_validation_options[count.index].resource_record_value]
   ttl     = 60
 
   provider = aws.hosted_zone
@@ -103,17 +112,23 @@ locals {
   allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
   cached_methods         = ["GET", "HEAD"]
   viewer_protocol_policy = "redirect-to-https"
-  s3_origin              = random_pet.s3_origin.id
+  s3_origin              = random_pet.s3_origin[0].id
   domains                = concat([var.domain_name], var.alternative_domain_names)
 }
 
-resource "random_pet" "s3_origin" {}
+resource "random_pet" "s3_origin" {
+  count = var.enabled ? 1 : 0
+}
 
 resource "aws_cloudfront_origin_access_identity" "s3" {
+  count = var.enabled ? 1 : 0
+
   comment = var.comment
 }
 
 resource "aws_cloudfront_distribution" "distribution" {
+  count = var.enabled ? 1 : 0
+
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
@@ -126,11 +141,11 @@ resource "aws_cloudfront_distribution" "distribution" {
   web_acl_id          = var.web_acl_id
 
   origin {
-    domain_name = aws_s3_bucket.bucket.bucket_domain_name
+    domain_name = aws_s3_bucket.bucket[0].bucket_domain_name
     origin_id   = local.s3_origin
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.s3.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.s3[0].cloudfront_access_identity_path
     }
   }
 
@@ -193,7 +208,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate_validation.certificate_validation.certificate_arn
+    acm_certificate_arn      = aws_acm_certificate_validation.certificate_validation[0].certificate_arn
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
   }
@@ -207,7 +222,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 resource "aws_route53_record" "distribution" {
-  count = length(local.domains)
+  count = var.enabled && var.create_distribution_dns_records ? length(local.domains) : 0
 
   name    = local.domains[count.index]
   type    = "A"
@@ -215,8 +230,8 @@ resource "aws_route53_record" "distribution" {
 
   alias {
     evaluate_target_health = true
-    name                   = aws_cloudfront_distribution.distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
+    name                   = aws_cloudfront_distribution.distribution[0].domain_name
+    zone_id                = aws_cloudfront_distribution.distribution[0].hosted_zone_id
   }
 
   provider = aws.hosted_zone
@@ -229,37 +244,45 @@ resource "aws_route53_record" "distribution" {
 
 locals {
   lambda_archive = "${path.module}/lambda.zip"
-  lambda_arn     = aws_lambda_function.edge_lambda.qualified_arn
+  lambda_arn     = aws_lambda_function.edge_lambda[0].qualified_arn
 }
 
 data "template_file" "edge_lambda" {
+  count = var.enabled ? 1 : 0
+
   template = file("${path.module}/lambda.js")
   vars     = {
-    csp_json_string = jsonencode(var.content_security_policy)
+    csp_json_string      = jsonencode(var.content_security_policy)
     header_frame_options = var.header_frame_options
   }
 }
 
 data "archive_file" "edge_lambda" {
+  count = var.enabled ? 1 : 0
+
   type                    = "zip"
-  source_content          = data.template_file.edge_lambda.rendered
+  source_content          = data.template_file.edge_lambda[0].rendered
   source_content_filename = "index.js"
   output_path             = local.lambda_archive
 }
 
 resource "aws_cloudwatch_log_group" "edge_lambda" {
+  count = var.enabled ? 1 : 0
+
   name              = "/aws/lambda/${var.name}-lambda-edge"
   retention_in_days = 14
 }
 
 resource "aws_lambda_function" "edge_lambda" {
+  count = var.enabled ? 1 : 0
+
   function_name    = "${var.name}-lambda-edge"
   handler          = "index.handler"
-  role             = aws_iam_role.edge_lambda.arn
+  role             = aws_iam_role.edge_lambda[0].arn
   runtime          = "nodejs12.x"
   timeout          = 5
-  filename         = data.archive_file.edge_lambda.output_path
-  source_code_hash = data.archive_file.edge_lambda.output_base64sha256
+  filename         = data.archive_file.edge_lambda[0].output_path
+  source_code_hash = data.archive_file.edge_lambda[0].output_base64sha256
   publish          = true
   tags             = var.tags
 
@@ -271,6 +294,8 @@ resource "aws_lambda_function" "edge_lambda" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 data "aws_iam_policy_document" "edge_lambda" {
+  count = var.enabled ? 1 : 0
+
   # CloudWatch Logging
   statement {
     effect    = "Allow"
@@ -283,10 +308,14 @@ data "aws_iam_policy_document" "edge_lambda" {
 }
 
 resource "aws_iam_policy" "edge_lambda" {
-  policy = data.aws_iam_policy_document.edge_lambda.json
+  count = var.enabled ? 1 : 0
+
+  policy = data.aws_iam_policy_document.edge_lambda[0].json
 }
 
 data "aws_iam_policy_document" "edge_lambda_role" {
+  count = var.enabled ? 1 : 0
+
   statement {
     actions = ["sts:AssumeRole"]
     effect  = "Allow"
@@ -298,13 +327,17 @@ data "aws_iam_policy_document" "edge_lambda_role" {
 }
 
 resource "aws_iam_role" "edge_lambda" {
+  count = var.enabled ? 1 : 0
+
   name               = "${var.name}-lambda-edge-role"
-  assume_role_policy = data.aws_iam_policy_document.edge_lambda_role.json
+  assume_role_policy = data.aws_iam_policy_document.edge_lambda_role[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "edge_lambda" {
-  policy_arn = aws_iam_policy.edge_lambda.arn
-  role       = aws_iam_role.edge_lambda.id
+  count = var.enabled ? 1 : 0
+
+  policy_arn = aws_iam_policy.edge_lambda[0].arn
+  role       = aws_iam_role.edge_lambda[0].id
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -312,6 +345,8 @@ resource "aws_iam_role_policy_attachment" "edge_lambda" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 data "aws_iam_policy_document" "deployer" {
+  count = var.enabled ? 1 : 0
+
   statement {
     effect    = "Allow"
     actions   = [
@@ -324,7 +359,7 @@ data "aws_iam_policy_document" "deployer" {
   statement {
     effect    = "Allow"
     actions   = ["s3:ListBucket"]
-    resources = [aws_s3_bucket.bucket.arn]
+    resources = [aws_s3_bucket.bucket[0].arn]
   }
 
   statement {
@@ -336,7 +371,7 @@ data "aws_iam_policy_document" "deployer" {
       "s3:PutObjectAcl",
       "s3:DeleteObject"
     ]
-    resources = ["${aws_s3_bucket.bucket.arn}/*"]
+    resources = ["${aws_s3_bucket.bucket[0].arn}/*"]
   }
 
   statement {
@@ -347,6 +382,8 @@ data "aws_iam_policy_document" "deployer" {
 }
 
 resource "aws_iam_policy" "deployer" {
+  count = var.enabled ? 1 : 0
+
   name   = "${var.name}-deployer"
-  policy = data.aws_iam_policy_document.deployer.json
+  policy = data.aws_iam_policy_document.deployer[0].json
 }

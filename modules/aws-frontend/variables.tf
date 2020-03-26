@@ -3,6 +3,18 @@ variable "name" {
   description = "Name of S3 bucket to store frontend app in."
 }
 
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Set to false if you don't want to create any resources."
+}
+
+variable "create_distribution_dns_records" {
+  type        = bool
+  default     = true
+  description = "Set to false if you don't want to create DNS records for frontend. DNS domain validation will take place regardless of this flag."
+}
+
 variable "domain_name" {
   type        = string
   description = "Domain under which frontend app will become available."
@@ -46,7 +58,7 @@ variable "wait_for_deployment" {
 variable "content_security_policy" {
   type        = map(string)
   description = "Content Security Policy header parameters."
-  default     = {
+  default = {
     "default-src" = "'self' blob:"
     "font-src"    = "'self'"
     "img-src"     = "'self'"

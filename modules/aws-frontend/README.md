@@ -31,7 +31,9 @@ You may want to set custom providers to deploy some parts of frontend:
 | cache\_disabled\_path\_patterns | List of path patterns that won't be cached on CloudFront. | `list(string)` | `[]` | no |
 | comment | Comment that will be applied to all underlying resources that support it. | `string` | `"Frontend application environment"` | no |
 | content\_security\_policy | Content Security Policy header parameters. | `map(string)` | <pre>{<br>  "default-src": "'self' blob:",<br>  "font-src": "'self'",<br>  "img-src": "'self'",<br>  "object-src": "'none'",<br>  "script-src": "'self' 'unsafe-inline' 'unsafe-eval'",<br>  "style-src": "'self' 'unsafe-inline'",<br>  "worker-src": "blob:"<br>}</pre> | no |
+| create\_distribution\_dns\_records | Set to false if you don't want to create DNS records for frontend. DNS domain validation will take place regardless of this flag. | `bool` | `true` | no |
 | domain\_name | Domain under which frontend app will become available. | `string` | n/a | yes |
+| enabled | Set to false if you don't want to create any resources. | `bool` | `true` | no |
 | header\_frame\_options | X-Frame-Options header value | `string` | `"deny"` | no |
 | hosted\_zone\_id | Route53 Zone ID to put DNS record for frontend app. | `string` | n/a | yes |
 | name | Name of S3 bucket to store frontend app in. | `string` | n/a | yes |
