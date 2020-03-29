@@ -109,7 +109,7 @@ locals {
   allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
   cached_methods         = ["GET", "HEAD"]
   viewer_protocol_policy = "redirect-to-https"
-  s3_origin              = random_pet.s3_origin[0].id
+  s3_origin              = var.enabled ? random_pet.s3_origin[0].id : ""
   domains                = concat([var.domain_name], var.alternative_domain_names)
 }
 
@@ -261,7 +261,7 @@ resource "aws_route53_record" "distribution" {
 
 locals {
   lambda_functions_dir = "${path.module}/lambda-functions"
-  headers_lambda_arn   = aws_lambda_function.edge_lambda[0].qualified_arn
+  headers_lambda_arn   = var.enabled ? aws_lambda_function.edge_lambda[0].qualified_arn : ""
 }
 
 data "template_file" "edge_lambda" {

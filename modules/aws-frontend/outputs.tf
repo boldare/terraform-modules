@@ -19,8 +19,10 @@ output "deployer_policy_arn" {
 }
 
 output "edge_function_roles" {
-  value       = {
+  value       = var.enabled ? {
   for key, value in aws_iam_role.edge_lambda_custom: key => value.id
+  } : {
+  for key, value in var.edge_functions: key => null
   }
   description = "Map of IAM role ids for custom Lambda@Edge functions passed to module."
 }
