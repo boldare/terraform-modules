@@ -10,11 +10,11 @@
 # ------------------------------------
 
 resource "aws_waf_ipset" "ipset" {
-  count = length(var.allowed_ips) > 0 ? 1 : 0
+  count = length(var.allowed_cidrs) > 0 ? 1 : 0
   name  = "${var.name}-ipset"
   dynamic "ip_set_descriptors" {
     iterator = ip
-    for_each = var.allowed_ips
+    for_each = var.allowed_cidrs
     content {
       type  = "IPV4"
       value = ip.value
@@ -23,7 +23,7 @@ resource "aws_waf_ipset" "ipset" {
 }
 
 resource "aws_waf_rule" "wafrule" {
-  count       = length(var.allowed_ips) > 0 ? 1 : 0
+  count       = length(var.allowed_cidrs) > 0 ? 1 : 0
   name        = "${var.name}-rule"
   metric_name = replace("${var.name}WafRule", "-", "")
 
@@ -36,7 +36,7 @@ resource "aws_waf_rule" "wafrule" {
 }
 
 resource "aws_waf_web_acl" "waf_acl" {
-  count       = length(var.allowed_ips) > 0 ? 1 : 0
+  count       = length(var.allowed_cidrs) > 0 ? 1 : 0
   name        = "${var.name}-acl"
   metric_name = replace("${var.name}WafAcl", "-", "")
 

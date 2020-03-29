@@ -31,9 +31,6 @@ resource "aws_s3_bucket" "bucket" {
 
   bucket = var.name
   acl    = "private"
-  versioning {
-    enabled = true
-  }
 
   tags = var.tags
 }
@@ -169,7 +166,17 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     lambda_function_association {
       event_type = "viewer-response"
-      lambda_arn = local.lambda_arn
+      lambda_arn = local.headers_lambda_arn
+    }
+
+    dynamic "lambda_function_association" {
+      for_each = local.enabled_edge_functions
+
+      content {
+        event_type   = lambda_function_association.value.event_type
+        lambda_arn   = aws_lambda_function.edge_lambda_custom[lambda_function_association.key].qualified_arn
+        include_body = lambda_function_association.value.include_body
+      }
     }
   }
 
@@ -196,7 +203,17 @@ resource "aws_cloudfront_distribution" "distribution" {
 
       lambda_function_association {
         event_type = "viewer-response"
-        lambda_arn = local.lambda_arn
+        lambda_arn = local.headers_lambda_arn
+      }
+
+      dynamic "lambda_function_association" {
+        for_each = local.enabled_edge_functions
+
+        content {
+          event_type   = lambda_function_association.value.event_type
+          lambda_arn   = aws_lambda_function.edge_lambda_custom[lambda_function_association.key].qualified_arn
+          include_body = lambda_function_association.value.include_body
+        }
       }
     }
   }
@@ -238,22 +255,24 @@ resource "aws_route53_record" "distribution" {
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
-# LAMBDA@EDGE
+# HEADERS LAMBDA@EDGE
 # Ensures correct Content-Security-Policy, Strict-Transport-Security headers and more.
 # ----------------------------------------------------------------------------------------------------------------------
 
 locals {
-  lambda_archive = "${path.module}/lambda.zip"
-  lambda_arn     = aws_lambda_function.edge_lambda[0].qualified_arn
+  lambda_functions_dir = "${path.module}/lambda-functions"
+  headers_lambda_arn   = aws_lambda_function.edge_lambda[0].qualified_arn
 }
 
 data "template_file" "edge_lambda" {
   count = var.enabled ? 1 : 0
 
-  template = file("${path.module}/lambda.js")
+  template = file("${local.lambda_functions_dir}/headers.js")
   vars     = {
-    csp_json_string      = jsonencode(var.content_security_policy)
-    header_frame_options = var.header_frame_options
+    csp_json_string            = jsonencode(var.content_security_policy)
+    custom_headers_json_string = jsonencode({
+    for key, value in var.custom_headers: lower(key) => value
+    })
   }
 }
 
@@ -263,14 +282,14 @@ data "archive_file" "edge_lambda" {
   type                    = "zip"
   source_content          = data.template_file.edge_lambda[0].rendered
   source_content_filename = "index.js"
-  output_path             = local.lambda_archive
+  output_path             = "${local.lambda_functions_dir}/headers_archive.gen.zip"
 }
 
 resource "aws_cloudwatch_log_group" "edge_lambda" {
   count = var.enabled ? 1 : 0
 
   name              = "/aws/lambda/${var.name}-lambda-edge"
-  retention_in_days = 14
+  retention_in_days = var.lambda_log_retention_in_days
 }
 
 resource "aws_lambda_function" "edge_lambda" {
@@ -290,27 +309,52 @@ resource "aws_lambda_function" "edge_lambda" {
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
+# ADDITIONAL LAMBDA@EDGE FUNCTIONS
+# Custom Lambda functions attached to CloudFront.
+# ----------------------------------------------------------------------------------------------------------------------
+locals {
+  enabled_edge_functions = var.enabled ? var.edge_functions : {}
+}
+
+data "archive_file" "edge_lambda_custom" {
+  for_each = local.enabled_edge_functions
+
+  type                    = "zip"
+  source_content          = each.value.lambda_code
+  source_content_filename = "index.js"
+  output_path             = "${local.lambda_functions_dir}/${each.key}_archive.gen.zip"
+}
+
+resource "aws_cloudwatch_log_group" "edge_lambda_custom" {
+  for_each = local.enabled_edge_functions
+
+  name              = "/aws/lambda/${var.name}-lambda-edge-${each.key}"
+  retention_in_days = var.lambda_log_retention_in_days
+}
+
+resource "aws_lambda_function" "edge_lambda_custom" {
+  for_each = local.enabled_edge_functions
+
+  function_name    = "${var.name}-lambda-edge-${each.key}"
+  handler          = "index.handler"
+  role             = aws_iam_role.edge_lambda_custom[each.key].arn
+  runtime          = each.value.lambda_runtime
+  timeout          = 5
+  filename         = data.archive_file.edge_lambda_custom[each.key].output_path
+  source_code_hash = data.archive_file.edge_lambda_custom[each.key].output_base64sha256
+  publish          = true
+  tags             = var.tags
+
+  provider = aws.global
+}
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 # LAMBDA@EDGE IAM PERMISSIONS
 # ----------------------------------------------------------------------------------------------------------------------
 
-data "aws_iam_policy_document" "edge_lambda" {
-  count = var.enabled ? 1 : 0
-
-  # CloudWatch Logging
-  statement {
-    effect    = "Allow"
-    actions   = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents"
-    ]
-    resources = ["arn:aws:logs:*:*:*"]
-  }
-}
-
-resource "aws_iam_policy" "edge_lambda" {
-  count = var.enabled ? 1 : 0
-
-  policy = data.aws_iam_policy_document.edge_lambda[0].json
+locals {
+  lambda_basic_policy = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 data "aws_iam_policy_document" "edge_lambda_role" {
@@ -333,11 +377,25 @@ resource "aws_iam_role" "edge_lambda" {
   assume_role_policy = data.aws_iam_policy_document.edge_lambda_role[0].json
 }
 
+resource "aws_iam_role" "edge_lambda_custom" {
+  for_each = local.enabled_edge_functions
+
+  name               = "${var.name}-${each.key}-lambda-edge-role"
+  assume_role_policy = data.aws_iam_policy_document.edge_lambda_role[0].json
+}
+
 resource "aws_iam_role_policy_attachment" "edge_lambda" {
   count = var.enabled ? 1 : 0
 
-  policy_arn = aws_iam_policy.edge_lambda[0].arn
+  policy_arn = local.lambda_basic_policy
   role       = aws_iam_role.edge_lambda[0].id
+}
+
+resource "aws_iam_role_policy_attachment" "edge_lambda_custom" {
+  for_each = local.enabled_edge_functions
+
+  role       = aws_iam_role.edge_lambda_custom[each.key].id
+  policy_arn = local.lambda_basic_policy
 }
 
 # ----------------------------------------------------------------------------------------------------------------------

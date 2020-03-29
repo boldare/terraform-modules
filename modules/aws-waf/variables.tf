@@ -2,7 +2,7 @@ variable "name" {
   type = string
 }
 
-variable "allowed_ips" {
+variable "allowed_cidrs" {
   type        = list(string)
   default     = []
   description = "List of whitelisted CIDR address blocks."

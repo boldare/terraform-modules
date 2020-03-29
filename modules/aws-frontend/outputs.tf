@@ -17,3 +17,10 @@ output "deployer_policy_arn" {
   value       = var.enabled ? aws_iam_policy.deployer[0].arn : null
   description = "Policy that allows for performing S3 bucket actions & CloudFront invalidation."
 }
+
+output "edge_function_roles" {
+  value       = {
+  for key, value in aws_iam_role.edge_lambda_custom: key => value.id
+  }
+  description = "Map of IAM role ids for custom Lambda@Edge functions passed to module."
+}

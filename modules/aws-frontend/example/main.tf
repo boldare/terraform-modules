@@ -12,6 +12,17 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+module "waf" {
+  source = "../../aws-waf"
+
+  name          = "my-app"
+  allowed_cidrs = [
+    "127.0.0.1/32" # Put your VPN IP here
+  ]
+}
+
+# The example below contains all possible options enabled.
+# Some of these options are set to default values.
 module "frontend" {
   source    = "../"
   providers = {
@@ -20,9 +31,62 @@ module "frontend" {
     aws.hosted_zone = aws.hosted_zone
   }
 
-  name           = "my-app"
-  domain_name    = "my-app.com"
-  hosted_zone_id = "Z24109WKUFE167"
+  enabled                         = true
+  create_distribution_dns_records = true
+
+  name                         = "my-app"
+  domain_name                  = "my-app.com"
+  alternative_domain_names     = [
+    "www.my-app.com",
+    "web.my-app.com"
+  ]
+  hosted_zone_id               = "Z24109WKUFE167"
+  wait_for_deployment          = false
+  cache_disabled_path_patterns = [
+    "index.html",
+    "/service-worker.js"
+  ]
+  web_acl_id                   = module.waf.web_acl_id # Limit access to set of CIDRs
+
+  content_security_policy = {
+    "default-src" = "'self' blob: https://*.my-app.com https://*.hotjar.com https://*.hotjar.io https://*.youtube.com https://*.ytimg.com https://firestore.googleapis.com"
+    "font-src"    = "'self' https://fonts.googleapis.com"
+    "img-src"     = "'self' https://www.google.com https://www.google-analytics.com https://*.ytimg.com"
+    "object-src"  = "'none'"
+    "script-src"  = "'self' 'unsafe-inline' 'unsafe-eval' https://*.my-app.com https://www.google-analytics.com https://*.hotjar.com https://*.hotjar.io https://*.youtube.com https://*.ytimg.com"
+    "style-src"   = "'self' 'unsafe-inline'"
+    "worker-src"  = "blob:"
+  }
+
+  custom_headers = {
+    "X-Frame-Options" = "" # Override default "deny" header
+  }
+
+  lambda_log_retention_in_days = 14
+
+  edge_functions               = {
+    redirections = {
+      event_type     = "origin-request"
+      include_body   = false
+      lambda_code    = file("${path.module}/redirections.js")
+      lambda_runtime = "nodejs12.x"
+    }
+  }
+
+  comment = "MyApp Frontend"
+  tags    = {
+    Name        = "MyApp"
+    Environment = "Production"
+  }
+}
+
+data "aws_iam_policy_document" "redirections_lambda" {
+  # Custom policy for redirections lambda function passed to frontend module
+}
+
+resource "aws_iam_role_policy" "redirections_lambda" {
+  policy = data.aws_iam_policy_document.redirections_lambda.json
+  role   = module.frontend.edge_function_roles["redirections"]
 }
 
 # ------------------------------------

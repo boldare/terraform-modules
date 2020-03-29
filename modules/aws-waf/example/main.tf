@@ -6,7 +6,7 @@ module "waf" {
   source = "../"
 
   name        = "my-rule"
-  allowed_ips = ["127.0.0.1/32", "8.8.8.8/32"]
+  allowed_cidrs = ["127.0.0.1/32", "8.8.8.8/32"]
 }
 
 output "web_acl_id" {

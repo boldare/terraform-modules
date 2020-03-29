@@ -32,10 +32,12 @@ You may want to set custom providers to deploy some parts of frontend:
 | comment | Comment that will be applied to all underlying resources that support it. | `string` | `"Frontend application environment"` | no |
 | content\_security\_policy | Content Security Policy header parameters. | `map(string)` | <pre>{<br>  "default-src": "'self' blob:",<br>  "font-src": "'self'",<br>  "img-src": "'self'",<br>  "object-src": "'none'",<br>  "script-src": "'self' 'unsafe-inline' 'unsafe-eval'",<br>  "style-src": "'self' 'unsafe-inline'",<br>  "worker-src": "blob:"<br>}</pre> | no |
 | create\_distribution\_dns\_records | Set to false if you don't want to create DNS records for frontend. DNS domain validation will take place regardless of this flag. | `bool` | `true` | no |
+| custom\_headers | Custom headers that may override headers returned by default. | `map(string)` | `{}` | no |
 | domain\_name | Domain under which frontend app will become available. | `string` | n/a | yes |
+| edge\_functions | Additional Lambda@Edge functions that tmay be added to CloudFront setup. | <pre>map(object({<br>    event_type     = string<br>    include_body   = bool<br>    lambda_code    = string<br>    lambda_runtime = string<br>  }))</pre> | `{}` | no |
 | enabled | Set to false if you don't want to create any resources. | `bool` | `true` | no |
-| header\_frame\_options | X-Frame-Options header value | `string` | `"deny"` | no |
 | hosted\_zone\_id | Route53 Zone ID to put DNS record for frontend app. | `string` | n/a | yes |
+| lambda\_log\_retention\_in\_days | CloudWatch log rentention time for Lambda@Edge functions. | `number` | `14` | no |
 | name | Name of S3 bucket to store frontend app in. | `string` | n/a | yes |
 | tags | Tags that will be applied to all underlying resources that support it. | `map(string)` | `{}` | no |
 | wait\_for\_deployment | If enabled, the resource will wait for the CloudFront distribution status to change from InProgress to Deployed. | `bool` | `false` | no |
@@ -47,6 +49,7 @@ You may want to set custom providers to deploy some parts of frontend:
 |------|-------------|
 | cf\_distribution\_id | CloudFront Distribution ID |
 | deployer\_policy\_arn | Policy that allows for performing S3 bucket actions & CloudFront invalidation. |
+| edge\_function\_roles | Map of IAM role ids for custom Lambda@Edge functions passed to module. |
 | s3\_bucket | S3 Bucket Name |
 | s3\_bucket\_arn | S3 Bucket ARN |
 

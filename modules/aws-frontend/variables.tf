@@ -58,7 +58,7 @@ variable "wait_for_deployment" {
 variable "content_security_policy" {
   type        = map(string)
   description = "Content Security Policy header parameters."
-  default = {
+  default     = {
     "default-src" = "'self' blob:"
     "font-src"    = "'self'"
     "img-src"     = "'self'"
@@ -75,8 +75,25 @@ variable "web_acl_id" {
   description = "WebACL ID for enabling whitelist access to CloudFront distribution."
 }
 
-variable "header_frame_options" {
-  type        = string
-  default     = "deny"
-  description = "X-Frame-Options header value"
+variable "custom_headers" {
+  type        = map(string)
+  default     = {}
+  description = "Custom headers that may override headers returned by default."
+}
+
+variable "edge_functions" {
+  type        = map(object({
+    event_type     = string
+    include_body   = bool
+    lambda_code    = string
+    lambda_runtime = string
+  }))
+  default     = {}
+  description = "Additional Lambda@Edge functions that tmay be added to CloudFront setup."
+}
+
+variable "lambda_log_retention_in_days" {
+  type        = number
+  default     = 14
+  description = "CloudWatch log rentention time for Lambda@Edge functions."
 }
