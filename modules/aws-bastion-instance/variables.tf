@@ -10,7 +10,7 @@ variable "vpc_id" {
 
 variable "public_subnet_id" {
   type    = map(string)
-  description = "Amazon Tag used to detect public VPC subnets. Used to determine the right subnets to put bastion instance in."
+  description = "Identifier of Public Subnet Id where the bastion instance is placed."
 }
 
 variable "egress_security_groups" {
@@ -74,4 +74,10 @@ variable "additional_user_data" {
   type    = string
   description = "Scripts to be ran when instance boots up."
   default = ""
+}
+
+variable "eip_id" {
+  type = string
+  description = "Elastic IP"
+  default = null
 }

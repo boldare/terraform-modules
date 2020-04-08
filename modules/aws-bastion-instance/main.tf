@@ -73,9 +73,9 @@ resource "aws_iam_instance_profile" "bastion" {
 }
 
 resource "aws_instance" "bastion" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  user_data = data.template_file.user_data.rendered
+  ami                     = var.ami_id
+  instance_type           = var.instance_type
+  user_data               = data.template_file.user_data.rendered
   disable_api_termination = var.disable_api_termination
 
   subnet_id = var.public_subnet_id
@@ -91,11 +91,31 @@ resource "aws_instance" "bastion" {
   iam_instance_profile = aws_iam_instance_profile.bastion.id
   key_name             = var.ssh_key_name
 
+  tags = concat(
+  [
+    {
+      key                 = "Name",
+      value               = var.name,
+      propagate_at_launch = true
+    }
+  ],
+  var.extra_tags
+  )
+
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_eip" "bastion" {
+  count = var.eip_id ? 0 : 1
+
   instance = aws_instance.bastion.id
+}
+
+resource "aws_eip_association" "bastion" {
+  count = var.eip_id ? 1 : 0
+
+  instance_id   = aws_instance.bastion.id
+  allocation_id = var.eip_id
 }

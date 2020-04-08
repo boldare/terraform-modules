@@ -37,21 +37,21 @@ module "bastion" {
   name = "bastion-instance"
 
   # Machine Launch Parameters
-  ami_id               = data.aws_ami.amazon_linux.id
-  instance_type        = "t3.nano"
-  additional_user_data = <<EOF
+  ami_id                  = data.aws_ami.amazon_linux.id
+  instance_type           = "t3.nano"
+  additional_user_data    = <<EOF
 echo "Configuring S3 authorized_keys..."
 ${module.admin_ssh_keys.user_data_chunk}
 
 EOF
-  enable_monitoring    = true
-  public_subnet_id       = var.public_subnet_id
-  vpc_id = var.vpc_id
+  enable_monitoring       = true
+  public_subnet_id        = var.public_subnet_id
+  vpc_id                  = var.vpc_id
   disable_api_termination = true
 
   # Access
-  ssh_key_name           = "example-key"
-  allowed_cidr_blocks    = [
+  ssh_key_name        = "example-key"
+  allowed_cidr_blocks = [
     "18.202.145.21/32", # Boldare VPN IP
   ]
 }
