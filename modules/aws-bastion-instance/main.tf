@@ -102,16 +102,9 @@ resource "aws_instance" "bastion" {
   iam_instance_profile = aws_iam_instance_profile.bastion.id
   key_name             = var.ssh_key_name
 
-  tags = concat(
-  [
-    {
-      key                 = "Name",
-      value               = var.name,
-      propagate_at_launch = true
-    }
-  ],
-  var.extra_tags
-  )
+  tags = merge(var.extra_tags, {
+    Name = var.name
+  })
 
   lifecycle {
     create_before_destroy = true
