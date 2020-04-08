@@ -4,6 +4,10 @@ configured to opinionated reasonable defaults. One can specify message templates
 and attributes that can be included in Cognito database.  
 An IAM policy for managing pool is provided as an output.
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -14,7 +18,7 @@ An IAM policy for managing pool is provided as an output.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | attributes | Attributes used in Cognito Pool. | <pre>list(object({<br>    name                     = string<br>    type                     = string # "String" or "Number"<br>    required                 = bool<br>    mutable                  = bool<br>    developer_only_attribute = bool<br>    constraints = any<br>  }))</pre> | `[]` | no |
 | email\_invitation\_message | E-mail template containing user credentials sent after registration. | `string` | `"Your username is {username} and temporary password is {####}."` | no |
 | email\_invitation\_subject | E-mail subject for e-mail containing user credentials sent after registration. | `string` | `"Your temporary password"` | no |

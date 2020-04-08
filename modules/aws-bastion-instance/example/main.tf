@@ -43,7 +43,6 @@ echo "Configuring S3 authorized_keys..."
 ${module.admin_ssh_keys.user_data_chunk}
 
 EOF
-  enable_monitoring       = true
   subnet_id               = var.subnet_id
   vpc_id                  = var.vpc_id
   disable_api_termination = true

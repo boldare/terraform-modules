@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -8,7 +12,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | environments | Map of environments, each with specific identities that can either modify or only read defined values | <pre>map(object({<br>    managers = list(string),<br>    readers = list(string),<br>  }))</pre> | `{}` | no |
 | managers | List of identities that can CRUD inside all environments | `list(string)` | `[]` | no |
 | name | Name of group will be used to create a group and a corresponding KV stores | `string` | n/a | yes |

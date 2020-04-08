@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -9,7 +13,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | aws\_region | The AWS region things are created in | `string` | n/a | yes |
 | az\_count | Number of Availability Zoness to cover in a given region | `number` | `2` | no |
 | ecs\_cluster | ECS cluster to run ECS Service in | `string` | n/a | yes |
@@ -20,7 +24,7 @@
 | fargate\_memory | Fargate instance memory to provision (in MiB) | `number` | `1024` | no |
 | health\_check\_grace\_period\_seconds | n/a | `number` | `15` | no |
 | health\_check\_path | AWS will perform GET requests on this path to determine if service is running | `string` | `"/"` | no |
-| image\_tag | ECR image tag to use; if not present, we use busybox | `string` | n/a | yes |
+| image\_tag | ECR image tag to use; if not present, we use busybox | `string` | `null` | no |
 | instance\_count | Number of docker containers to run | `number` | `3` | no |
 | internal\_port | n/a | `number` | n/a | yes |
 | load\_balancer\_arn | n/a | `string` | n/a | yes |

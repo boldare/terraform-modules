@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -7,7 +11,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | name | Domain name to be used as a base name for Hosted Zone and certificate, i.e.: my.domain.com | `string` | n/a | yes |
 
 ## Outputs

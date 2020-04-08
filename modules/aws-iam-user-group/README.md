@@ -1,6 +1,10 @@
 AWS IAM User Group  
 This module creates IAM user group, attaches users and policies to it.
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -10,7 +14,7 @@ This module creates IAM user group, attaches users and policies to it.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | attached\_policy\_arns | n/a | `map(string)` | n/a | yes |
 | name | n/a | `string` | n/a | yes |
 | path | You can optionally give an optional path to the group. You can use a single path, or nest multiple paths as if they were a folder structure. For example, you could use the nested path /division\_abc/subdivision\_xyz/product\_1234/engineering/ to match your company's organizational structure. | `string` | `"/"` | no |

@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -7,7 +11,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | admin\_iam\_roles | ARN Users that have admin access to the cluster | `list(string)` | `[]` | no |
 | admin\_iam\_users | ARN Users that have admin access to the cluster | `list(string)` | `[]` | no |
 | aws\_profile | n/a | `string` | n/a | yes |

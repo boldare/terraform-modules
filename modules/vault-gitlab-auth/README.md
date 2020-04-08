@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -7,7 +11,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | default\_token\_policies | n/a | `list(string)` | n/a | yes |
 | gitlab\_client\_id | n/a | `string` | n/a | yes |
 | gitlab\_client\_secret | n/a | `string` | n/a | yes |

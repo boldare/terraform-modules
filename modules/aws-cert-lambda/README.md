@@ -4,6 +4,10 @@ Certificates are stored on S3 bucket (encrypted by KMS key) and are verified usi
 It is based on `certbot` and `letsencrypt.org`. CloudWatch events are used to trigger lambda according  
 to `refresh_frequency_cron` (once every 12 hours by default).
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -14,8 +18,8 @@ to `refresh_frequency_cron` (once every 12 hours by default).
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
-| domain\_names | The domain name to use in the DNS A record for the Vault ELB (e.g. vault.example.com). Make sure that a) this is a domain within the var.hosted\_zone\_domain\_name hosted zone and b) this is the same domain name you used in the TLS certificates for Vault. Only used if var.create\_dns\_entry is true. | `list(string)` | n/a | yes |
+|------|-------------|------|---------|:--------:|
+| domain\_names | The domain name to use in the DNS A record for the Vault ELB (e.g. vault.example.com). Make sure that a) this is a domain within the var.hosted\_zone\_domain\_name hosted zone and b) this is the same domain name you used in the TLS certificates for Vault. Only used if var.create\_dns\_entry is true. | `list(string)` | `null` | no |
 | hosted\_zone\_id | Identifier of a Hosted Zone in Route53. Lambda will get permissions to modify entries in this Hosted Zone for certificate validation purpose. | `string` | n/a | yes |
 | name\_prefix | Name prefix for all AWS resources that are created with this module. | `string` | n/a | yes |
 | owner\_email | E-mail of the domain owner. Lets Encrypt uses that e-mail address to send reminders regarding domain expiration. Using an alias is recommended, as it let's you avoid having a single person as a manager, i.e. devops-team@domain.org | `string` | n/a | yes |
