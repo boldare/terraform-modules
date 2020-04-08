@@ -83,7 +83,7 @@ data "aws_ami" "amazon_linux" {
 
 
 resource "aws_instance" "bastion" {
-  ami                     = var.ami_id ? var.ami_id : data.aws_ami.amazon_linux
+  ami                     = var.ami_id != null ? var.ami_id : data.aws_ami.amazon_linux.id
   instance_type           = var.instance_type
   user_data               = data.template_file.user_data.rendered
   disable_api_termination = var.disable_api_termination
@@ -119,13 +119,13 @@ resource "aws_instance" "bastion" {
 }
 
 resource "aws_eip" "bastion" {
-  count = var.eip_id ? 0 : 1
+  count = var.eip_id != null ? 0 : 1
 
   instance = aws_instance.bastion.id
 }
 
 resource "aws_eip_association" "bastion" {
-  count = var.eip_id ? 1 : 0
+  count = var.eip_id != null ? 1 : 0
 
   instance_id   = aws_instance.bastion.id
   allocation_id = var.eip_id

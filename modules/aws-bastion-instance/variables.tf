@@ -50,13 +50,9 @@ variable "ssh_key_name" {
 }
 
 variable "extra_tags" {
-  type        = list(object({
-    key                 = string
-    value               = string
-    propagate_at_launch = bool
-  }))
+  type        = map(string)
   description = "AWS Tags that will be added to running bastion instance."
-  default     = []
+  default     = {}
 }
 
 variable "detailed_monitoring" {

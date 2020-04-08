@@ -9,6 +9,6 @@ output "bastion_iam_role" {
 }
 
 output "bastion_ip" {
-  value       = var.eip_id ? aws_eip_association.bastion[0].public_ip : aws_eip.bastion[0].public_ip
+  value       = var.eip_id != null ? aws_eip_association.bastion[0].public_ip : aws_eip.bastion[0].public_ip
   description = "Bastion Public IP."
 }
