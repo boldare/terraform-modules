@@ -84,7 +84,7 @@ resource "aws_instance" "bastion" {
     aws_security_group.bastion_host.id
   ]
 
-    root_block_device {
+  root_block_device {
     volume_size = var.volume_size
   }
 
