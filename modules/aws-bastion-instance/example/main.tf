@@ -45,16 +45,15 @@ ${module.admin_ssh_keys.user_data_chunk}
 
 EOF
   enable_monitoring    = true
-  vpc_id               = var.vpc_id
+  public_subnet_id       = var.public_subnet_id
+  vpc_id = var.vpc_id
+  disable_api_termination = true
 
   # Access
   ssh_key_name           = "example-key"
   allowed_cidr_blocks    = [
     "18.202.145.21/32", # Boldare VPN IP
   ]
-  vpc_public_subnet_tags = {
-    "MyVpcSubnetType" = "Public"
-  }
 }
 
 resource "aws_iam_role_policy_attachment" "bastion_ssh_policy" {
