@@ -91,6 +91,9 @@ resource "aws_instance" "bastion" {
   iam_instance_profile = aws_iam_instance_profile.bastion.id
   key_name             = var.ssh_key_name
 
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_eip" "bastion" {
