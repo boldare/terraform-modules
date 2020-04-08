@@ -78,7 +78,7 @@ resource "aws_instance" "bastion" {
   user_data               = data.template_file.user_data.rendered
   disable_api_termination = var.disable_api_termination
 
-  subnet_id = var.public_subnet_id
+  subnet_id = var.subnet_id
 
   security_groups = [
     aws_security_group.bastion_host.id

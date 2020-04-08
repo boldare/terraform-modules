@@ -1,7 +1,9 @@
 variable "vpc_id" {
-  type = string
+  type        = string
+  description = "Identifier of VPC where the bastion instance is placed."
 }
 
-variable "public_subnet_id" {
-  type = string
+variable "subnet_id" {
+  type        = string
+  description = "Identifier of Public Subnet Id where the bastion instance is placed."
 }
