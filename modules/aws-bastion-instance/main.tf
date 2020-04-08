@@ -72,8 +72,18 @@ resource "aws_iam_instance_profile" "bastion" {
   role        = aws_iam_role.bastion.id
 }
 
+data "aws_ami" "amazon_linux" {
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+  owners      = ["amazon"]
+  most_recent = true
+}
+
+
 resource "aws_instance" "bastion" {
-  ami                     = var.ami_id
+  ami                     = var.ami_id ? var.ami_id : data.aws_ami.amazon_linux
   instance_type           = var.instance_type
   user_data               = data.template_file.user_data.rendered
   disable_api_termination = var.disable_api_termination
