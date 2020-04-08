@@ -8,7 +8,7 @@ variable "vpc_id" {
   description = "Identifier of VPC where the bastion instance is placed."
 }
 
-variable "vpc_public_subnet_tags" {
+variable "public_subnet_id" {
   type    = map(string)
   description = "Amazon Tag used to detect public VPC subnets. Used to determine the right subnets to put bastion instance in."
 }
@@ -62,6 +62,12 @@ variable "enable_monitoring" {
   type        = bool
   description = "Whether to enable EC2 instance monitoring."
   default     = false
+}
+
+variable "disable_api_termination" {
+  type = bool
+  description = "Whether to enable EC2 Instance Termination Protection"
+  default = false
 }
 
 variable "additional_user_data" {
