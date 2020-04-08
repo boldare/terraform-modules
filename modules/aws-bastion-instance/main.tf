@@ -6,11 +6,6 @@
  * One can use `aws-s3-authorized-keys` module in order to be able to manage SSH keys that have access to the instance.
  */
 
-data "aws_subnet_ids" "vpc" {
-  vpc_id = var.vpc_id
-  tags   = var.vpc_public_subnet_tags
-}
-
 resource "aws_security_group" "bastion_host" {
   name   = "${var.name}-bastion-host"
   vpc_id = var.vpc_id
@@ -77,13 +72,24 @@ resource "aws_iam_instance_profile" "bastion" {
   role        = aws_iam_role.bastion.id
 }
 
-resource "aws_launch_configuration" "bastion" {
-  name_prefix                 = "${var.name}-"
-  image_id                    = var.ami_id
-  instance_type               = var.instance_type
-  user_data                   = data.template_file.user_data.rendered
-  enable_monitoring           = var.enable_monitoring
-  associate_public_ip_address = true
+data "aws_ami" "amazon_linux" {
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+  owners      = ["amazon"]
+  most_recent = true
+}
+
+
+resource "aws_instance" "bastion" {
+  ami                     = var.ami_id ? var.ami_id : data.aws_ami.amazon_linux
+  instance_type           = var.instance_type
+  user_data               = data.template_file.user_data.rendered
+  disable_api_termination = var.disable_api_termination
+  monitoring              = var.detailed_monitoring
+
+  subnet_id = var.subnet_id
 
   security_groups = [
     aws_security_group.bastion_host.id
@@ -95,36 +101,6 @@ resource "aws_launch_configuration" "bastion" {
 
   iam_instance_profile = aws_iam_instance_profile.bastion.id
   key_name             = var.ssh_key_name
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_autoscaling_group" "bastion" {
-  name = aws_launch_configuration.bastion.name
-
-  vpc_zone_identifier = data.aws_subnet_ids.vpc.ids
-
-  desired_capacity          = 1
-  min_size                  = 1
-  max_size                  = 1
-  health_check_grace_period = 60
-  health_check_type         = "EC2"
-  force_delete              = false
-  wait_for_capacity_timeout = 0
-  launch_configuration      = aws_launch_configuration.bastion.name
-
-  enabled_metrics = [
-    "GroupMinSize",
-    "GroupMaxSize",
-    "GroupDesiredCapacity",
-    "GroupInServiceInstances",
-    "GroupPendingInstances",
-    "GroupStandbyInstances",
-    "GroupTerminatingInstances",
-    "GroupTotalInstances",
-  ]
 
   tags = concat(
   [
@@ -140,4 +116,17 @@ resource "aws_autoscaling_group" "bastion" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_eip" "bastion" {
+  count = var.eip_id ? 0 : 1
+
+  instance = aws_instance.bastion.id
+}
+
+resource "aws_eip_association" "bastion" {
+  count = var.eip_id ? 1 : 0
+
+  instance_id   = aws_instance.bastion.id
+  allocation_id = var.eip_id
 }

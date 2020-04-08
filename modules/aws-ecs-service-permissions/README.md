@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -7,7 +11,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | attached\_policies | List of IAM policy ARNs to attach to service | `list(string)` | `[]` | no |
 | name | Name of a service. | `string` | n/a | yes |
 | secret\_arns | List of AWS Secret Manager secrets. Specify ARNs of secrets that may be accessed by this service. | `list(string)` | `[]` | no |

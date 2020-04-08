@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -7,7 +11,7 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | email | n/a | `string` | n/a | yes |
 | existing\_user | n/a | `bool` | `false` | no |
 | gitlab\_accessor | n/a | `string` | n/a | yes |

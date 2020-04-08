@@ -1,3 +1,7 @@
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -8,12 +12,12 @@
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | administrators | List of IAM user names that will be added to administrators group. | `list(string)` | `[]` | no |
 | administrators\_iam\_policies | { name: arn } map of policies to attach to administrators group. | `map(string)` | `{}` | no |
 | developers | List of IAM user names that will be added to developers group. | `list(string)` | `[]` | no |
 | developers\_iam\_policies | { name: arn } map of policies to attach to developers group. | `map(string)` | `{}` | no |
-| iam\_path | AWS IAM base path for all resources created for namespace | `string` | n/a | yes |
+| iam\_path | AWS IAM base path for all resources created for namespace | `string` | `null` | no |
 | namespace | The name of namespace to be created on a cluster | `string` | n/a | yes |
 
 ## Outputs

@@ -2,6 +2,10 @@
 
 This module creates IAM policy which blocks all actions if user is not authenticated using MFA.
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -11,7 +15,7 @@ This module creates IAM policy which blocks all actions if user is not authentic
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | authorization\_policy\_path\_prefix | Path that applies to all users in authorization policy. Must end with '/'. It's used to create Resource like 'arn:aws:iam::\*:user/authorization\_policy\_path\_prefix/${aws:username}'. | `string` | `""` | no |
 | name | Policy name | `string` | `"Authorization"` | no |
 

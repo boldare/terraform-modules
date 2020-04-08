@@ -12,6 +12,10 @@ You may want to set custom providers to deploy some parts of frontend:
 - Lambda@Edge & ACM certificate have to be created on `us-east-1` region (via `aws.global` provider),
 - Route53 entries can be on a different AWS account (via `aws.hosted_zone` provider)
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -26,7 +30,7 @@ You may want to set custom providers to deploy some parts of frontend:
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | alternative\_domain\_names | Alternative domains under which frontend app will become available. | `list(string)` | `[]` | no |
 | cache\_disabled\_path\_patterns | List of path patterns that won't be cached on CloudFront. | `list(string)` | `[]` | no |
 | comment | Comment that will be applied to all underlying resources that support it. | `string` | `"Frontend application environment"` | no |
@@ -41,7 +45,7 @@ You may want to set custom providers to deploy some parts of frontend:
 | name | Name of S3 bucket to store frontend app in. | `string` | n/a | yes |
 | tags | Tags that will be applied to all underlying resources that support it. | `map(string)` | `{}` | no |
 | wait\_for\_deployment | If enabled, the resource will wait for the CloudFront distribution status to change from InProgress to Deployed. | `bool` | `false` | no |
-| web\_acl\_id | WebACL ID for enabling whitelist access to CloudFront distribution. | `string` | n/a | yes |
+| web\_acl\_id | WebACL ID for enabling whitelist access to CloudFront distribution. | `string` | `null` | no |
 
 ## Outputs
 

@@ -1,33 +1,34 @@
 variable "name" {
-  type = string
+  type        = string
   description = "Name of bastion instance and a prefix for it's dependencies"
 }
 
 variable "vpc_id" {
-  type = string
+  type        = string
   description = "Identifier of VPC where the bastion instance is placed."
 }
 
-variable "vpc_public_subnet_tags" {
-  type    = map(string)
-  description = "Amazon Tag used to detect public VPC subnets. Used to determine the right subnets to put bastion instance in."
+variable "subnet_id" {
+  type        = string
+  description = "Identifier of Public Subnet Id where the bastion instance is placed."
 }
 
 variable "egress_security_groups" {
-  type    = list(string)
+  type        = list(string)
   description = "Egress"
-  default = []
+  default     = []
 }
 
 variable "instance_type" {
-  type    = string
+  type        = string
   description = "Type of EC2 instance."
-  default = "t3.nano"
+  default     = "t3.nano"
 }
 
 variable "ami_id" {
-  type = string
+  type        = string
   description = "Amazon Machine Image identifier. You can use data.aws_ami to find the right image."
+  default     = null
 }
 
 variable "allowed_cidr_blocks" {
@@ -58,14 +59,26 @@ variable "extra_tags" {
   default     = []
 }
 
-variable "enable_monitoring" {
+variable "detailed_monitoring" {
   type        = bool
   description = "Whether to enable EC2 instance monitoring."
   default     = false
 }
 
+variable "disable_api_termination" {
+  type        = bool
+  description = "Whether to enable EC2 Instance Termination Protection"
+  default     = false
+}
+
 variable "additional_user_data" {
-  type    = string
+  type        = string
   description = "Scripts to be ran when instance boots up."
-  default = ""
+  default     = ""
+}
+
+variable "eip_id" {
+  type        = string
+  description = "Elastic IP"
+  default     = null
 }

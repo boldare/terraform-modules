@@ -1,6 +1,10 @@
 # AWS KMS Key  
 This module creates KMS key, adds an alias and creates Key and IAM policies
 
+## Requirements
+
+No requirements.
+
 ## Providers
 
 | Name | Version |
@@ -10,7 +14,7 @@ This module creates KMS key, adds an alias and creates Key and IAM policies
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | alias\_name | n/a | `string` | n/a | yes |
 | description | n/a | `string` | `""` | no |
 | is\_enabled | n/a | `bool` | `true` | no |
