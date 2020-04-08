@@ -87,6 +87,7 @@ resource "aws_instance" "bastion" {
   instance_type           = var.instance_type
   user_data               = data.template_file.user_data.rendered
   disable_api_termination = var.disable_api_termination
+  monitoring              = var.detailed_monitoring
 
   subnet_id = var.subnet_id
 

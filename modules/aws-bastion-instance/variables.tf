@@ -59,7 +59,7 @@ variable "extra_tags" {
   default     = []
 }
 
-variable "enable_monitoring" {
+variable "detailed_monitoring" {
   type        = bool
   description = "Whether to enable EC2 instance monitoring."
   default     = false
