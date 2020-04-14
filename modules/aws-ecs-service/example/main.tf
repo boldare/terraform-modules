@@ -19,9 +19,8 @@ module "app" {
 
   aws_region  = var.aws_region
   ecs_cluster = aws_ecs_cluster.cluster.id
-  sg_ids = [
-  var.network_workloads_sg_id]
-  subnet_ids        = var.network_private_subnets
+  sg_ids = [var.network_workloads_sg_id]
+  subnet_ids        = [var.network_private_subnets]
   vpc_id            = var.network_vpc_id
   load_balancer_arn = var.network_lb_arn
 
@@ -55,7 +54,7 @@ module "app" {
   instance_count = "1"
 
   secrets = {
-    SECRET_KEY = var.secret
+    SECRET_KEY = var.secret_arn
   }
 
   environment = {
