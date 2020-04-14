@@ -1,6 +1,6 @@
 /**
  * # AWS generate cert
- * Simple module creating SSL certificate for domain including all nessesary Route53 records .
+ * Simple module creating SSL certificate for domain including all necessary Route53 records .
  */
 
 resource "aws_acm_certificate_validation" "cert" {
