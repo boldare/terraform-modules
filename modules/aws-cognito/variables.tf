@@ -95,7 +95,7 @@ variable "mfa_configuration" {
 }
 
 variable "allow_admin_create_user_only" {
-  type        = string
+  type        = bool
   default     = "true"
   description = "Settings if only the administrator is allowed to create user profiles"
 }
