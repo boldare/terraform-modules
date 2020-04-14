@@ -87,8 +87,7 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn      = var.task_role_arn
   execution_role_arn = var.execution_role_arn
   network_mode       = "awsvpc"
-  requires_compatibilities = [
-  "FARGATE"]
+  requires_compatibilities = ["FARGATE"]
   cpu    = var.fargate_cpu
   memory = var.fargate_memory
   container_definitions = jsonencode([
@@ -122,8 +121,7 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_ecs_service" "this" {
-  depends_on = [
-  aws_lb_listener.listener]
+  depends_on = [aws_lb_listener.listener]
   name            = "${var.name}-service"
   cluster         = var.ecs_cluster
   task_definition = aws_ecs_task_definition.this.arn
@@ -227,8 +225,7 @@ resource "aws_lb_target_group" "target_groups" {
 
 # Redirect all traffic from the LB to the target group
 resource "aws_lb_listener" "listener" {
-  depends_on = [
-  aws_lb_target_group.target_groups]
+  depends_on = [aws_lb_target_group.target_groups]
   for_each = var.exposed_ports
 
   load_balancer_arn = var.load_balancer_arn
