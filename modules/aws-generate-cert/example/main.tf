@@ -10,9 +10,9 @@ module "api_cert" {
   domain  = "api.boldare.com"
 }
 
-module "api_cert" {
+module "api2_cert" {
   source = "../"
 
   zone_id = aws_route53_zone.zone.zone_id
-  domain  = "api.boldare.com"
+  domain  = "api2.boldare.com"
 }
