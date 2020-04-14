@@ -1,6 +1,6 @@
 # AWS one Secret Manager to many SSM secrets  
 Creates from ont Secret Manager entry many SSM secrets.  
-Useful for add external secrets to ECS.
+Useful for adding external secrets to ECS.
 
 ## Requirements
 
