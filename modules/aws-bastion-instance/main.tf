@@ -2,7 +2,7 @@
  * # AWS Bastion Instance
  * This module creates Auto-Scaling Group containing a single EC2 instance with public IP.
  * The instance can access all other instances in a VPC (Security Groups are preconfigured).
- * User Data script is parametrizable and it's output is logged to `/var/log/user-data.log` by default.
+ * User Data script is parameterizable and it's output is logged to `/var/log/user-data.log` by default.
  * One can use `aws-s3-authorized-keys` module in order to be able to manage SSH keys that have access to the instance.
  */
 
@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "sg_all_access_ingress" {
 
 data "template_file" "user_data" {
   template = file("${path.module}/templates/user_data.sh")
-  vars     = {
+  vars = {
     additional_user_data_script = var.additional_user_data
   }
 }
