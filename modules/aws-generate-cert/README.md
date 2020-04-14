@@ -1,4 +1,4 @@
-# AWS generate cert  
+# AWS Generate Cert  
 Simple module creating SSL certificate for domain including all necessary Route53 records .
 
 ## Requirements

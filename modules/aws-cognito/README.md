@@ -19,7 +19,7 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| allow\_admin\_create\_user\_only | Settings if only the administrator is allowed to create user profiles | `string` | `"true"` | no |
+| allow\_admin\_create\_user\_only | Settings if only the administrator is allowed to create user profiles | `bool` | `"true"` | no |
 | attributes | Attributes used in Cognito Pool. | <pre>list(object({<br>    name = string<br>    type = string<br>    # "String" or "Number"<br>    required                 = bool<br>    mutable                  = bool<br>    developer_only_attribute = bool<br>    constraints              = any<br>  }))</pre> | `[]` | no |
 | default\_email\_option | Default email verification option | `string` | `"CONFIRM_WITH_CODE"` | no |
 | email\_invitation\_message | E-mail template containing user credentials sent after registration. | `string` | `"Your username is {username} and temporary password is {####}."` | no |
