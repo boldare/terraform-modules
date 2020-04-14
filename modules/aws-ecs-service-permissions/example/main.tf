@@ -1,9 +1,9 @@
 module "app_role" {
   source = "../"
 
-  name = "boldare-dev"
+  name              = "boldare-dev"
   attached_policies = [aws_iam_policy.example.arn]
-  secret_arns = [aws_secretsmanager_secret.app_secret.arn]
+  secret_arns       = [aws_secretsmanager_secret.app_secret.arn]
 
 }
 
@@ -26,10 +26,8 @@ resource "aws_secretsmanager_secret_version" "app_secret_v1" {
 
 data "aws_iam_policy_document" "example" {
   statement {
-    actions = [
-    "*"]
-    resources = [
-    "*"]
+    actions   = ["*"]
+    resources = ["*"]
   }
 }
 
