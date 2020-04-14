@@ -16,9 +16,9 @@ resource "random_uuid" "cognito_external_id" {}
 resource "aws_cognito_user_pool" "pool" {
   name = var.name
 
-  mfa_configuration = "OPTIONAL"
+  mfa_configuration = var.mfa_configuration
 
-  alias_attributes         = [
+  alias_attributes = [
     "email"
   ]
   auto_verified_attributes = [
@@ -34,7 +34,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   admin_create_user_config {
-    allow_admin_create_user_only = true
+    allow_admin_create_user_only = var.allow_admin_create_user_only
     unused_account_validity_days = 7
     invite_message_template {
       email_message = var.email_invitation_message
@@ -49,7 +49,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   verification_message_template {
-    default_email_option  = "CONFIRM_WITH_LINK"
+    default_email_option  = var.default_email_option
     sms_message           = var.sms_verification_message
     email_message         = var.email_verification_message
     email_message_by_link = var.email_verification_message_by_link
@@ -63,11 +63,11 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   password_policy {
-    minimum_length    = 12
-    require_lowercase = true
-    require_numbers   = true
-    require_symbols   = true
-    require_uppercase = true
+    minimum_length    = var.password_policy.minimum_length
+    require_lowercase = var.password_policy.require_lowercase
+    require_numbers   = var.password_policy.require_numbers
+    require_symbols   = var.password_policy.require_symbols
+    require_uppercase = var.password_policy.require_uppercase
   }
 
   dynamic "schema" {
@@ -93,8 +93,8 @@ resource "aws_cognito_user_pool" "pool" {
         for_each = schema.value.type == "String" ? [schema.value.constraints] : []
 
         content {
-          min_length = string_attribute_constraints.value.min_length
-          max_length = string_attribute_constraints.value.max_length
+          min_length = string_attribute_constraints.value.min_value
+          max_length = string_attribute_constraints.value.max_value
         }
       }
     }
