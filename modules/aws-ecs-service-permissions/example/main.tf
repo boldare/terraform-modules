@@ -2,10 +2,8 @@ module "app_role" {
   source = "../"
 
   name = "boldare-dev"
-  attached_policies = [
-  aws_iam_policy.example.arn]
-  secret_arns = [
-  aws_secretsmanager_secret.app_secret.arn]
+  attached_policies = [aws_iam_policy.example.arn]
+  secret_arns = [aws_secretsmanager_secret.app_secret.arn]
 
 }
 
