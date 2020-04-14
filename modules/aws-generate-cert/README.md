@@ -1,3 +1,6 @@
+# AWS Generate Cert  
+Simple module creating SSL certificate for domain including all necessary Route53 records .
+
 ## Requirements
 
 No requirements.
@@ -12,14 +15,12 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| name | Domain name to be used as a base name for Hosted Zone and certificate, i.e.: my.domain.com | `string` | n/a | yes |
+| domain | Domain for which certificate is going to be created | `string` | n/a | yes |
+| zone\_id | Route53 zone id. | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | certificate\_arn | n/a |
-| id | n/a |
-| name | n/a |
-| name\_servers | n/a |
 

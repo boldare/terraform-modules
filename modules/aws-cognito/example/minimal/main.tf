@@ -7,7 +7,7 @@ resource "aws_ses_email_identity" "sender" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 module "cognito" {
-  source = "../"
+  source = "../.."
 
   name = "boldare"
 
@@ -21,9 +21,9 @@ module "cognito" {
       required                 = true
       mutable                  = false
       developer_only_attribute = false
-      constraints              = {
-        min_length = "0"
-        max_length = "2048"
+      constraints = {
+        min_value = "0"
+        max_value = "2048"
       }
     },
     {
@@ -32,9 +32,9 @@ module "cognito" {
       required                 = false
       mutable                  = false
       developer_only_attribute = false
-      constraints              = {
-        min_length = "1"
-        max_length = "256"
+      constraints = {
+        min_value = "1"
+        max_value = "256"
       }
     }
   ]

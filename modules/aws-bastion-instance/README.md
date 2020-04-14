@@ -1,7 +1,7 @@
 # AWS Bastion Instance  
 This module creates Auto-Scaling Group containing a single EC2 instance with public IP.  
 The instance can access all other instances in a VPC (Security Groups are preconfigured).  
-User Data script is parametrizable and it's output is logged to `/var/log/user-data.log` by default.  
+User Data script is parameterizable and it's output is logged to `/var/log/user-data.log` by default.  
 One can use `aws-s3-authorized-keys` module in order to be able to manage SSH keys that have access to the instance.
 
 ## Requirements
@@ -26,7 +26,7 @@ No requirements.
 | disable\_api\_termination | Whether to enable EC2 Instance Termination Protection | `bool` | `false` | no |
 | egress\_security\_groups | Egress | `list(string)` | `[]` | no |
 | eip\_id | Elastic IP | `string` | `null` | no |
-| extra\_tags | AWS Tags that will be added to running bastion instance. | <pre>list(object({<br>    key                 = string<br>    value               = string<br>    propagate_at_launch = bool<br>  }))</pre> | `[]` | no |
+| extra\_tags | AWS Tags that will be added to running bastion instance. | `map(string)` | `{}` | no |
 | instance\_type | Type of EC2 instance. | `string` | `"t3.nano"` | no |
 | name | Name of bastion instance and a prefix for it's dependencies | `string` | n/a | yes |
 | ssh\_key\_name | Name of SSH key present in AWS EC2 keys list. | `string` | `null` | no |
