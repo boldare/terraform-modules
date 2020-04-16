@@ -38,10 +38,11 @@ module "namespace" {
 | [`aws-eks-iam-role-group`](./modules/aws-eks-iam-role-group) | Defines IAM-EKS binding, allowing IAM group users to perform specific set of operations on EKS cluster. |
 | [`aws-eks-namespace`](./modules/aws-eks-namespace) | Creates a namespace for Kubernetes project. Defines binding for IAM roles to allow access to EKS. Provides IAM policies that allow access to S3 buckets & ECR repositories prefixed by namespace name. |
 | [`aws-frontend`](./modules/aws-frontend) | Creates S3 bucket + CloudFormation + Route53 + Lambda@Edge setup allowing for nearly single-module SPA frontend app deployment. |
+| [`aws-generate-cert`](./modules/aws-generate-cert) | Creates and validates ssl certificate for domain in specified route53 zone. | 
 | [`aws-iam-user-group`](./modules/aws-iam-user-group) | Creates IAM user group, attaches users and policies to it. |
 | [`aws-kms-key`](./modules/aws-kms-key) | Creates KMS key with an alias and creates Key policy that allows to configure access using IAM. |
 | [`aws-mfa-policy`](./modules/aws-mfa-policy) | Creates Multi-Factor Authorization policy that can be attached to global user groups. |
-| [`aws-route53-zone-with-cert`](./modules/aws-route53-zone-with-cert) | Creates a hosted zone with ACM wildcard certificate attached. |
+| [`aws-one-sm-to-many-ssm-secrets`](./modules/aws-one-sm-to-many-ssm-secrets) | Creates multiple SSM secrets from a single Secret Manager entry. |
 | [`aws-s3-authorized-keys`](./modules/aws-s3-authorized-keys) | Stores SSH keys on S3 bucket providing a script for EC2 instances to pull synchronize those keys with bucket. |
 | [`aws-s3-bucket`](modules/aws-s3-bucket) | Creates S3 bucket. Allows for a couple of simplifications. |
 | [`aws-users`](./modules/aws-users) | Creates a list of users within a specified IAM path. |
