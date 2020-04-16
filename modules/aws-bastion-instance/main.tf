@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "sg_all_access_ingress" {
 
 data "template_file" "user_data" {
   template = file("${path.module}/templates/user_data.sh")
-  vars = {
+  vars     = {
     additional_user_data_script = var.additional_user_data
   }
 }
@@ -91,7 +91,7 @@ resource "aws_instance" "bastion" {
 
   subnet_id = var.subnet_id
 
-  security_groups = [
+  vpc_security_group_ids = [
     aws_security_group.bastion_host.id
   ]
 
