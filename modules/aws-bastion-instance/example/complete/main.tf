@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 data "aws_ami" "amazon_linux" {
   filter {
     name   = "name"
@@ -13,7 +17,7 @@ data "aws_ami" "amazon_linux" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "admin_ssh_keys" {
-  source = "../../aws-s3-authorized-keys"
+  source = "../../../aws-s3-authorized-keys"
 
   bucket_name = "example-authorized-keys"
   ssh_user    = "ec2-user"
@@ -32,7 +36,7 @@ module "admin_ssh_keys" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "bastion" {
-  source = "../"
+  source = "../.."
 
   name = "bastion-instance"
 

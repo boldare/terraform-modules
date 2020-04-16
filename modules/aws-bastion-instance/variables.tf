@@ -3,6 +3,12 @@ variable "name" {
   description = "Name of bastion instance and a prefix for it's dependencies"
 }
 
+variable "create" {
+  type        = bool
+  default     = true
+  description = "Set to false if you don't want to create any resources"
+}
+
 variable "vpc_id" {
   type        = string
   description = "Identifier of VPC where the bastion instance is placed."
