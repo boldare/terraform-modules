@@ -10,13 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        ref: master
     - name: Checkout Hack (Push Ability)
       run: |
         git config --global user.name "Boldare Automation"
         git config --global user.email "devops+automation@boldare.com"
         git remote set-url origin https://automation:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}
         git remote -v
-        git checkout "${GITHUB_REF:11}"
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/cache@v1
