@@ -1,0 +1,40 @@
+/**
+ * # Vault OIDC
+ * This module creates Vault JWT Auth Backend, which allows you to log in to Vault
+ * using well-known services you already use.
+ *
+ * For instance, you may configure this module to let you in to vault after
+ * authorizing via GitLab or Google account.
+ */
+
+resource "vault_jwt_auth_backend" "this" {
+  description        = var.description
+  path               = var.path
+  type               = "oidc"
+  oidc_discovery_url = "https://${var.domain}"
+  oidc_client_id     = var.client_id
+  oidc_client_secret = var.client_secret
+  bound_issuer       = var.domain
+  default_role       = var.role_name
+
+  tune {
+    listing_visibility = "unauth"
+  }
+}
+
+resource "vault_jwt_auth_backend_role" "this" {
+  role_type      = "oidc"
+  backend        = vault_jwt_auth_backend.this.path
+  user_claim     = "email"
+  role_name      = var.role_name
+  token_policies = var.default_token_policies
+  oidc_scopes    = var.scopes
+
+  bound_audiences = [vault_jwt_auth_backend.this.oidc_client_id]
+
+  allowed_redirect_uris = [
+    "https://${var.vault_domain}/ui/vault/auth/${vault_jwt_auth_backend.this.path}/oidc/callback",
+    "http://localhost:8250/oidc/callback",
+  ]
+
+}
