@@ -3,4 +3,4 @@ set -e
 
 git add .
 git commit -m "chore: format & readme update"
-git push origin master
+git push origin master --force
