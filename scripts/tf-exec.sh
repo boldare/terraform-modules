@@ -32,6 +32,7 @@ failed=no
 
 function cmd_validate() {
   echo "Running init and validate for all examples..."
+  export VAULT_ADDR=https://example.com # Handle https://github.com/terraform-providers/terraform-provider-vault/issues/666
   for dir in ./modules/*/example/*/; do
     validate "$dir" || failed=yes
   done
