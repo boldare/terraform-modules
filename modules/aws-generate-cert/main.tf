@@ -4,7 +4,7 @@
  */
 
 resource "aws_acm_certificate_validation" "cert" {
-  certificate_arn = aws_acm_certificate.cert.arn
+  certificate_arn         = aws_acm_certificate.cert.arn
   validation_record_fqdns = [aws_route53_record.cert_validation.fqdn]
 }
 
@@ -18,5 +18,5 @@ resource "aws_route53_record" "cert_validation" {
   type    = aws_acm_certificate.cert.domain_validation_options[0].resource_record_type
   zone_id = var.zone_id
   records = [aws_acm_certificate.cert.domain_validation_options[0].resource_record_value]
-  ttl = 60
+  ttl     = 60
 }

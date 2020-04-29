@@ -2,7 +2,7 @@ data "template_file" "policy_environment_manage" {
   for_each = var.environments
 
   template = file("${path.module}/policy_templates/group_kv_manage.hcl")
-  vars     = {
+  vars = {
     group_name  = var.name
     environment = each.key
   }
@@ -20,7 +20,7 @@ resource "vault_identity_group" "environment_manage" {
 
   name              = "${var.name}/${each.key}/manage"
   member_entity_ids = concat(var.managers, each.value.managers)
-  policies          = [
+  policies = [
     vault_policy.environment_manage[each.key].id,
     vault_policy.environment_read[each.key].id
   ]
@@ -30,7 +30,7 @@ data "template_file" "policy_environment_read" {
   for_each = var.environments
 
   template = file("${path.module}/policy_templates/group_kv_read.hcl")
-  vars     = {
+  vars = {
     group_name  = var.name
     environment = each.key
   }

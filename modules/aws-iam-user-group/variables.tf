@@ -3,7 +3,7 @@ variable "name" {
 }
 
 variable "users" {
-  type = map(string)
+  type        = map(string)
   description = "Map of users with their respective internal keys. Can be { userid = \"userid\" }"
 }
 

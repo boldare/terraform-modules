@@ -21,9 +21,9 @@ locals {
 
 data "aws_iam_policy_document" "datadog" {
   statement {
-    sid       = "Monitoring"
-    effect    = "Allow"
-    actions   = [
+    sid    = "Monitoring"
+    effect = "Allow"
+    actions = [
       "apigateway:GET",
       "autoscaling:Describe*",
       "budgets:ViewBudget",
@@ -149,8 +149,8 @@ data "archive_file" "datadog_lambda" {
 data "aws_iam_policy_document" "datadog_write_logs" {
   # CloudWatch Logging
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
@@ -194,7 +194,7 @@ resource "aws_lambda_function" "datadog" {
   role          = aws_iam_role.datadog_lambda.arn
   runtime       = "python3.7"
   filename      = local.archive_file
-  layers        = [
+  layers = [
     local.lambda_layer
   ]
 

@@ -57,7 +57,7 @@ data "template_file" "user_data" {
   count = local.create_count
 
   template = file("${path.module}/templates/user_data.sh")
-  vars     = {
+  vars = {
     additional_user_data_script = var.additional_user_data
   }
 }

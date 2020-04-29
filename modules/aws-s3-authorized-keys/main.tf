@@ -57,8 +57,8 @@ data "aws_iam_policy_document" "read_only" {
     resources = [aws_s3_bucket.keys.arn]
   }
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:HeadObject",
       "s3:GetObject",
       "s3:GetObjectAcl"

@@ -1,5 +1,5 @@
 variable "users" {
-  type        = map(object({
+  type = map(object({
     email = string
   }))
   description = "Map of users to be added to AWS IAM"

@@ -22,9 +22,9 @@ data "aws_iam_policy_document" "task_role_assume" {
 
 data "aws_iam_policy_document" "execution_role_secrets" {
   statement {
-    sid       = "GetSecrets"
-    effect    = "Allow"
-    actions   = [
+    sid    = "GetSecrets"
+    effect = "Allow"
+    actions = [
       "secretsmanager:GetSecretValue"
     ]
     resources = var.secret_arns

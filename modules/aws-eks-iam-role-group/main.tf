@@ -20,7 +20,7 @@ module "group" {
 
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
-    effect  = "Allow"
+    effect = "Allow"
     principals {
       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
       type        = "AWS"

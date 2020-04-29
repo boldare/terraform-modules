@@ -5,7 +5,7 @@ provider aws {
 module "waf" {
   source = "../"
 
-  name        = "my-rule"
+  name          = "my-rule"
   allowed_cidrs = ["127.0.0.1/32", "8.8.8.8/32"]
 }
 

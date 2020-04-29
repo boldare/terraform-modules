@@ -21,14 +21,14 @@ module "aws_namespace" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 locals {
-  administrators_default_policies   = {
+  administrators_default_policies = {
     cluster = module.aws_namespace.cluster_policy_arn
     ecr     = module.aws_namespace.ecr_policy_arn
     s3      = module.aws_namespace.s3_policy_arn
   }
   administrators_iam_group_policies = zipmap(
-  concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
-  concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
+    concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
+    concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
   )
   administrators_group_users = concat([aws_iam_user.ci.name], var.administrators)
 }
@@ -41,13 +41,13 @@ module "administrators" {
   iam_group          = "${local.namespace_name}-administrators"
   iam_group_policies = local.administrators_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users    = zipmap(local.administrators_group_users, local.administrators_group_users)
+  iam_group_users = zipmap(local.administrators_group_users, local.administrators_group_users)
 
-  kubernetes_role       = "${local.namespace_name}-admin"
-  kubernetes_namespace  = local.namespace_name
+  kubernetes_role      = "${local.namespace_name}-admin"
+  kubernetes_namespace = local.namespace_name
   kubernetes_role_rules = [
     {
-      api_groups: [
+      api_groups : [
         "",
         "apps",
         "autoscaling",
@@ -58,13 +58,13 @@ module "administrators" {
         "rbac.authorization.k8s.io",
         "kubedb.com"
       ],
-      resources: ["*"],
-      verbs: ["*"],
+      resources : ["*"],
+      verbs : ["*"],
     },
     {
-      api_groups: ["batch"],
-      resources: ["jobs", "cronjobs"],
-      verbs: ["*"],
+      api_groups : ["batch"],
+      resources : ["jobs", "cronjobs"],
+      verbs : ["*"],
     }
   ]
 }
@@ -74,14 +74,14 @@ module "administrators" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 locals {
-  developers_default_policies   = {
+  developers_default_policies = {
     cluster = module.aws_namespace.cluster_policy_arn
     ecr     = module.aws_namespace.ecr_read_policy_arn
     s3      = module.aws_namespace.s3_read_policy_arn
   }
   developers_iam_group_policies = zipmap(
-  concat(keys(local.developers_default_policies), keys(var.developers_iam_policies)),
-  concat(values(local.developers_default_policies), values(var.developers_iam_policies))
+    concat(keys(local.developers_default_policies), keys(var.developers_iam_policies)),
+    concat(values(local.developers_default_policies), values(var.developers_iam_policies))
   )
 }
 
@@ -93,13 +93,13 @@ module "developers" {
   iam_group          = "${local.namespace_name}-developers"
   iam_group_policies = local.developers_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users    = zipmap(var.developers, var.developers)
+  iam_group_users = zipmap(var.developers, var.developers)
 
-  kubernetes_role       = "${local.namespace_name}-developer"
-  kubernetes_namespace  = local.namespace_name
+  kubernetes_role      = "${local.namespace_name}-developer"
+  kubernetes_namespace = local.namespace_name
   kubernetes_role_rules = [
     {
-      api_groups: [
+      api_groups : [
         "",
         "apps",
         "autoscaling",
@@ -110,13 +110,13 @@ module "developers" {
         "rbac.authorization.k8s.io",
         "kubedb.com"
       ],
-      resources: ["*"],
-      verbs: ["get", "list", "watch"],
+      resources : ["*"],
+      verbs : ["get", "list", "watch"],
     },
     {
-      api_groups: ["batch"],
-      resources: ["jobs", "cronjobs"],
-      verbs: ["get", "list", "watch", "describe"],
+      api_groups : ["batch"],
+      resources : ["jobs", "cronjobs"],
+      verbs : ["get", "list", "watch", "describe"],
     }
   ]
 }

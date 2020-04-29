@@ -37,14 +37,14 @@ resource "aws_lambda_function" "certbot" {
   function_name = local.function_name
   role          = aws_iam_role.lambda.arn
   handler       = "main.lambda_handler"
-  layers        = [
+  layers = [
     aws_lambda_layer_version.certbot_requirements.id
   ]
 
   source_code_hash = data.archive_file.certbot.output_base64sha256
 
   runtime = "python3.7"
-  timeout = 5*60
+  timeout = 5 * 60
 
   environment {
     variables = {
@@ -89,8 +89,8 @@ resource "aws_lambda_permission" "permission" {
 data "aws_iam_policy_document" "lambda" {
   # CloudWatch Logging
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
@@ -98,16 +98,16 @@ data "aws_iam_policy_document" "lambda" {
   }
   # Route53 DNS changes
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "route53:ListHostedZones",
       "route53:GetChange"
     ]
     resources = ["*"]
   }
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "route53:ChangeResourceRecordSets"
     ]
     resources = [
@@ -116,8 +116,8 @@ data "aws_iam_policy_document" "lambda" {
   }
   # S3 Bucket Access
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:GetBucketLocation",
       "s3:ListAllMyBuckets"
     ]
@@ -129,8 +129,8 @@ data "aws_iam_policy_document" "lambda" {
     resources = ["arn:aws:s3:::${var.s3_bucket_name}"]
   }
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:HeadObject",
       "s3:GetObject",
       "s3:GetObjectAcl",
