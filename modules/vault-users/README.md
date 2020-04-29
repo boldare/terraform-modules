@@ -1,3 +1,7 @@
+# Vault Users  
+This module creates entities in Vault that are automatically connected to aliases for specified auth backend.  
+You can use it to create list of users that can log in to Vault using OpenID Connect, i.e. via Google or GitLab.
+
 ## Requirements
 
 No requirements.
@@ -12,16 +16,13 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| email | n/a | `string` | n/a | yes |
-| existing\_user | n/a | `bool` | `false` | no |
-| gitlab\_accessor | n/a | `string` | n/a | yes |
-| name | n/a | `string` | n/a | yes |
+| auth\_backend\_accessor | Auth backend accessor used for authentication. For example, Google OIDC aliases are created. | `string` | n/a | yes |
+| users | Map of users to create or include in Vault. Map user name to email. | `map(string)` | `{}` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| email | n/a |
-| id | n/a |
-| name | n/a |
+| ids | User names mapped to their identifiers in Vault. |
+| users | User names mapped to their emails (same as 'users' input variable). |
 

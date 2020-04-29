@@ -22,6 +22,7 @@ No requirements.
 | additional\_user\_data | Scripts to be ran when instance boots up. | `string` | `""` | no |
 | allowed\_cidr\_blocks | Determines what CIDRs (i.e. 18.202.145.21/32) can connect to the bastion instance. | `list(string)` | `[]` | no |
 | ami\_id | Amazon Machine Image identifier. You can use data.aws\_ami to find the right image. | `string` | `null` | no |
+| create | Set to false if you don't want to create any resources | `bool` | `true` | no |
 | detailed\_monitoring | Whether to enable EC2 instance monitoring. | `bool` | `false` | no |
 | disable\_api\_termination | Whether to enable EC2 Instance Termination Protection | `bool` | `false` | no |
 | egress\_security\_groups | Egress | `list(string)` | `[]` | no |
