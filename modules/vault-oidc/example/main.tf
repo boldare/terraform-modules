@@ -124,5 +124,5 @@ module "gitlab" {
   client_secret          = var.gitlab_client_secret
   default_token_policies = [vault_policy.default_user_policy.id]
   scopes                 = ["profile", "email"]
-  ttl                    = 12*60*60
+  ttl                    = 12 * 60 * 60
 }

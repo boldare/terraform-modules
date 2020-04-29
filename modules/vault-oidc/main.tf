@@ -40,7 +40,7 @@ resource "vault_jwt_auth_backend_role" "this" {
   token_max_ttl          = var.ttl
   token_explicit_max_ttl = var.ttl
 
-  bound_audiences       = [vault_jwt_auth_backend.this.oidc_client_id]
+  bound_audiences = [vault_jwt_auth_backend.this.oidc_client_id]
   allowed_redirect_uris = [
     "https://${var.vault_domain}/ui/vault/auth/${vault_jwt_auth_backend.this.path}/oidc/callback",
     "http://localhost:8250/oidc/callback",

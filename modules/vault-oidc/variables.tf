@@ -30,7 +30,7 @@ variable "default_token_policies" {
 
 variable "ttl" {
   type        = number
-  default     = 12*60*60
+  default     = 12 * 60 * 60
   description = "Time-To-Live (in seconds) for Vault tokens genereated by this method. It should be set to a time comfortable for all users, yet still short enough to be safe in case of breach."
 }
 

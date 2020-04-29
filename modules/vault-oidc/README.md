@@ -27,6 +27,7 @@ No requirements.
 | path | Path to place this auth method. It can be just 'gitlab' for GitLab. | `string` | `"oidc"` | no |
 | role\_name | Role name for this OIDC Auth | `string` | n/a | yes |
 | scopes | This is a list of scopes/permissions you will be asked to provide during login via target service. | `list(string)` | <pre>[<br>  "profile",<br>  "email"<br>]</pre> | no |
+| ttl | Time-To-Live (in seconds) for Vault tokens genereated by this method. It should be set to a time comfortable for all users, yet still short enough to be safe in case of breach. | `number` | `43200` | no |
 | vault\_domain | Domain for your Vault installation. This is used to redirect you back to Vault from external service after authentication. | `string` | n/a | yes |
 
 ## Outputs
