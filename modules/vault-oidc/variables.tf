@@ -28,6 +28,12 @@ variable "default_token_policies" {
   description = "Default policy for everyone that's authorized using this method. I.e. this policies may allow access to cubbyhole and utilities."
 }
 
+variable "ttl" {
+  type        = number
+  default     = 12*60*60
+  description = "Time-To-Live (in seconds) for Vault tokens genereated by this method. It should be set to a time comfortable for all users, yet still short enough to be safe in case of breach."
+}
+
 variable "scopes" {
   type        = list(string)
   default     = ["profile", "email"]

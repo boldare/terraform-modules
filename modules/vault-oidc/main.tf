@@ -19,6 +19,12 @@ resource "vault_jwt_auth_backend" "this" {
 
   tune {
     listing_visibility = "unauth"
+    default_lease_ttl  = "${var.ttl}s"
+    max_lease_ttl      = "${var.ttl}s"
+  }
+
+  lifecycle {
+    ignore_changes = [description]
   }
 }
 
@@ -30,11 +36,13 @@ resource "vault_jwt_auth_backend_role" "this" {
   token_policies = var.default_token_policies
   oidc_scopes    = var.scopes
 
-  bound_audiences = [vault_jwt_auth_backend.this.oidc_client_id]
+  token_ttl              = var.ttl
+  token_max_ttl          = var.ttl
+  token_explicit_max_ttl = var.ttl
 
+  bound_audiences       = [vault_jwt_auth_backend.this.oidc_client_id]
   allowed_redirect_uris = [
     "https://${var.vault_domain}/ui/vault/auth/${vault_jwt_auth_backend.this.path}/oidc/callback",
     "http://localhost:8250/oidc/callback",
   ]
-
 }
