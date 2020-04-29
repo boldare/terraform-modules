@@ -1,0 +1,27 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  validate:
+    name: Validate
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      id: yarn-cache
+      with:
+        path: bin
+        key: ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+    - name: Get binaries
+      run: ./get-binaries.sh
+    - name: Validate
+      run: ./scripts/tf-exec.sh validate

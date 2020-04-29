@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "kms" {
       identifiers = concat(var.key_admin_arns, [local.aws_account_arn])
     }
 
-    actions   = [
+    actions = [
       "kms:Create*",
       "kms:Describe*",
       "kms:Enable*",
@@ -65,7 +65,7 @@ data "aws_iam_policy_document" "kms" {
       identifiers = concat(var.key_user_arns, [local.aws_account_arn])
     }
 
-    actions   = [
+    actions = [
       "kms:Encrypt",
       "kms:Decrypt",
       "kms:ReEncrypt*",
@@ -84,7 +84,7 @@ data "aws_iam_policy_document" "kms" {
       identifiers = concat(var.key_user_arns, [local.aws_account_arn])
     }
 
-    actions   = [
+    actions = [
       "kms:CreateGrant",
       "kms:ListGrants",
       "kms:RevokeGrant"
@@ -115,9 +115,9 @@ resource "aws_kms_alias" "this" {
 
 data "aws_iam_policy_document" "iam_user" {
   statement {
-    sid       = "AllowKeyUsage"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowKeyUsage"
+    effect = "Allow"
+    actions = [
       "kms:Encrypt",
       "kms:Decrypt",
       "kms:ReEncrypt*",
@@ -127,9 +127,9 @@ data "aws_iam_policy_document" "iam_user" {
     resources = [aws_kms_key.this.arn]
   }
   statement {
-    sid       = "AllowPersistentResourcesAttachment"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowPersistentResourcesAttachment"
+    effect = "Allow"
+    actions = [
       "kms:CreateGrant",
       "kms:ListGrants",
       "kms:RevokeGrant"
@@ -155,9 +155,9 @@ resource "aws_iam_policy" "user" {
 data "aws_iam_policy_document" "iam_admin" {
 
   statement {
-    sid       = "AllowKeyUsage"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowKeyUsage"
+    effect = "Allow"
+    actions = [
       "kms:Create*",
       "kms:Describe*",
       "kms:Enable*",

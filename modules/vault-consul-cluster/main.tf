@@ -38,9 +38,9 @@ module "vault_cluster" {
   ssh_key_name                         = var.ssh_key_name
 
   cluster_extra_tags = [{
-    key: "vault_s3_bucket_backend",
-    value: aws_s3_bucket.vault_storage.id,
-    propagate_at_launch: true
+    key : "vault_s3_bucket_backend",
+    value : aws_s3_bucket.vault_storage.id,
+    propagate_at_launch : true
   }]
 }
 
@@ -63,8 +63,8 @@ module "consul_iam_policies_servers" {
 
 data "aws_iam_policy_document" "vault_cert_s3_access" {
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:GetBucketLocation",
       "s3:ListAllMyBuckets"
     ]
@@ -76,8 +76,8 @@ data "aws_iam_policy_document" "vault_cert_s3_access" {
     resources = ["arn:aws:s3:::${var.cert_s3_bucket_name}"]
   }
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:HeadObject",
       "s3:GetObject",
       "s3:GetObjectAcl"
@@ -131,7 +131,7 @@ module "kms_s3_key" {
   description = "Vault Encryption Key"
 
   key_admin_arns = var.s3_backend_admin_arns
-  key_user_arns  = [
+  key_user_arns = [
     module.vault_cluster.iam_role_arn
   ]
 }
@@ -148,8 +148,8 @@ data "aws_iam_policy_document" "vault_storage" {
     resources = [aws_s3_bucket.vault_storage.arn]
   }
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:HeadObject",
       "s3:GetObject",
       "s3:GetObjectAcl",
@@ -169,7 +169,7 @@ resource "aws_iam_role_policy" "vault_storage" {
 
 resource "aws_s3_bucket" "vault_storage" {
   bucket = local.vault_s3_backend_name
-  tags   = {
+  tags = {
     "Description" = "Used for secret storage with Vault. DO NOT DELETE this Bucket unless you know what you are doing."
   }
 
@@ -295,14 +295,14 @@ data "template_file" "user_data_consul" {
 
 data "aws_subnet_ids" "private" {
   vpc_id = var.vpc_id
-  tags   = {
+  tags = {
     Subnet = "private"
   }
 }
 
 data "aws_subnet_ids" "public" {
   vpc_id = var.vpc_id
-  tags   = {
+  tags = {
     Subnet = "public"
   }
 }

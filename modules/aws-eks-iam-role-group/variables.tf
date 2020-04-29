@@ -38,7 +38,7 @@ variable "kubernetes_role" {
 }
 
 variable "kubernetes_role_rules" {
-  type        = list(object({
+  type = list(object({
     api_groups = list(string)
     resources  = list(string)
     verbs      = list(string)

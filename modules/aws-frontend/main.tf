@@ -268,10 +268,10 @@ data "template_file" "edge_lambda" {
   count = var.enabled ? 1 : 0
 
   template = file("${local.lambda_functions_dir}/headers.js")
-  vars     = {
-    csp_json_string            = jsonencode(var.content_security_policy)
+  vars = {
+    csp_json_string = jsonencode(var.content_security_policy)
     custom_headers_json_string = jsonencode({
-    for key, value in var.custom_headers: lower(key) => value
+      for key, value in var.custom_headers : lower(key) => value
     })
   }
 }
@@ -406,8 +406,8 @@ data "aws_iam_policy_document" "deployer" {
   count = var.enabled ? 1 : 0
 
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:GetBucketLocation",
       "s3:ListAllMyBuckets"
     ]
@@ -421,8 +421,8 @@ data "aws_iam_policy_document" "deployer" {
   }
 
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "s3:GetObject",
       "s3:GetObjectAcl",
       "s3:PutObject",

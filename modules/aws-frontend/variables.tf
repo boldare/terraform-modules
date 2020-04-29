@@ -58,7 +58,7 @@ variable "wait_for_deployment" {
 variable "content_security_policy" {
   type        = map(string)
   description = "Content Security Policy header parameters."
-  default     = {
+  default = {
     "default-src" = "'self' blob:"
     "font-src"    = "'self'"
     "img-src"     = "'self'"
@@ -82,7 +82,7 @@ variable "custom_headers" {
 }
 
 variable "edge_functions" {
-  type        = map(object({
+  type = map(object({
     event_type     = string
     include_body   = bool
     lambda_code    = string

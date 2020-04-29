@@ -1,21 +1,21 @@
 locals {
   admin_username = "cluster-admin"
   admin_groups   = ["system:masters"]
-  admin_roles    = [
-  for arn in var.admin_iam_roles:
-  {
-    rolearn  = arn
-    username = split("/", arn)[1]
-    groups   = local.admin_groups
-  }
+  admin_roles = [
+    for arn in var.admin_iam_roles :
+    {
+      rolearn  = arn
+      username = split("/", arn)[1]
+      groups   = local.admin_groups
+    }
   ]
-  admin_users    = [
-  for arn in var.admin_iam_users:
-  {
-    userarn  = arn
-    username = split("/", arn)[1]
-    groups   = local.admin_groups
-  }
+  admin_users = [
+    for arn in var.admin_iam_users :
+    {
+      userarn  = arn
+      username = split("/", arn)[1]
+      groups   = local.admin_groups
+    }
   ]
 }
 
@@ -46,8 +46,8 @@ module "eks" {
     aws_iam_policy.autoscaling.arn
   ]
 
-  kubeconfig_aws_authenticator_command       = "aws"
-  kubeconfig_aws_authenticator_command_args  = [
+  kubeconfig_aws_authenticator_command = "aws"
+  kubeconfig_aws_authenticator_command_args = [
     "--region", var.region,
     "eks", "get-token",
     "--cluster-name", var.cluster_name
@@ -63,8 +63,8 @@ module "eks" {
 
 data "aws_iam_policy_document" "alb_ingress" {
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "acm:DescribeCertificate",
       "acm:ListCertificates",
       "acm:GetCertificate",
@@ -142,8 +142,8 @@ resource "aws_iam_policy" "alb_ingress" {
 
 data "aws_iam_policy_document" "autoscaling" {
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeAutoScalingInstances",
       "autoscaling:DescribeLaunchConfigurations",
@@ -177,9 +177,9 @@ data "aws_iam_policy_document" "dns" {
     resources = ["arn:aws:route53:::change/*"]
   }
   statement {
-    sid       = "HostedZones"
-    effect    = "Allow"
-    actions   = [
+    sid    = "HostedZones"
+    effect = "Allow"
+    actions = [
       "route53:ListHostedZones",
       "route53:ListResourceRecordSets",
       "route53:ListHostedZonesByName"

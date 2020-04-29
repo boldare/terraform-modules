@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  pull_request:
+    branches: master
+    types: closed
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout Hack (Push Ability)
+      run: |
+        git config --global user.name "Boldare Automation"
+        git config --global user.email "devops+automation@boldare.com"
+        git remote set-url origin https://automation:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}
+        git remote -v
+        git checkout "${GITHUB_REF:11}"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/cache@v1
+      id: yarn-cache
+      with:
+        path: bin
+        key: ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+    - name: Get binaries
+      run: ./get-binaries.sh
+    - name: Validate
+      run: ./scripts/tf-exec.sh validate
+    - name: Format
+      run: ./scripts/tf-exec.sh format
+    - name: Generate docs
+      run: ./scripts/generate-docs.sh
+    - name: Git push
+      run: ./scripts/git-push.sh
+    - name: Tag
+      uses: K-Phoen/semver-release-action@v1.2.0
+      with:
+        release_branch: master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

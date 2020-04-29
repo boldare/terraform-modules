@@ -44,11 +44,10 @@ module "namespace" {
 | [`aws-mfa-policy`](./modules/aws-mfa-policy) | Creates Multi-Factor Authorization policy that can be attached to global user groups. |
 | [`aws-one-sm-to-many-ssm-secrets`](./modules/aws-one-sm-to-many-ssm-secrets) | Creates multiple SSM secrets from a single Secret Manager entry. |
 | [`aws-s3-authorized-keys`](./modules/aws-s3-authorized-keys) | Stores SSH keys on S3 bucket providing a script for EC2 instances to pull synchronize those keys with bucket. |
-| [`aws-s3-bucket`](modules/aws-s3-bucket) | Creates S3 bucket. Allows for a couple of simplifications. |
 | [`aws-users`](./modules/aws-users) | Creates a list of users within a specified IAM path. |
 | [`vault-consul-cluster`](./modules/vault-consul-cluster) | Creates Vault & Consul cluster running on EC2 instances. |
 | [`vault-gitlab-auth`](./modules/vault-gitlab-auth) | Creates GitLab authentication backend in Vault. |
-| [`vault-gitlab-user`](./modules/vault-gitlab-user) | Binds GitLab user with Vault entity. |
+| [`vault-gitlab-user`](modules/vault-users) | Binds GitLab user with Vault entity. |
 | [`vault-group`](./modules/vault-group) | Creates a "namespace" for storing secrets in KV store in Vault. Supports multiple environments with read-only & read-write permissions. |
 
 

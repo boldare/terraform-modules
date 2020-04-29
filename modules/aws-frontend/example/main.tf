@@ -15,7 +15,7 @@ provider "aws" {
 module "waf" {
   source = "../../aws-waf"
 
-  name          = "my-app"
+  name = "my-app"
   allowed_cidrs = [
     "127.0.0.1/32" # Put your VPN IP here
   ]
@@ -24,7 +24,7 @@ module "waf" {
 # The example below contains all possible options enabled.
 # Some of these options are set to default values.
 module "frontend" {
-  source    = "../"
+  source = "../"
   providers = {
     aws             = aws
     aws.global      = aws.global
@@ -34,19 +34,19 @@ module "frontend" {
   enabled                         = true
   create_distribution_dns_records = true
 
-  name                         = "my-app"
-  domain_name                  = "my-app.com"
-  alternative_domain_names     = [
+  name        = "my-app"
+  domain_name = "my-app.com"
+  alternative_domain_names = [
     "www.my-app.com",
     "web.my-app.com"
   ]
-  hosted_zone_id               = "Z24109WKUFE167"
-  wait_for_deployment          = false
+  hosted_zone_id      = "Z24109WKUFE167"
+  wait_for_deployment = false
   cache_disabled_path_patterns = [
     "index.html",
     "/service-worker.js"
   ]
-  web_acl_id                   = module.waf.web_acl_id # Limit access to set of CIDRs
+  web_acl_id = module.waf.web_acl_id # Limit access to set of CIDRs
 
   content_security_policy = {
     "default-src" = "'self' blob: https://*.my-app.com https://*.hotjar.com https://*.hotjar.io https://*.youtube.com https://*.ytimg.com https://firestore.googleapis.com"
@@ -64,7 +64,7 @@ module "frontend" {
 
   lambda_log_retention_in_days = 14
 
-  edge_functions               = {
+  edge_functions = {
     redirections = {
       event_type     = "origin-request"
       include_body   = false
@@ -74,7 +74,7 @@ module "frontend" {
   }
 
   comment = "MyApp Frontend"
-  tags    = {
+  tags = {
     Name        = "MyApp"
     Environment = "Production"
   }

@@ -6,9 +6,9 @@
 
 data "aws_iam_policy_document" "authorization" {
   statement {
-    sid       = "AllowPasswordSelfManagement"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowPasswordSelfManagement"
+    effect = "Allow"
+    actions = [
       "iam:ChangePassword",
       "iam:UpdateUser",
       "iam:*AccessKey*",
@@ -22,9 +22,9 @@ data "aws_iam_policy_document" "authorization" {
   }
 
   statement {
-    sid       = "AllowListActions"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowListActions"
+    effect = "Allow"
+    actions = [
       "iam:ListUsers",
       "iam:ListVirtualMFADevices"
     ]
@@ -32,9 +32,9 @@ data "aws_iam_policy_document" "authorization" {
   }
 
   statement {
-    sid       = "AllowIndividualUserToListOnlyTheirOwnMFA"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowIndividualUserToListOnlyTheirOwnMFA"
+    effect = "Allow"
+    actions = [
       "iam:ListMFADevices"
     ]
     resources = [
@@ -44,9 +44,9 @@ data "aws_iam_policy_document" "authorization" {
   }
 
   statement {
-    sid       = "AllowIndividualUserToManageTheirOwnMFA"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowIndividualUserToManageTheirOwnMFA"
+    effect = "Allow"
+    actions = [
       "iam:CreateVirtualMFADevice",
       "iam:DeleteVirtualMFADevice",
       "iam:EnableMFADevice",
@@ -59,9 +59,9 @@ data "aws_iam_policy_document" "authorization" {
   }
 
   statement {
-    sid       = "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA"
+    effect = "Allow"
+    actions = [
       "iam:DeactivateMFADevice"
     ]
     resources = [
@@ -76,8 +76,8 @@ data "aws_iam_policy_document" "authorization" {
   }
 
   statement {
-    sid         = "BlockMostAccessUnlessSignedInWithMFA"
-    effect      = "Deny"
+    sid    = "BlockMostAccessUnlessSignedInWithMFA"
+    effect = "Deny"
     not_actions = [
       "iam:ChangePassword",
       "iam:CreateVirtualMFADevice",
@@ -87,7 +87,7 @@ data "aws_iam_policy_document" "authorization" {
       "iam:ListVirtualMFADevices",
       "iam:ResyncMFADevice"
     ]
-    resources   = ["*"]
+    resources = ["*"]
     condition {
       test     = "BoolIfExists"
       values   = ["false"]

@@ -1,3 +1,8 @@
+provider "aws" {
+  version = "~>2.0"
+  region  = "us-east-1"
+}
+
 resource "aws_ecs_cluster" "cluster" {
   name = "boldare-cluster"
 }
@@ -17,9 +22,9 @@ module "app" {
   scaling_min_capacity              = "1"
   scaling_max_capacity              = "2"
 
-  aws_region  = var.aws_region
-  ecs_cluster = aws_ecs_cluster.cluster.id
-  sg_ids = [var.network_workloads_sg_id]
+  aws_region        = var.aws_region
+  ecs_cluster       = aws_ecs_cluster.cluster.id
+  sg_ids            = [var.network_workloads_sg_id]
   subnet_ids        = [var.network_private_subnets]
   vpc_id            = var.network_vpc_id
   load_balancer_arn = var.network_lb_arn

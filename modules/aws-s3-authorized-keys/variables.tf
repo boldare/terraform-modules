@@ -16,7 +16,7 @@ variable "keys_update_frequency" {
 
 variable "ssh_keys" {
   type = list(object({
-    name = string,
+    name       = string,
     public_key = string
   }))
 }
