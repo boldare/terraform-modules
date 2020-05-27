@@ -11,7 +11,7 @@ To include a module directly from this repository, use `github.com/boldare/terra
 
 ```tf
 module "namespace" {
-  source = "github.com/boldare/terraform-modules//modules/aws-eks-namespace?ref=v0.1.0"
+  source = "github.com/boldare/terraform-modules//modules/aws-eks-namespace?ref=v1.0.2"
 
   namespace = local.name
   iam_path  = local.iam_path
