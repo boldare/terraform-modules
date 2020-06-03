@@ -1,5 +1,5 @@
 variable "non_prod_secret_engines" {
-  type        = object({
+  type = object({
     kv       = string
     rabbitmq = string
     mongodb  = string
@@ -8,7 +8,7 @@ variable "non_prod_secret_engines" {
 }
 
 variable "prod_secret_engines" {
-  type        = object({
+  type = object({
     kv       = string
     rabbitmq = string
     mongodb  = string
@@ -17,11 +17,11 @@ variable "prod_secret_engines" {
 }
 
 variable "non_prod_access" {
-  type = list(string)
+  type        = list(string)
   description = "List of entities (i.e. developers) with full access to non-prod environments"
 }
 
 variable "prod_access" {
-  type = list(string)
+  type        = list(string)
   description = "List of entities (i.e. developers) with full access to all environments"
 }

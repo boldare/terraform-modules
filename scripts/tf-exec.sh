@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+trap "exit" INT
 
 function realpath() {
   echo "$(cd "$(dirname $1)" && pwd)/$(basename $1)"
@@ -31,13 +32,24 @@ function validate() {
 failed=no
 
 function cmd_validate() {
-  echo "Running init and validate for all examples..."
+  local module=$1
   export VAULT_ADDR=https://example.com # Handle https://github.com/terraform-providers/terraform-provider-vault/issues/666
-  for dir in ./modules/*/example/*/; do
-    validate "$dir" || failed=yes
+  local basepath="./modules/*"
+  local target="all examples"
+  if [[ -n "$module" ]]; then
+    basepath="./modules/$module"
+    target="module $module"
+  fi
+  echo "Running init and validate for $target..."
+  for dir in $basepath/example/*/; do
+    if [[ -d "$dir" ]]; then
+      validate "$dir" || failed=yes
+    fi
   done
-  for example in ./modules/*/example/main.tf; do
-    validate "$(dirname "$example")" || failed=yes
+  for example in $basepath/example/main.tf; do
+    if [[ -f "$example" ]]; then
+      validate "$(dirname "$example")" || failed=yes
+    fi
   done
 }
 
@@ -48,7 +60,7 @@ function cmd_format() {
 
 case "$1" in
 validate)
-  cmd_validate
+  cmd_validate $2
   ;;
 format)
   cmd_format

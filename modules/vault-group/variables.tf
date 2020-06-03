@@ -4,7 +4,7 @@ variable "name" {
 }
 
 variable "groups" {
-  type        = map(object({
+  type = map(object({
     entities     = list(string)
     policies     = list(string)
     environments = list(string)

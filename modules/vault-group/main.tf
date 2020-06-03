@@ -57,9 +57,9 @@ locals {
 
   # Policy data contain everything needed for templates to be inflated
   policy_data = flatten([
-    for environment, secret_engines in var.environments: [
-      for policy in ["read", "write"]: [
-        for key, data in secret_engines: {
+    for environment, secret_engines in var.environments : [
+      for policy in ["read", "write"] : [
+        for key, data in secret_engines : {
           type        = "${data[0]}-${policy}"
           key         = "${environment}-${key}"
           environment = environment
@@ -72,8 +72,8 @@ locals {
   ])
 
   policy_templates = {
-    for policy in local.policy_data:
-      policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
+    for policy in local.policy_data :
+    policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
   }
 }
 
@@ -89,10 +89,10 @@ resource "vault_identity_group" "groups" {
 
   name              = "${var.name}/${each.key}"
   member_entity_ids = each.value.entities
-  policies          = flatten([
-    for policy in each.value.policies: [
-      for env in each.value.environments:
-        vault_policy.policies["${env}-${policy}"].id
+  policies = flatten([
+    for policy in each.value.policies : [
+      for env in each.value.environments :
+      vault_policy.policies["${env}-${policy}"].id
     ]
   ])
 }

@@ -5,13 +5,13 @@ output "environments" {
 output "group_ids" {
   value = {
     for key, group in vault_identity_group.groups :
-      key => group.id
+    key => group.id
   }
 }
 
 output "policy_ids" {
   value = {
-    for key, policy in vault_policy.policies:
-      key => policy.id
+    for key, policy in vault_policy.policies :
+    key => policy.id
   }
 }
