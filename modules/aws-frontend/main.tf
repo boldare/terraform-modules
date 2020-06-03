@@ -138,7 +138,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   web_acl_id          = var.web_acl_id
 
   origin {
-    domain_name = aws_s3_bucket.bucket[0].bucket_domain_name
+    domain_name = aws_s3_bucket.bucket[0].bucket_regional_domain_name
     origin_id   = local.s3_origin
 
     s3_origin_config {
