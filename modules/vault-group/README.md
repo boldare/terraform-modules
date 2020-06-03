@@ -72,7 +72,8 @@ No requirements.
 
 | Name | Description |
 |------|-------------|
-| environments | n/a |
+| environments | Environments variable passthrough. |
 | group\_ids | n/a |
 | policy\_ids | n/a |
+| secret\_engine\_paths | Environments variable, but without Secret Engine types. For example kv = ["kv2", "kv"] becomes just kv = "kv" |
 

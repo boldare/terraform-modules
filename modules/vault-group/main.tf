@@ -73,13 +73,13 @@ locals {
 
   policy_templates = {
     for policy in local.policy_data :
-      policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
+    policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
   }
 
   secret_engine_paths = {
-    for environment, secret_engines in var.environments:
-      environment => {
-      for engine, data in secret_engines: engine => data[1]
+    for environment, secret_engines in var.environments :
+    environment => {
+      for engine, data in secret_engines : engine => data[1]
     }
   }
 }
