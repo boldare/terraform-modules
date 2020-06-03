@@ -2,5 +2,5 @@
 set -e
 
 git add .
-git commit -m "chore: format & readme update"
+git commit --allow-empty -m "chore: automatic code formatting & readme update"
 git push origin master --force
