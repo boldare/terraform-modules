@@ -61,7 +61,7 @@ locals {
       for policy in ["read", "write"] : [
         for key, data in secret_engines : {
           type        = "${data[0]}-${policy}"
-          key         = "${environment}-${key}"
+          key         = "${environment}-${key}/${policy}"
           environment = environment
           engine_path = data[1]
           separator   = var.separator
@@ -73,7 +73,14 @@ locals {
 
   policy_templates = {
     for policy in local.policy_data :
-    policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
+      policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
+  }
+
+  secret_engine_paths = {
+    for environment, secret_engines in var.environments:
+      environment => {
+      for engine, data in secret_engines: engine => data[1]
+    }
   }
 }
 
@@ -91,8 +98,11 @@ resource "vault_identity_group" "groups" {
   member_entity_ids = each.value.entities
   policies = flatten([
     for policy in each.value.policies : [
-      for env in each.value.environments :
-      vault_policy.policies["${env}-${policy}"].id
+      for env in each.value.environments : [
+        for secret_engine in env : [
+          vault_policy.policies["${env}-${secret_engine}/${policy}"].id
+        ]
+      ]
     ]
   ])
 }
