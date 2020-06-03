@@ -1,52 +1,44 @@
-data "template_file" "policy_environment_manage" {
-  for_each = var.environments
+locals {
+  templates_path = "${path.module}/policy-templates"
 
-  template = file("${path.module}/policy_templates/group_kv_manage.hcl")
-  vars = {
-    group_name  = var.name
-    environment = each.key
+  # Policy data contain everything needed for templates to be inflated
+  policy_data = flatten([
+    for environment, secret_engines in var.environments: [
+      for policy in ["read", "write"]: [
+        for key, data in secret_engines: {
+          type        = "${data[0]}-${policy}"
+          key         = "${environment}-${key}"
+          environment = environment
+          engine_path = data[1]
+          separator   = var.separator
+          group_name  = var.name
+        }
+      ]
+    ]
+  ])
+
+  policy_templates = {
+    for policy in local.policy_data:
+      policy.key => templatefile("${local.templates_path}/${policy.type}.hcl", policy)
   }
 }
 
-resource "vault_policy" "environment_manage" {
-  for_each = var.environments
+resource "vault_policy" "policies" {
+  for_each = local.policy_templates
 
-  name   = "${var.name}/${each.key}/manage"
-  policy = data.template_file.policy_environment_manage[each.key].rendered
+  name   = "${var.name}/${each.key}"
+  policy = each.value
 }
 
-resource "vault_identity_group" "environment_manage" {
-  for_each = var.environments
+resource "vault_identity_group" "groups" {
+  for_each = var.groups
 
-  name              = "${var.name}/${each.key}/manage"
-  member_entity_ids = concat(var.managers, each.value.managers)
-  policies = [
-    vault_policy.environment_manage[each.key].id,
-    vault_policy.environment_read[each.key].id
-  ]
-}
-
-data "template_file" "policy_environment_read" {
-  for_each = var.environments
-
-  template = file("${path.module}/policy_templates/group_kv_read.hcl")
-  vars = {
-    group_name  = var.name
-    environment = each.key
-  }
-}
-
-resource "vault_policy" "environment_read" {
-  for_each = var.environments
-
-  name   = "${var.name}/${each.key}/read"
-  policy = data.template_file.policy_environment_read[each.key].rendered
-}
-
-resource "vault_identity_group" "environment_read" {
-  for_each = var.environments
-
-  name              = "${var.name}/${each.key}/read"
-  member_entity_ids = concat(var.readers, each.value.readers)
-  policies          = [vault_policy.environment_read[each.key].id]
+  name              = "${var.name}/${each.key}"
+  member_entity_ids = each.value.entities
+  policies          = flatten([
+    for policy in each.value.policies: [
+      for env in each.value.environments:
+        vault_policy.policies["${env}-${policy}"].id
+    ]
+  ])
 }

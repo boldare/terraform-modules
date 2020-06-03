@@ -3,22 +3,24 @@ variable "name" {
   description = "Name of group will be used to create a group and a corresponding KV stores"
 }
 
-variable "managers" {
-  type        = list(string)
-  default     = []
-  description = "List of identities that can CRUD inside all environments"
-}
-
-variable "readers" {
-  type        = list(string)
-  default     = []
-  description = "List of identities that can only read inside all environments"
-}
-variable "environments" {
-  type = map(object({
-    managers = list(string),
-    readers  = list(string),
+variable "groups" {
+  type        = map(object({
+    entities     = list(string)
+    policies     = list(string)
+    environments = list(string)
   }))
   default     = {}
-  description = "Map of environments, each with specific identities that can either modify or only read defined values"
+  description = "Groups map entity ids (users/apps) to permissions. Policies can contain \"read\" and/or \"write\"."
+}
+
+variable "environments" {
+  type        = map(map(list(string)))
+  default     = {}
+  description = "This maps environment names to objects containing definitions of secret engines used by those environments. For example, your `dev` environment may use `{ rabbitmq = [\"rabbitmq\", \"/rabbitmq/non-prod\"] }` and your `prod` can equal to `{ rabbitmq = [\"rabbitmq\", \"/rabbitmq/prod\"] }`."
+}
+
+variable "separator" {
+  type        = string
+  default     = "-"
+  description = "Separator used in places, where regular path nesting is not possible. While in KV you can do `/kv/group/env/key`, in RabbitMQ it has to be non-slash character: `/rabbitmq/group-env-key`."
 }
