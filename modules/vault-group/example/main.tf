@@ -1,15 +1,15 @@
 locals {
   # We have to define Secret Engine types, because policy templates differ between different Secret Engines
   non_prod = {
-    kv = ["kv2", var.non_prod_secret_engines.kv]
+    kv       = ["kv2", var.non_prod_secret_engines.kv]
     rabbitmq = ["rabbitmq", var.non_prod_secret_engines.rabbitmq]
-    mongodb = ["db", var.non_prod_secret_engines.mongodb]
+    mongodb  = ["db", var.non_prod_secret_engines.mongodb]
   }
 
   prod = {
-    kv = ["kv2", var.prod_secret_engines.kv]
+    kv       = ["kv2", var.prod_secret_engines.kv]
     rabbitmq = ["rabbitmq", var.prod_secret_engines.rabbitmq]
-    mongodb = ["db", var.prod_secret_engines.mongodb]
+    mongodb  = ["db", var.prod_secret_engines.mongodb]
   }
 
   # Now we define some boilerplate to be able to reuse it when setting up multiple envs running on the same secret engine
@@ -22,7 +22,7 @@ locals {
     non_prod = {
       kv = local.non_prod.kv
     }
-    prod     = {
+    prod = {
       kv = local.prod.kv
     }
   }
@@ -31,8 +31,8 @@ locals {
 module "sales_groups" {
   source = "../"
 
-  name         = "sales"
-  groups       = {
+  name = "sales"
+  groups = {
     # This group has full access to Sales dev env
     non_prod = {
       entities     = var.non_prod_access
@@ -40,9 +40,9 @@ module "sales_groups" {
       environments = ["dev"]
     }
     # This group has full access to Sales dev and prod envs
-    prod     = {
-      users        = var.prod_access
-      policy       = ["read", "write"]
+    prod = {
+      entities     = var.prod_access
+      policies     = ["read", "write"]
       environments = ["dev", "prod"]
     }
   }
@@ -55,8 +55,8 @@ module "sales_groups" {
 module "internal_groups" {
   source = "../"
 
-  name         = "sales"
-  groups       = {
+  name = "sales"
+  groups = {
     # This group has full access to Internal local, dev, staging, test and demo envs
     # Note that they're all based on the same "non_prod" secret engines and we don't have to redefine anything
     dev = {
@@ -66,8 +66,8 @@ module "internal_groups" {
     }
     # This group has read-only access to Internal prod env
     prod = {
-      users        = var.prod_access
-      policy       = ["read"]
+      entities     = var.prod_access
+      policies     = ["read"]
       environments = ["prod"]
     }
   }
