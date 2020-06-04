@@ -99,7 +99,7 @@ resource "vault_identity_group" "groups" {
   policies = flatten([
     for policy in each.value.policies : [
       for env in each.value.environments : [
-        for secret_engine in env : [
+        for secret_engine in keys(var.environments[env]) : [
           vault_policy.policies["${env}-${secret_engine}/${policy}"].id
         ]
       ]
