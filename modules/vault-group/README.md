@@ -73,7 +73,10 @@ No requirements.
 | Name | Description |
 |------|-------------|
 | environments | Environments variable passthrough. |
-| group\_ids | n/a |
-| policy\_ids | n/a |
+| group\_ids | Map containing all groups mapped to their IDs in Vault. |
+| group\_policies | Map containing group names mapped to list of policies of each group. |
+| groups | All Vault groups created by this module. |
+| policies | All Vault policies created by this module. |
+| policy\_ids | Map containing all policies mapped to their IDs in Vault. |
 | secret\_engine\_paths | Environments variable, but without Secret Engine types. For example kv = ["kv2", "kv"] becomes just kv = "kv" |
 
