@@ -97,3 +97,9 @@ variable "lambda_log_retention_in_days" {
   default     = 14
   description = "CloudWatch log rentention time for Lambda@Edge functions."
 }
+
+variable "scheduled_for_deletion" {
+  type        = bool
+  default     = false
+  description = "Enable this to disconnect Lambda@Edge functions from CloudFront distribution and enables force_Destroy on S3 bucket. It's necessary to proceed with module deletion."
+}

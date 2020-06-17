@@ -6,7 +6,7 @@ path "${engine_path}/roles/${group_name}${separator}${environment}${separator}+"
   capabilities = ["create", "delete"]
 }
 
-# Create and delete roles
+# Rotate roles
 path "${engine_path}/rotate-role/${group_name}${separator}${environment}${separator}+" {
   capabilities = ["create"]
 }
