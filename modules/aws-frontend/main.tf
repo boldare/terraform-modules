@@ -12,6 +12,11 @@
  * - S3 bucket & IAM policies is deployed using the default `aws` provider
  * - Lambda@Edge & ACM certificate have to be created on `us-east-1` region (via `aws.global` provider),
  * - Route53 entries can be on a different AWS account (via `aws.hosted_zone` provider)
+ *
+ * If you wish to gracefully destroy this module, make sure to set `scheduled_for_deletion` parameter to `true`.
+ * Otherwise you won't be able to remove non-empty S3 bucket or Lambda@Edge functions still connected to CloudFront.
+ * Setting this flag to `true` may render your environment unusable, so make sure to migrate gracefully to a different
+ * environment by provisioning replacement and swapping DNS entries first.
  */
 
 provider "aws" {
@@ -31,6 +36,8 @@ resource "aws_s3_bucket" "bucket" {
 
   bucket = var.name
   acl    = "private"
+
+  force_destroy = var.scheduled_for_deletion
 
   tags = var.tags
 }
@@ -164,18 +171,22 @@ resource "aws_cloudfront_distribution" "distribution" {
       }
     }
 
-    lambda_function_association {
-      event_type = "viewer-response"
-      lambda_arn = local.headers_lambda_arn
+    dynamic "lambda_function_association" {
+      for_each = local.headers_edge_function
+
+      content {
+        event_type = "viewer-response"
+        lambda_arn = local.headers_lambda_arn
+      }
     }
 
     dynamic "lambda_function_association" {
       for_each = local.enabled_edge_functions
 
       content {
-        event_type   = lambda_function_association.value.event_type
+        event_type   = lambda_function_association.value["event_type"]
         lambda_arn   = aws_lambda_function.edge_lambda_custom[lambda_function_association.key].qualified_arn
-        include_body = lambda_function_association.value.include_body
+        include_body = lambda_function_association.value["include_body"]
       }
     }
   }
@@ -201,18 +212,22 @@ resource "aws_cloudfront_distribution" "distribution" {
         }
       }
 
-      lambda_function_association {
-        event_type = "viewer-response"
-        lambda_arn = local.headers_lambda_arn
+      dynamic "lambda_function_association" {
+        for_each = local.headers_edge_function
+
+        content {
+          event_type = "viewer-response"
+          lambda_arn = local.headers_lambda_arn
+        }
       }
 
       dynamic "lambda_function_association" {
         for_each = local.enabled_edge_functions
 
         content {
-          event_type   = lambda_function_association.value.event_type
+          event_type   = lambda_function_association.value["event_type"]
           lambda_arn   = aws_lambda_function.edge_lambda_custom[lambda_function_association.key].qualified_arn
-          include_body = lambda_function_association.value.include_body
+          include_body = lambda_function_association.value["include_body"]
         }
       }
     }
@@ -313,14 +328,15 @@ resource "aws_lambda_function" "edge_lambda" {
 # Custom Lambda functions attached to CloudFront.
 # ----------------------------------------------------------------------------------------------------------------------
 locals {
-  enabled_edge_functions = var.enabled ? var.edge_functions : {}
+  headers_edge_function  = var.enabled && ! var.scheduled_for_deletion ? { headers = "headers" } : {}
+  enabled_edge_functions = var.enabled && ! var.scheduled_for_deletion ? var.edge_functions : {}
 }
 
 data "archive_file" "edge_lambda_custom" {
   for_each = local.enabled_edge_functions
 
   type                    = "zip"
-  source_content          = each.value.lambda_code
+  source_content          = each.value["lambda_code"]
   source_content_filename = "index.js"
   output_path             = "${local.lambda_functions_dir}/${each.key}_archive.gen.zip"
 }
@@ -338,7 +354,7 @@ resource "aws_lambda_function" "edge_lambda_custom" {
   function_name    = "${var.name}-lambda-edge-${each.key}"
   handler          = "index.handler"
   role             = aws_iam_role.edge_lambda_custom[each.key].arn
-  runtime          = each.value.lambda_runtime
+  runtime          = each.value["lambda_runtime"]
   timeout          = 5
   filename         = data.archive_file.edge_lambda_custom[each.key].output_path
   source_code_hash = data.archive_file.edge_lambda_custom[each.key].output_base64sha256
