@@ -12,6 +12,11 @@ You may want to set custom providers to deploy some parts of frontend:
 - Lambda@Edge & ACM certificate have to be created on `us-east-1` region (via `aws.global` provider),
 - Route53 entries can be on a different AWS account (via `aws.hosted_zone` provider)
 
+If you wish to gracefully destroy this module, make sure to set `scheduled_for_deletion` parameter to `true`.  
+Otherwise you won't be able to remove non-empty S3 bucket or Lambda@Edge functions still connected to CloudFront.  
+Setting this flag to `true` may render your environment unusable, so make sure to migrate gracefully to a different  
+environment by provisioning replacement and swapping DNS entries first.
+
 ## Requirements
 
 No requirements.
@@ -43,6 +48,7 @@ No requirements.
 | hosted\_zone\_id | Route53 Zone ID to put DNS record for frontend app. | `string` | n/a | yes |
 | lambda\_log\_retention\_in\_days | CloudWatch log rentention time for Lambda@Edge functions. | `number` | `14` | no |
 | name | Name of S3 bucket to store frontend app in. | `string` | n/a | yes |
+| scheduled\_for\_deletion | Enable this to disconnect Lambda@Edge functions from CloudFront distribution and enables force\_Destroy on S3 bucket. It's necessary to proceed with module deletion. | `bool` | `false` | no |
 | tags | Tags that will be applied to all underlying resources that support it. | `map(string)` | `{}` | no |
 | wait\_for\_deployment | If enabled, the resource will wait for the CloudFront distribution status to change from InProgress to Deployed. | `bool` | `false` | no |
 | web\_acl\_id | WebACL ID for enabling whitelist access to CloudFront distribution. | `string` | `null` | no |
