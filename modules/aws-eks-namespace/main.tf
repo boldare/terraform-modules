@@ -26,7 +26,7 @@ locals {
     ecr     = module.aws_namespace.ecr_policy_arn
     s3      = module.aws_namespace.s3_policy_arn
   }
-  administrators_iam_group_policies = zipmap(
+  administrators_iam_policies = zipmap(
     concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
     concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
   )
@@ -36,13 +36,13 @@ locals {
 module "administrators" {
   source = "../aws-eks-iam-role-group"
 
-  iam_role           = "${local.namespace_name}-admin"
-  iam_path           = local.iam_path
-  iam_group          = "${local.namespace_name}-administrators"
-  iam_group_policies = local.administrators_iam_group_policies
+  iam_role     = "${local.namespace_name}-admin"
+  iam_path     = local.iam_path
+  iam_group    = "${local.namespace_name}-administrators"
+  iam_policies = local.administrators_iam_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users    = zipmap(local.administrators_group_users, local.administrators_group_users)
-  external_arn_roles = var.external_arn_admin_roles
+  iam_group_users            = zipmap(local.administrators_group_users, local.administrators_group_users)
+  additional_role_principals = var.additional_admin_role_principals
 
   kubernetes_role      = "${local.namespace_name}-admin"
   kubernetes_namespace = local.namespace_name
@@ -80,7 +80,7 @@ locals {
     ecr     = module.aws_namespace.ecr_read_policy_arn
     s3      = module.aws_namespace.s3_read_policy_arn
   }
-  developers_iam_group_policies = zipmap(
+  developers_iam_policies = zipmap(
     concat(keys(local.developers_default_policies), keys(var.developers_iam_policies)),
     concat(values(local.developers_default_policies), values(var.developers_iam_policies))
   )
@@ -89,13 +89,13 @@ locals {
 module "developers" {
   source = "../aws-eks-iam-role-group"
 
-  iam_role           = "${local.namespace_name}-developer"
-  iam_path           = local.iam_path
-  iam_group          = "${local.namespace_name}-developers"
-  iam_group_policies = local.developers_iam_group_policies
+  iam_role     = "${local.namespace_name}-developer"
+  iam_path     = local.iam_path
+  iam_group    = "${local.namespace_name}-developers"
+  iam_policies = local.developers_iam_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users    = zipmap(var.developers, var.developers)
-  external_arn_roles = var.external_arn_developer_roles
+  iam_group_users            = zipmap(var.developers, var.developers)
+  additional_role_principals = var.additional_developer_role_principals
 
   kubernetes_role      = "${local.namespace_name}-developer"
   kubernetes_namespace = local.namespace_name

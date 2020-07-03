@@ -9,10 +9,10 @@ variable "iam_path" {
   description = "AWS IAM base path for all resources created for namespace"
 }
 
-variable "iam_group_policies" {
+variable "iam_policies" {
   type        = map(string)
   default     = {}
-  description = "AWS IAM group policies to be attached to group and role in {name: arn} map format."
+  description = "AWS IAM policies to be attached to group and role in {name: arn} map format."
 }
 
 variable "iam_group_users" {
@@ -46,8 +46,8 @@ variable "kubernetes_role_rules" {
   description = "RBAC rules for the role"
 }
 
-variable "external_arn_roles" {
+variable "additional_role_principals" {
   type        = list(string)
   default     = []
-  description = "List of external ARNs to get access to role"
+  description = "List of additional role principal ARNs. Principals are able to directly assume role created by this module"
 }
