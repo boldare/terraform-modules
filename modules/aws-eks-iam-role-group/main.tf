@@ -15,14 +15,14 @@ module "group" {
   users = var.iam_group_users
   path  = var.iam_path
 
-  attached_policy_arns = var.iam_group_policies
+  attached_policy_arns = var.iam_policies
 }
 
 data "aws_iam_policy_document" "assume_role_policy" {
   statement {
     effect = "Allow"
     principals {
-      identifiers = concat(["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"], var.external_arn_roles)
+      identifiers = concat(["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"], var.additional_role_principals)
       type        = "AWS"
     }
     actions = ["sts:AssumeRole"]
@@ -35,31 +35,12 @@ resource "aws_iam_role" "iam_role" {
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
 }
 
-data "aws_iam_policy_document" "role_policy_for_cluster" {
-  statement {
-    sid     = "ClusterInfo"
-    effect  = "Allow"
-    actions = [
-      "eks:DescribeCluster",
-      "eks:ListClusters"
-    ]
-    resources = ["*"]
-  }
-  statement {
-    sid       = "AssumeRole"
-    effect    = "Allow"
-    actions   = ["sts:AssumeRole"]
-    resources = [aws_iam_role.iam_role.arn]
-  }
-}
 
-resource "aws_iam_role_policy" "role_access_policy" {
-  count = length(var.external_arn_roles) == 0 ? 0 : 1
+resource "aws_iam_role_policy_attachment" "role_policies" {
+  for_each = var.iam_policies
 
-  name = "AssumeRole_access"
-  role = aws_iam_role.iam_role.id
-
-  policy = data.aws_iam_policy_document.role_policy_for_cluster.json
+  role       = aws_iam_role.iam_role.id
+  policy_arn = each.value
 }
 
 data "aws_iam_policy_document" "allow_assume_role_policy" {

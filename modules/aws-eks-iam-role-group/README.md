@@ -16,11 +16,11 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| external\_arn\_roles | List of external ARNs to get access to role | `list(string)` | `[]` | no |
+| additional\_role\_principals | List of additional role principal ARNs. Principals are able to directly assume role created by this module | `list(string)` | `[]` | no |
 | iam\_group | AWS IAM group name. Users assigned to group will be able to assume IAM role which is bound to Kubernetes role. | `string` | n/a | yes |
-| iam\_group\_policies | AWS IAM group policies to be attached to group and role in {name: arn} map format. | `map(string)` | `{}` | no |
 | iam\_group\_users | Users to be added to IAM group in { [internal id]: "iam id" } format | `map(string)` | `{}` | no |
 | iam\_path | AWS IAM base path for all resources created for namespace | `string` | `null` | no |
+| iam\_policies | AWS IAM policies to be attached to group and role in {name: arn} map format. | `map(string)` | `{}` | no |
 | iam\_role | AWS IAM role name. It is bound to Kubernetes role. | `string` | n/a | yes |
 | kubernetes\_namespace | If not specified, a ClusterRole will be created. Otherwise a Role will be scoped to a single Kubernetes Namespace. | `string` | `null` | no |
 | kubernetes\_role | The name of Kubernetes Role to be created | `string` | n/a | yes |
