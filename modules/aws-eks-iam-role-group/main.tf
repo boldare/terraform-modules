@@ -22,25 +22,11 @@ data "aws_iam_policy_document" "assume_role_policy" {
   statement {
     effect = "Allow"
     principals {
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = concat(["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"], var.external_arn_roles)
       type        = "AWS"
     }
     actions = ["sts:AssumeRole"]
   }
-
-  dynamic "statement" {
-    for_each = var.external_arn_role
-
-    content {
-      effect = "Allow"
-      principals {
-        identifiers = [statement.value]
-        type        = "AWS"
-      }
-      actions = ["sts:AssumeRole"]
-    }
-  }
-
 }
 
 resource "aws_iam_role" "iam_role" {
@@ -68,7 +54,7 @@ data "aws_iam_policy_document" "role_policy_for_cluster" {
 }
 
 resource "aws_iam_role_policy" "role_access_policy" {
-  count = length(var.external_arn_role) == 0 ? 0 : 1
+  count = length(var.external_arn_roles) == 0 ? 0 : 1
 
   name = "AssumeRole_access"
   role = aws_iam_role.iam_role.id

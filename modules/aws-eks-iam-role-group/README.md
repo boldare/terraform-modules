@@ -16,7 +16,7 @@ No requirements.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| external\_arn\_role | List of external ARNs to get access to role | `list(string)` | `[]` | no |
+| external\_arn\_roles | List of external ARNs to get access to role | `list(string)` | `[]` | no |
 | iam\_group | AWS IAM group name. Users assigned to group will be able to assume IAM role which is bound to Kubernetes role. | `string` | n/a | yes |
 | iam\_group\_policies | AWS IAM group policies to be attached to group and role in {name: arn} map format. | `map(string)` | `{}` | no |
 | iam\_group\_users | Users to be added to IAM group in { [internal id]: "iam id" } format | `map(string)` | `{}` | no |
