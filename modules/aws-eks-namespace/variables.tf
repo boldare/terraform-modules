@@ -33,13 +33,13 @@ variable "iam_path" {
   description = "AWS IAM base path for all resources created for namespace"
 }
 
-variable "external_arn_admin_role" {
+variable "external_arn_admin_roles" {
   type        = list(string)
   default     = []
   description = "List of external ARNs to get access to admin role"
 }
 
-variable "external_arn_developer_role" {
+variable "external_arn_developer_roles" {
   type        = list(string)
   default     = []
   description = "List of external ARNs to get access to developer role"
