@@ -41,7 +41,8 @@ module "administrators" {
   iam_group          = "${local.namespace_name}-administrators"
   iam_group_policies = local.administrators_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users = zipmap(local.administrators_group_users, local.administrators_group_users)
+  iam_group_users   = zipmap(local.administrators_group_users, local.administrators_group_users)
+  external_arn_role = var.external_arn_admin_role
 
   kubernetes_role      = "${local.namespace_name}-admin"
   kubernetes_namespace = local.namespace_name
@@ -93,7 +94,8 @@ module "developers" {
   iam_group          = "${local.namespace_name}-developers"
   iam_group_policies = local.developers_iam_group_policies
   # CI User deploys all resources to the namespace, so it also belongs to the admin group
-  iam_group_users = zipmap(var.developers, var.developers)
+  iam_group_users   = zipmap(var.developers, var.developers)
+  external_arn_role = var.external_arn_developer_role
 
   kubernetes_role      = "${local.namespace_name}-developer"
   kubernetes_namespace = local.namespace_name

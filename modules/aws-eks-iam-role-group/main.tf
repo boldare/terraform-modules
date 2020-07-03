@@ -27,12 +27,53 @@ data "aws_iam_policy_document" "assume_role_policy" {
     }
     actions = ["sts:AssumeRole"]
   }
+
+  dynamic "statement" {
+    for_each = var.external_arn_role
+
+    content {
+      effect = "Allow"
+      principals {
+        identifiers = [statement.value]
+        type        = "AWS"
+      }
+      actions = ["sts:AssumeRole"]
+    }
+  }
+
 }
 
 resource "aws_iam_role" "iam_role" {
   name               = var.iam_role
   path               = var.iam_path
   assume_role_policy = data.aws_iam_policy_document.assume_role_policy.json
+}
+
+data "aws_iam_policy_document" "role_policy_for_cluster" {
+  statement {
+    sid     = "ClusterInfo"
+    effect  = "Allow"
+    actions = [
+      "eks:DescribeCluster",
+      "eks:ListClusters"
+    ]
+    resources = ["*"]
+  }
+  statement {
+    sid       = "AssumeRole"
+    effect    = "Allow"
+    actions   = ["sts:AssumeRole"]
+    resources = [aws_iam_role.iam_role.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "role_access_policy" {
+  count = length(var.external_arn_role) == 0 ? 0 : 1
+
+  name = "AssumeRole_access"
+  role = aws_iam_role.iam_role.id
+
+  policy = data.aws_iam_policy_document.role_policy_for_cluster.json
 }
 
 data "aws_iam_policy_document" "allow_assume_role_policy" {
