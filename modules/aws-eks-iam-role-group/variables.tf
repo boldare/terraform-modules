@@ -45,3 +45,9 @@ variable "kubernetes_role_rules" {
   }))
   description = "RBAC rules for the role"
 }
+
+variable "external_arn_role" {
+  type        = list(string)
+  default     = []
+  description = "List of external ARNs to get access to role"
+}
