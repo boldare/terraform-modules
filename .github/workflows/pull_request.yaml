@@ -6,6 +6,15 @@ on:
     - master
 
 jobs:
+  verify_labels:
+    runs-on: ubuntu-latest
+    name: Verify labels
+    steps:
+    - uses: actions/checkout@v2
+    - name: Verify labels
+      run: ./scripts/verify-labels.sh
+      env:
+        github: ${{ toJson(github) }}
   validate:
     name: Validate
     strategy:
