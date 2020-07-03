@@ -17,6 +17,8 @@ No requirements.
 | administrators\_iam\_policies | { name: arn } map of policies to attach to administrators group. | `map(string)` | `{}` | no |
 | developers | List of IAM user names that will be added to developers group. | `list(string)` | `[]` | no |
 | developers\_iam\_policies | { name: arn } map of policies to attach to developers group. | `map(string)` | `{}` | no |
+| external\_arn\_admin\_role | List of external ARNs to get access to admin role | `list(string)` | `[]` | no |
+| external\_arn\_developer\_role | List of external ARNs to get access to developer role | `list(string)` | `[]` | no |
 | iam\_path | AWS IAM base path for all resources created for namespace | `string` | `null` | no |
 | namespace | The name of namespace to be created on a cluster | `string` | n/a | yes |
 
