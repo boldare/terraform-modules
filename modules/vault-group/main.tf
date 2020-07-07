@@ -49,6 +49,7 @@
  * * Key-Value Version 2 (name: `kv2`)
  * * Database (name: `db`)
  * * RabbitMQ (name: `rabbitmq`)
+ * * AWS (name: `aws`)
  *
  */
 
