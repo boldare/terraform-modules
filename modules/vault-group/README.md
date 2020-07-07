@@ -48,6 +48,7 @@ Most secret engines have different paths and need different permissions, so in o
 * Key-Value Version 2 (name: `kv2`)
 * Database (name: `db`)
 * RabbitMQ (name: `rabbitmq`)
+* AWS (name: `aws`)
 
 ## Requirements
 
