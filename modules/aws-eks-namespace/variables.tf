@@ -44,3 +44,9 @@ variable "additional_developer_role_principals" {
   default     = []
   description = "List of additional role principal ARNs. Principals are able to directly assume developer role"
 }
+
+variable "create_ci_iam_user" {
+  type        = bool
+  default     = false
+  description = "Whether to create a dedicated IAM user for CI"
+}
