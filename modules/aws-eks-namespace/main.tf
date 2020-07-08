@@ -26,11 +26,8 @@ locals {
     ecr     = module.aws_namespace.ecr_policy_arn
     s3      = module.aws_namespace.s3_policy_arn
   }
-  administrators_iam_policies = zipmap(
-    concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
-    concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
-  )
-  administrators_group_users = concat([aws_iam_user.ci.name], var.administrators)
+  administrators_iam_policies = merge(local.administrators_default_policies, var.administrators_iam_policies)
+  administrators_group_users  = concat(var.create_ci_iam_user ? [aws_iam_user.ci[0].name] : [], var.administrators)
 }
 
 module "administrators" {
@@ -80,10 +77,7 @@ locals {
     ecr     = module.aws_namespace.ecr_read_policy_arn
     s3      = module.aws_namespace.s3_read_policy_arn
   }
-  developers_iam_policies = zipmap(
-    concat(keys(local.developers_default_policies), keys(var.developers_iam_policies)),
-    concat(values(local.developers_default_policies), values(var.developers_iam_policies))
-  )
+  developers_iam_policies = merge(local.developers_default_policies, var.developers_iam_policies)
 }
 
 module "developers" {
@@ -128,6 +122,7 @@ module "developers" {
 # ----------------------------------------------------------------------------------------------------------------------
 
 resource "aws_iam_user" "ci" {
-  name = "${local.namespace_name}-ci"
-  path = local.iam_path
+  count = var.create_ci_iam_user ? 1 : 0
+  name  = "${local.namespace_name}-ci"
+  path  = local.iam_path
 }
