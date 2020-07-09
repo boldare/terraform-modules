@@ -36,13 +36,13 @@ module "sales_groups" {
     # This group has full access to Sales dev env
     non_prod = {
       entities     = var.non_prod_access
-      policies     = ["read", "write"]
+      policies     = ["read-write"]
       environments = ["dev"]
     }
     # This group has full access to Sales dev and prod envs
     prod = {
       entities     = var.prod_access
-      policies     = ["read", "write"]
+      policies     = ["read-write"]
       environments = ["dev", "prod"]
     }
   }
@@ -61,7 +61,7 @@ module "internal_groups" {
     # Note that they're all based on the same "non_prod" secret engines and we don't have to redefine anything
     dev = {
       entities     = var.non_prod_access
-      policies     = ["read", "write"]
+      policies     = ["read-write"]
       environments = ["local", "dev", "staging", "test", "demo"]
     }
     # This group has read-only access to Internal prod env
