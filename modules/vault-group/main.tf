@@ -14,53 +14,27 @@
  *
  * As a result, you get the following:
  * * Vault Policies:
- *     - for paths: `/kv/sales/dev`, `/rabbitmq/sales/dev`, `/mongodb/sales/dev`:
- *        - `sales/dev-read`,
- *        - `sales/dev-read-write`
- *        - `sales/dev-write`
- *     - for paths: `/kv/sales/prod`, `/rabbitmq/sales/prod`, `/mongodb/sales/prod`:
- *        - `sales/prod-read`
- *        - `sales/prod-read-write`
- *        - `sales/prod-write`
- *     - for path `/kv/internal/dev`:
- *       - `internal/dev-read`
- *       - `internal/dev-read-write`
- *       - `internal/dev-write`
- *     - for path `/kv/internal/local`:
- *       - `internal/local-read`
- *       - `internal/local-read-write`
- *       - `internal/local-write`
- *     - for path `/kv/internal/test`:
- *       - `internal/test-read`
- *       - `internal/test-read-write`
- *       - `internal/test-write`
- *     - for path `/kv/internal/staging`:
- *       - `internal/staging-read`
- *       - `internal/staging-read-write`
- *       - `internal/staging-write`
- *     - for path `/kv/internal/demo`:
- *       - `internal/demo-read`
- *       - `internal/demo-read-write`
- *       - `internal/demo-write`
- *     - for path `/kv/internal/prod`:
- *       - `internal/prod-read`
- *       - `internal/prod-read-write`
- *       - `internal/prod-write`
+ *     - `sales/dev-read` (can read secrets in paths: `/kv/sales/dev`, `/rabbitmq/sales/dev`, `/mongodb/sales/dev`)
+ *     - `sales/dev-write` (can write secrets in paths: `/kv/sales/dev`, `/rabbitmq/sales/dev`, `/mongodb/sales/dev`)
+ *     - `sales/prod-read` (can read secrets in paths: `/kv/sales/prod`, `/rabbitmq/sales/prod`, `/mongodb/sales/prod`)
+ *     - `sales/prod-write` (can write secrets in paths: `/kv/sales/prod`, `/rabbitmq/sales/prod`, `/mongodb/sales/prod`)
+ *     - `internal/dev-read` (can read secrets in paths: `/kv/internal/dev`)
+ *     - `internal/dev-write` (can write secrets in paths: `/kv/internal/dev`)
+ *     - `internal/local-read` (can read secrets in paths: `/kv/internal/local`)
+ *     - `internal/local-write` (can write secrets in paths: `/kv/internal/local`)
+ *     - `internal/test-read` (can read secrets in paths: `/kv/internal/test`)
+ *     - `internal/test-write` (can write secrets in paths: `/kv/internal/test`)
+ *     - `internal/staging-read` (can read secrets in paths: `/kv/internal/staging`)
+ *     - `internal/staging-write` (can write secrets in paths: `/kv/internal/staging`)
+ *     - `internal/demo-read` (can read secrets in paths: `/kv/internal/demo`)
+ *     - `internal/demo-write` (can write secrets in paths: `/kv/internal/demo`)
+ *     - `internal/prod-read` (can read secrets in paths: `/kv/internal/prod`)
+ *     - `internal/prod-read` (can write secrets in paths: `/kv/internal/prod`)
  * * Vault Groups:
- *     - `sales/non-prod` with policies:
- *       - `sales/dev-read-write`
- *       - `sales/dev-write`
- *     - `sales/prod` with policies:
- *       - `sales/dev-read-write`
- *       - `sales/prod-read-write`
- *     - `internal/dev` with policies:
- *       - `internal/dev-read-write`
- *       - `internal/local-read-write`
- *       - `internal/staging-read-write`
- *       - `internal/test-read-write`
- *       - `internal/demo-read-write`
- *     - `internal/prod` with policy:
- *       - `internal/prod-read`
+ *     - `sales/non-prod` (with policies: `sales/dev-read`, `sales/dev-write`)
+ *     - `sales/prod` (with policies: `sales/dev-read`, `sales/dev-write`, `sales/prod-read`, `sales/prod-write`)
+ *     - `internal/dev` (with policies: `internal/dev-read`, `internal/dev-write`, `internal/local-read`, `internal/local-write`, `internal/staging-read`, `internal/staging-write`, `internal/test-read`, `internal/test-write`, `internal/demo-read`, `internal/demo-write`)
+ *     - `internal/prod` (with policy: `internal/prod-read`)
  * * Entities you passed to specific groups are added to these Vault Groups.
  *
  * As you can see in this complex example, you only type name of a group (aka namespace, aka prefix), environments, policies and you get a matrix of policies, groups and group attachments done for you. You don't have to worry about writing policies directly, as templates handle that for you automatically. It scales really well and helps in making configurations DRY, yet still extendable.
@@ -70,7 +44,7 @@
  *
  * ## Supported Secret Engines
  *
- * Most secret engines have different paths and need different permissions, so in order to support them we use `read`, `read-write` and `write` policy templates. You can inspect them in [policy-templates](./policy-templates) directory.
+ * Most secret engines have different paths and need different permissions, so in order to support them we use read and write policy templates. You can inspect them in [policy-templates](./policy-templates) directory.
  *
  * * Key-Value Version 2 (name: `kv2`)
  * * Database (name: `db`)
@@ -85,7 +59,7 @@ locals {
   # Policy data contain everything needed for templates to be inflated
   policy_data = flatten([
     for environment, secret_engines in var.environments : [
-      for policy in ["read", "read-write", "write"] : [
+      for policy in ["read", "write"] : [
         for key, data in secret_engines : {
           type        = "${data[0]}-${policy}"
           key         = "${environment}-${key}/${policy}"
