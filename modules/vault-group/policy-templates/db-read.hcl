@@ -7,7 +7,7 @@ path "${engine_path}/roles" {
 }
 
 # Read roles
-path "${engine_path}/roles/${group_name}${separator}${environment}${separator}*" {
+path "${engine_path}/roles/${group_name}${separator}${environment}*" {
   capabilities = ["read"]
 }
 
@@ -16,16 +16,16 @@ path "${engine_path}/static-roles" {
   capabilities = ["list"]
 }
 # Read static roles
-path "${engine_path}/static-roles/${group_name}${separator}${environment}${separator}*" {
+path "${engine_path}/static-roles/${group_name}${separator}${environment}*" {
   capabilities = ["read"]
 }
 
 # Generate credentials
-path "${engine_path}/creds/${group_name}${separator}${environment}${separator}*" {
+path "${engine_path}/creds/${group_name}${separator}${environment}*" {
   capabilities = ["read"]
 }
 
 # Read static credentials
-path "${engine_path}/static-creds/${group_name}${separator}${environment}${separator}*" {
+path "${engine_path}/static-creds/${group_name}${separator}${environment}*" {
   capabilities = ["read"]
 }
