@@ -1,28 +1,31 @@
 output "iam_group" {
-  value = module.group.iam_group
+  value       = module.group.iam_group
+  description = "AWS IAM group name for this group."
 }
 
 output "iam_group_arn" {
-  value = module.group.iam_group_arn
+  value       = module.group.iam_group_arn
+  description = "AWS IAM group ARN for this group."
 }
 
 output "iam_role" {
-  value = aws_iam_role.iam_role.id
+  value       = aws_iam_role.iam_role.id
+  description = "AWS IAM role ID with all necessary permissions for managing Kubernetes, assumable by this group."
 }
 
 output "kubernetes_role" {
-  value  = var.kubernetes_role
-  output = "Kubernetes role for this IAM group. Can be used in 'aws-auth' ConfigMap as 'username' entry."
+  value       = var.kubernetes_role
+  description = "Kubernetes role for this IAM group. Can be used in 'aws-auth' ConfigMap as 'username' entry."
 }
 
 output "kubernetes_group" {
-  value  = local.kubernetes_group
-  output = "Kubernetes group for this IAM group. Can be used in 'aws-auth' ConfigMap as element of 'groups' entry."
+  value       = local.kubernetes_group
+  description = "Kubernetes group for this IAM group. Can be used in 'aws-auth' ConfigMap as element of 'groups' entry."
 }
 
 output "kubernetes_namespace" {
-  value  = var.kubernetes_namespace
-  output = "Kubernetes namespace to which this IAM group has access to."
+  value       = var.kubernetes_namespace
+  description = "Kubernetes namespace to which this IAM group has access to."
 }
 
 output "aws_auth_entry" {
