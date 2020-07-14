@@ -1,3 +1,16 @@
+/**
+ * # AWS EKS Namespace
+ * Use this module to quickly bootstrap an environment for project running on EKS cluster.
+ *
+ * This module creates:
+ * - a Kubernetes namespace
+ * - IAM user groups (for administrators and developers)
+ * - optional CI role
+ * - bindings between IAM roles and Kubernetes RBAC roles
+ * - set of ECR, S3 and EKS permissions for IAM roles
+ * - set of RBAC permissions for RBAC roles
+ */
+
 resource "kubernetes_namespace" "namespace" {
   metadata {
     name = var.namespace
