@@ -28,6 +28,10 @@ locals {
   }
   administrators_iam_policies = merge(local.administrators_default_policies, var.administrators_iam_policies)
   administrators_group_users  = concat(var.create_ci_iam_user ? [aws_iam_user.ci[0].name] : [], var.administrators)
+  admin_role_rules = concat(
+    var.admin_kubernetes_role_rules == null ? local.administrators_default_role_rules : var.admin_kubernetes_role_rules,
+    var.admin_kubernetes_role_rules_extra
+  )
 }
 
 module "administrators" {
@@ -41,30 +45,9 @@ module "administrators" {
   iam_group_users            = zipmap(local.administrators_group_users, local.administrators_group_users)
   additional_role_principals = var.additional_admin_role_principals
 
-  kubernetes_role      = "${local.namespace_name}-admin"
-  kubernetes_namespace = local.namespace_name
-  kubernetes_role_rules = [
-    {
-      api_groups : [
-        "",
-        "apps",
-        "autoscaling",
-        "extensions",
-        "persistentvolumeclaims",
-        "networking.k8s.io",
-        "storage.k8s.io",
-        "rbac.authorization.k8s.io",
-        "kubedb.com"
-      ],
-      resources : ["*"],
-      verbs : ["*"],
-    },
-    {
-      api_groups : ["batch"],
-      resources : ["jobs", "cronjobs"],
-      verbs : ["*"],
-    }
-  ]
+  kubernetes_role       = "${local.namespace_name}-admin"
+  kubernetes_namespace  = local.namespace_name
+  kubernetes_role_rules = local.admin_role_rules
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -78,6 +61,10 @@ locals {
     s3      = module.aws_namespace.s3_read_policy_arn
   }
   developers_iam_policies = merge(local.developers_default_policies, var.developers_iam_policies)
+  developers_role_rules = concat(
+    var.developer_kubernetes_role_rules == null ? local.developers_default_role_rules : var.developer_kubernetes_role_rules,
+    var.developer_kubernetes_role_rules_extra
+  )
 }
 
 module "developers" {
@@ -91,30 +78,9 @@ module "developers" {
   iam_group_users            = zipmap(var.developers, var.developers)
   additional_role_principals = var.additional_developer_role_principals
 
-  kubernetes_role      = "${local.namespace_name}-developer"
-  kubernetes_namespace = local.namespace_name
-  kubernetes_role_rules = [
-    {
-      api_groups : [
-        "",
-        "apps",
-        "autoscaling",
-        "extensions",
-        "persistentvolumeclaims",
-        "networking.k8s.io",
-        "storage.k8s.io",
-        "rbac.authorization.k8s.io",
-        "kubedb.com"
-      ],
-      resources : ["*"],
-      verbs : ["get", "list", "watch"],
-    },
-    {
-      api_groups : ["batch"],
-      resources : ["jobs", "cronjobs"],
-      verbs : ["get", "list", "watch", "describe"],
-    }
-  ]
+  kubernetes_role       = "${local.namespace_name}-developer"
+  kubernetes_namespace  = local.namespace_name
+  kubernetes_role_rules = local.developers_role_rules
 }
 
 # ----------------------------------------------------------------------------------------------------------------------

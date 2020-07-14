@@ -11,11 +11,18 @@ output "iam_role" {
 }
 
 output "kubernetes_role" {
-  value = var.kubernetes_role
+  value  = var.kubernetes_role
+  output = "Kubernetes role for this IAM group. Can be used in 'aws-auth' ConfigMap as 'username' entry."
+}
+
+output "kubernetes_group" {
+  value  = local.kubernetes_group
+  output = "Kubernetes group for this IAM group. Can be used in 'aws-auth' ConfigMap as element of 'groups' entry."
 }
 
 output "kubernetes_namespace" {
-  value = var.kubernetes_namespace
+  value  = var.kubernetes_namespace
+  output = "Kubernetes namespace to which this IAM group has access to."
 }
 
 output "aws_auth_entry" {

@@ -3,6 +3,22 @@ variable "namespace" {
   description = "The name of namespace to be created on a cluster"
 }
 
+variable "iam_path" {
+  type        = string
+  default     = null
+  description = "AWS IAM base path for all resources created for namespace"
+}
+
+variable "create_ci_iam_user" {
+  type        = bool
+  default     = false
+  description = "Whether to create a dedicated IAM user for CI"
+}
+
+# ------------------
+# ADMIN GROUP
+# ------------------
+
 variable "administrators" {
   type        = list(string)
   default     = []
@@ -14,6 +30,36 @@ variable "administrators_iam_policies" {
   default     = {}
   description = "{ name: arn } map of policies to attach to administrators group."
 }
+
+variable "additional_admin_role_principals" {
+  type        = list(string)
+  default     = []
+  description = "List of additional role principal ARNs. Principals are able to directly assume admin role."
+}
+
+variable "admin_kubernetes_role_rules" {
+  type = list(object({
+    resources  = list(string)
+    api_groups = list(string)
+    verbs      = list(string)
+  }))
+  default     = null
+  description = "Standard set of Kubernetes role rules to add to admin group. If not changed, it contains safe, namespace-scoped defaults fitting most use case cases."
+}
+
+variable "admin_kubernetes_role_rules_extra" {
+  type = list(object({
+    resources  = list(string)
+    api_groups = list(string)
+    verbs      = list(string)
+  }))
+  default     = []
+  description = "Additional Kubernetes role rules to add to admin group."
+}
+
+# ------------------
+# DEVELOPERS GROUP
+# ------------------
 
 variable "developers" {
   type        = list(string)
@@ -27,26 +73,28 @@ variable "developers_iam_policies" {
   description = "{ name: arn } map of policies to attach to developers group."
 }
 
-variable "iam_path" {
-  type        = string
-  default     = null
-  description = "AWS IAM base path for all resources created for namespace"
-}
-
-variable "additional_admin_role_principals" {
-  type        = list(string)
-  default     = []
-  description = "List of additional role principal ARNs. Principals are able to directly assume admin role"
-}
-
 variable "additional_developer_role_principals" {
   type        = list(string)
   default     = []
-  description = "List of additional role principal ARNs. Principals are able to directly assume developer role"
+  description = "List of additional role principal ARNs. Principals are able to directly assume developer role."
 }
 
-variable "create_ci_iam_user" {
-  type        = bool
-  default     = false
-  description = "Whether to create a dedicated IAM user for CI"
+variable "developer_kubernetes_role_rules" {
+  type = list(object({
+    resources  = list(string)
+    api_groups = list(string)
+    verbs      = list(string)
+  }))
+  default     = null
+  description = "Standard set of Kubernetes role rules to add to developer group. If not changed, it contains safe defaults fitting most use case cases."
+}
+
+variable "developer_kubernetes_role_rules_extra" {
+  type = list(object({
+    resources  = list(string)
+    api_groups = list(string)
+    verbs      = list(string)
+  }))
+  default     = []
+  description = "Additional Kubernetes role rules to add to developer group."
 }
