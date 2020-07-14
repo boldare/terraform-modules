@@ -31,10 +31,10 @@ No requirements.
 | Name | Description |
 |------|-------------|
 | aws\_auth\_entry | An IAM-Kubernetes binding that has to be put to aws-auth ConfigMap. |
-| iam\_group | n/a |
-| iam\_group\_arn | n/a |
-| iam\_role | n/a |
-| kubernetes\_group | n/a |
-| kubernetes\_namespace | n/a |
-| kubernetes\_role | n/a |
+| iam\_group | AWS IAM group name for this group. |
+| iam\_group\_arn | AWS IAM group ARN for this group. |
+| iam\_role | AWS IAM role ID with all necessary permissions for managing Kubernetes, assumable by this group. |
+| kubernetes\_group | Kubernetes group for this IAM group. Can be used in 'aws-auth' ConfigMap as element of 'groups' entry. |
+| kubernetes\_namespace | Kubernetes namespace to which this IAM group has access to. |
+| kubernetes\_role | Kubernetes role for this IAM group. Can be used in 'aws-auth' ConfigMap as 'username' entry. |
 
