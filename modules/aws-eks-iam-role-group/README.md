@@ -34,6 +34,7 @@ No requirements.
 | iam\_group | n/a |
 | iam\_group\_arn | n/a |
 | iam\_role | n/a |
+| kubernetes\_group | n/a |
 | kubernetes\_namespace | n/a |
 | kubernetes\_role | n/a |
 
