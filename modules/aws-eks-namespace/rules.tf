@@ -46,6 +46,7 @@ locals {
     "networkpolicies",
     "replicasets",
     "pods",
+    "pods/log",
     "ingresses",
     "networkpolicies",
     "poddisruptionbudgets",
