@@ -40,10 +40,10 @@ locals {
     s3      = module.aws_namespace.s3_policy_arn
   }
   administrators_iam_policies = zipmap(
-  concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
-  concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
+    concat(keys(local.administrators_default_policies), keys(var.administrators_iam_policies)),
+    concat(values(local.administrators_default_policies), values(var.administrators_iam_policies))
   )
-  administrators_group_users  = concat(var.create_ci_iam_user ? [aws_iam_user.ci[0].name] : [], var.administrators)
+  administrators_group_users = concat(var.create_ci_iam_user ? [aws_iam_user.ci[0].name] : [], var.administrators)
   admin_role_rules = concat(
     var.admin_kubernetes_role_rules == null ? local.administrators_default_role_rules : var.admin_kubernetes_role_rules,
     var.admin_kubernetes_role_rules_extra
@@ -77,8 +77,8 @@ locals {
     s3      = module.aws_namespace.s3_read_policy_arn
   }
   developers_iam_policies = zipmap(
-  concat(keys(local.developers_default_policies), keys(var.developers_iam_policies)),
-  concat(values(local.developers_default_policies), values(var.developers_iam_policies))
+    concat(keys(local.developers_default_policies), keys(var.developers_iam_policies)),
+    concat(values(local.developers_default_policies), values(var.developers_iam_policies))
   )
   developers_role_rules = concat(
     var.developer_kubernetes_role_rules == null ? local.developers_default_role_rules : var.developer_kubernetes_role_rules,
