@@ -1,15 +1,18 @@
 provider "aws" {
-  region = "eu-west-1"
+  version = "~>3.0"
+  region  = "eu-west-1"
 }
 
 provider "aws" {
-  alias  = "global"
-  region = "us-east-1"
+  version = "~>3.0"
+  alias   = "global"
+  region  = "us-east-1"
 }
 
 provider "aws" {
-  alias  = "hosted_zone"
-  region = "eu-west-1"
+  version = "~>3.0"
+  alias   = "hosted_zone"
+  region  = "eu-west-1"
 }
 
 module "waf" {

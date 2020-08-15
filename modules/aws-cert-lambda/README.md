@@ -6,14 +6,17 @@ to `refresh_frequency_cron` (once every 12 hours by default).
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.49, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | archive | n/a |
-| aws | n/a |
+| aws | >= 2.49, < 4.0 |
 
 ## Inputs
 

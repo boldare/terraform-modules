@@ -4,13 +4,16 @@ Its highly recommended to use `aws-ecs-service-permissions` with this module to 
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.49, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | >= 2.49, < 4.0 |
 | null | n/a |
 | random | n/a |
 

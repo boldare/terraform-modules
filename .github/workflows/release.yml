@@ -21,12 +21,12 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.PUSH_GH_TOKEN }}
     - uses: actions/cache@v1
-      id: yarn-cache
+      id: binaries-cache
       with:
         path: bin
-        key: ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+        key: ${{ runner.os }}-binaries-${{ hashFiles('**/.binaries.lock') }}
         restore-keys: |
-          ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+          ${{ runner.os }}-binaries-${{ hashFiles('**/.binaries.lock') }}
     - name: Get binaries
       run: ./get-binaries.sh
     - name: Validate

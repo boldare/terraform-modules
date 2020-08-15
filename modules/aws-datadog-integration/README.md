@@ -4,14 +4,17 @@ Source code for Lambda can be found at [DataDog/datadog-serverless-functions](ht
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.49, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | archive | n/a |
-| aws | n/a |
+| aws | >= 2.49, < 4.0 |
 
 ## Inputs
 

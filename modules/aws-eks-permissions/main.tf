@@ -1,67 +1,24 @@
+/**
+ * # AWS EKS Permissions
+ * Use this module to define a set of standard permissions for your EKS cluster.
+ *
+ * This module features the following IAM policies:
+ * - Load Balancing: Allows to create and manage load balancers
+ * - Autoscaling: Allows to scale existing autoscaling groups
+ * - DNS: Allows to modify Route53 records in all hosted zones
+ */
+
 locals {
-  admin_username = "cluster-admin"
-  admin_groups   = ["system:masters"]
-  admin_roles = [
-    for arn in var.admin_iam_roles :
-    {
-      rolearn  = arn
-      username = split("/", arn)[1]
-      groups   = local.admin_groups
-    }
-  ]
-  admin_users = [
-    for arn in var.admin_iam_users :
-    {
-      userarn  = arn
-      username = split("/", arn)[1]
-      groups   = local.admin_groups
-    }
-  ]
+  prefix = title(var.name_prefix)
 }
 
-module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "~>10.0.0"
+# ----------------------
+# LOAD BALANCING
+# ----------------------
 
-  cluster_name    = var.cluster_name
-  subnets         = var.subnets
-  vpc_id          = var.vpc_id
-  cluster_version = var.cluster_version
+data "aws_iam_policy_document" "load_balancing" {
+  count = var.load_balancing_create ? 1 : 0
 
-  worker_groups        = var.worker_groups
-  node_groups          = var.node_groups
-  node_groups_defaults = var.node_groups_defaults
-
-  worker_groups_launch_template = var.worker_groups_launch_template
-  map_roles                     = concat(var.map_roles, local.admin_roles)
-  map_users                     = local.admin_users
-
-  tags = {
-    "k8s.io/cluster-autoscaler/${var.cluster_name}" = var.cluster_name
-  }
-
-  workers_additional_policies = [
-    aws_iam_policy.dns.arn,
-    aws_iam_policy.alb_ingress.arn,
-    aws_iam_policy.autoscaling.arn
-  ]
-
-  kubeconfig_aws_authenticator_command = "aws"
-  kubeconfig_aws_authenticator_command_args = [
-    "--region", var.region,
-    "eks", "get-token",
-    "--cluster-name", var.cluster_name
-  ]
-  kubeconfig_aws_authenticator_env_variables = {
-    AWS_PROFILE = var.aws_profile
-  }
-}
-
-# ----------------------------------------------------------------------------------------------------------------------
-# CLUSTER IAM POLICIES
-# ----------------------------------------------------------------------------------------------------------------------
-
-data "aws_iam_policy_document" "alb_ingress" {
   statement {
     effect = "Allow"
     actions = [
@@ -134,13 +91,21 @@ data "aws_iam_policy_document" "alb_ingress" {
   }
 }
 
-resource "aws_iam_policy" "alb_ingress" {
-  name_prefix = "${var.cluster_name}-alb-ingress"
-  description = "ALB Ingress Policy for ${var.cluster_name}"
-  policy      = data.aws_iam_policy_document.alb_ingress.json
+resource "aws_iam_policy" "load_balancing" {
+  count = var.load_balancing_create ? 1 : 0
+
+  name        = "${local.prefix}_EKS_LoadBalancingPolicy"
+  description = "Policy that allows performing Load Balancer changes"
+  policy      = data.aws_iam_policy_document.load_balancing[0].json
 }
 
+# ----------------------
+# AUTOSCALING
+# ----------------------
+
 data "aws_iam_policy_document" "autoscaling" {
+  count = var.autoscaling_create ? 1 : 0
+
   statement {
     effect = "Allow"
     actions = [
@@ -158,12 +123,20 @@ data "aws_iam_policy_document" "autoscaling" {
 }
 
 resource "aws_iam_policy" "autoscaling" {
-  name_prefix = "${var.cluster_name}-autoscaling"
-  description = "Autoscaling Policy for ${var.cluster_name}"
-  policy      = data.aws_iam_policy_document.autoscaling.json
+  count = var.autoscaling_create ? 1 : 0
+
+  name_prefix = "${local.prefix}_EKS_AutoscalingPolicy"
+  description = "Policy that allows for autoscaling in EKS cluster"
+  policy      = data.aws_iam_policy_document.autoscaling[0].json
 }
 
+# ----------------------
+# DNS
+# ----------------------
+
 data "aws_iam_policy_document" "dns" {
+  count = var.dns_create ? 1 : 0
+
   statement {
     sid       = "ChangeSet"
     effect    = "Allow"
@@ -189,7 +162,9 @@ data "aws_iam_policy_document" "dns" {
 }
 
 resource "aws_iam_policy" "dns" {
-  name_prefix = "${var.cluster_name}-dns"
-  description = "ALB Ingress Policy for ${var.cluster_name}"
-  policy      = data.aws_iam_policy_document.dns.json
+  count = var.dns_create ? 1 : 0
+
+  name_prefix = "${local.prefix}_EKS_DNSPolicy"
+  description = "Policy that allows performing DNS changes"
+  policy      = data.aws_iam_policy_document.dns[0].json
 }

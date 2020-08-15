@@ -52,13 +52,16 @@ Most secret engines have different paths and need different permissions, so in o
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| vault | >= 2.0, < 3.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| vault | n/a |
+| vault | >= 2.0, < 3.0 |
 
 ## Inputs
 

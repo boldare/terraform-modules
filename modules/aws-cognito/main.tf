@@ -25,6 +25,10 @@ resource "aws_cognito_user_pool" "pool" {
     "email"
   ]
 
+  password_policy {
+    temporary_password_validity_days = 7
+  }
+
   sms_authentication_message = var.sms_authentication_message
 
   email_configuration {
@@ -35,7 +39,7 @@ resource "aws_cognito_user_pool" "pool" {
 
   admin_create_user_config {
     allow_admin_create_user_only = var.allow_admin_create_user_only
-    unused_account_validity_days = 7
+
     invite_message_template {
       email_message = var.email_invitation_message
       email_subject = var.email_invitation_subject

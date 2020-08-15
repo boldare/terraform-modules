@@ -1,6 +1,6 @@
-variable "vault_domain" {
-  type        = string
-  description = "Domain for your Vault installation. This is used to redirect you back to Vault from external service after authentication."
+variable "vault_domains" {
+  type        = list(string)
+  description = "Domain(s) of your Vault installation. This is used to redirect you back to Vault from external service after authentication."
 }
 
 variable "role_name" {

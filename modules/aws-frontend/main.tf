@@ -20,11 +20,13 @@
  */
 
 provider "aws" {
-  alias = "global"
+  version = "~>3.0"
+  alias   = "global"
 }
 
 provider "aws" {
-  alias = "hosted_zone"
+  version = "~>3.0"
+  alias   = "hosted_zone"
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -90,19 +92,28 @@ resource "aws_acm_certificate" "certificate" {
 resource "aws_acm_certificate_validation" "certificate_validation" {
   count = var.enabled ? 1 : 0
 
-  certificate_arn         = aws_acm_certificate.certificate[0].arn
-  validation_record_fqdns = aws_route53_record.certificate_validation.*.fqdn
+  certificate_arn = aws_acm_certificate.certificate[0].arn
+  validation_record_fqdns = [
+    for validation in aws_route53_record.certificate_validation :
+    validation.fqdn
+  ]
 
   provider = aws.global
 }
 
 resource "aws_route53_record" "certificate_validation" {
-  count = var.enabled ? length(local.domains) : 0
+  for_each = {
+    for dvo in(length(aws_acm_certificate.certificate) > 0 ? aws_acm_certificate.certificate[0].domain_validation_options : toset([])) : dvo["domain_name"] => {
+      name   = dvo["resource_record_name"]
+      record = dvo["resource_record_value"]
+      type   = dvo["resource_record_type"]
+    }
+  }
 
-  name    = aws_acm_certificate.certificate[0].domain_validation_options[count.index].resource_record_name
-  type    = aws_acm_certificate.certificate[0].domain_validation_options[count.index].resource_record_type
+  name    = each.value["name"]
+  type    = each.value["type"]
   zone_id = var.hosted_zone_id
-  records = [aws_acm_certificate.certificate[0].domain_validation_options[count.index].resource_record_value]
+  records = [each.value["record"]]
   ttl     = 60
 
   provider = aws.hosted_zone
@@ -328,7 +339,9 @@ resource "aws_lambda_function" "edge_lambda" {
 # Custom Lambda functions attached to CloudFront.
 # ----------------------------------------------------------------------------------------------------------------------
 locals {
-  headers_edge_function  = var.enabled && ! var.scheduled_for_deletion ? { headers = "headers" } : {}
+  headers_edge_function = var.enabled && ! var.scheduled_for_deletion ? {
+    headers = "headers"
+  } : {}
   enabled_edge_functions = var.enabled && ! var.scheduled_for_deletion ? var.edge_functions : {}
 }
 

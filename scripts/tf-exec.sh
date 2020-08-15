@@ -6,9 +6,11 @@ function realpath() {
   echo "$(cd "$(dirname $1)" && pwd)/$(basename $1)"
 }
 
-terraform="$(realpath ./bin/terraform)"
+TF_VERSION="${TF_VERSION:-13}"
 
-echo "Using Terraform binary at $terraform: $(terraform -v)"
+terraform="$(realpath "./bin/terraform-$TF_VERSION")"
+
+echo "Using Terraform $TF_VERSION binary at $terraform: $(terraform -v)"
 
 function retry_with_log() {
   $@ &>/dev/null || $@
@@ -21,6 +23,8 @@ function validate() {
   echo "---------------------"
   (
     cd "$dir"
+    echo "🧹 Terraform: Clean cache"
+    rm -rf ".terraform"
     echo "🧵 Terraform: Init"
     retry_with_log "$terraform" init -backend=false
     echo "🪁 Terraform: Validate"
