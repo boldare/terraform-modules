@@ -19,16 +19,21 @@ environment by provisioning replacement and swapping DNS entries first.
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| aws | ~>3.0 |
+| aws | ~>3.0 |
+| aws | >= 3.0, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | archive | n/a |
-| aws | n/a |
-| aws.global | n/a |
-| aws.hosted\_zone | n/a |
+| aws | ~>3.0 ~>3.0 >= 3.0, < 4.0 |
+| aws.global | ~>3.0 ~>3.0 >= 3.0, < 4.0 |
+| aws.hosted\_zone | ~>3.0 ~>3.0 >= 3.0, < 4.0 |
 | random | n/a |
 | template | n/a |
 

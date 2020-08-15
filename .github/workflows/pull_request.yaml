@@ -19,18 +19,20 @@ jobs:
     name: Validate
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+        terraform: [12, 13]
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/cache@v1
-      id: yarn-cache
+      id: binaries-cache
       with:
         path: bin
-        key: ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+        key: ${{ runner.os }}-binaries-${{ hashFiles('**/.binaries.lock') }}
         restore-keys: |
-          ${{ runner.os }}-${{ matrix.node_version }}-binaries-${{ hashFiles('**/.binaries.lock') }}
+          ${{ runner.os }}-binaries-${{ hashFiles('**/.binaries.lock') }}
     - name: Get binaries
       run: ./get-binaries.sh
     - name: Validate
       run: ./scripts/tf-exec.sh validate
+      env:
+        TF_VERSION: ${{ matrix.terraform }}

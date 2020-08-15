@@ -6,13 +6,16 @@ An IAM policy for managing pool is provided as an output.
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.49, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | >= 2.49, < 4.0 |
 | random | n/a |
 
 ## Inputs

@@ -24,6 +24,10 @@ module "namespace" {
 }
 ```
 
+Most modules work with AWS Provider ~>2.49 and Terraform 0.12.6+.
+Note that some AWS modules may require new AWS Provider (~>3.0), due to a change in ACM certificate outputs. 
+
+
 ## Modules Summary
 
 | Module | Description |
@@ -34,18 +38,16 @@ module "namespace" {
 | [`aws-datadog-integration`](./modules/aws-datadog-integration) | Creates Lambda, role & policies necessary to run full Datadog monitoring for AWS account. |
 | [`aws-ecs-service`](./modules/aws-ecs-service) | Creates ECS service, task, ECR (Docker repository) and binds the service to existing application load balancer. |
 | [`aws-ecs-service-permissions`](./modules/aws-ecs-service-permissions) | Manages IAM permissions for ECS service and attaches a policy to read specific secrets from AWS Secret Manager. |
-| [`aws-eks-cluster`](./modules/aws-eks-cluster) | Creates managed Kubernetes cluster using `terraform-aws-modules/terraform-aws-eks` and attaches policies for autoscaling, load-balancing & DNS. |
 | [`aws-eks-iam-role-group`](./modules/aws-eks-iam-role-group) | Defines IAM-EKS binding, allowing IAM group users to perform specific set of operations on EKS cluster. |
 | [`aws-eks-namespace`](./modules/aws-eks-namespace) | Creates a namespace for Kubernetes project. Defines binding for IAM roles to allow access to EKS. Provides IAM policies that allow access to S3 buckets & ECR repositories prefixed by namespace name. |
 | [`aws-frontend`](./modules/aws-frontend) | Creates S3 bucket + CloudFormation + Route53 + Lambda@Edge setup allowing for nearly single-module SPA frontend app deployment. |
-| [`aws-generate-cert`](./modules/aws-generate-cert) | Creates and validates ssl certificate for domain in specified route53 zone. | 
+| [`aws-acm-certificate`](modules/aws-acm-certificate) | Creates and validates TLS certificate for a domain in specified Route53 zone. | 
 | [`aws-iam-user-group`](./modules/aws-iam-user-group) | Creates IAM user group, attaches users and policies to it. |
 | [`aws-kms-key`](./modules/aws-kms-key) | Creates KMS key with an alias and creates Key policy that allows to configure access using IAM. |
 | [`aws-mfa-policy`](./modules/aws-mfa-policy) | Creates Multi-Factor Authorization policy that can be attached to global user groups. |
 | [`aws-one-sm-to-many-ssm-secrets`](./modules/aws-one-sm-to-many-ssm-secrets) | Creates multiple SSM secrets from a single Secret Manager entry. |
 | [`aws-s3-authorized-keys`](./modules/aws-s3-authorized-keys) | Stores SSH keys on S3 bucket providing a script for EC2 instances to pull synchronize those keys with bucket. |
 | [`aws-users`](./modules/aws-users) | Creates a list of users within a specified IAM path. |
-| [`vault-consul-cluster`](./modules/vault-consul-cluster) | Creates Vault & Consul cluster running on EC2 instances. |
 | [`vault-oidc`](modules/vault-oidc) | Creates OpenID Connect authentication backend in Vault. |
 | [`vault-users`](modules/vault-users) | Binds OIDC aliases with identity entities to create users in Vault. |
 | [`vault-group`](./modules/vault-group) | Creates a "namespace" for storing secrets in KV store in Vault. Supports multiple environments with read-only & read-write permissions. |

@@ -95,6 +95,7 @@ function gb_fetch() {
   local NAME
   local VERSION
   local URL
+  local PATH_IN_ZIP
   local DARWIN_PLATFORM=darwin
   local LINUX_PLATFORM=linux
   for p in "$@"; do
@@ -131,6 +132,14 @@ function gb_fetch() {
 
   URL=${URL//\{version\}/${VERSION}}
   URL=${URL//\{platform\}/${URL_PLATFORM}}
+
+  PATH_IN_ZIP="${URL#*\|}"
+  if [[ "$PATH_IN_ZIP" == "$URL" ]]; then
+    PATH_IN_ZIP="$NAME"
+  else
+    URL=${URL%\|${PATH_IN_ZIP}}
+  fi
+
   local FILE="${BIN_DIR}/${NAME}"
   local TMP_FILE="${FILE}.tmp"
   local CHECKSUM
@@ -146,10 +155,14 @@ function gb_fetch() {
     gb_lockfile_check "$NAME" "$PLATFORM" "$CHECKSUM"
     if [[ "$URL" =~ \.tar\.gz$ ]]; then
       echo "→ ${NAME}: 🗃 Unpacking..."
-      tar xz -f "$TMP_FILE" -C "${BIN_DIR}"
+      local TMP_DIR="${BIN_DIR:?BIN_DIR must exist}/tmp"
+      mkdir -p "$TMP_DIR"
+      tar xz -f "$TMP_FILE" -C "$TMP_DIR" "$PATH_IN_ZIP"
+      mv "$TMP_DIR/$PATH_IN_ZIP" "$FILE"
+      rm -rf "$TMP_DIR"
     elif [[ "$URL" =~ \.zip$ ]]; then
       echo "→ ${NAME}: 🗃 Unpacking..."
-      unzip "$TMP_FILE" -d "${BIN_DIR}"
+      unzip -p "$TMP_FILE" "$PATH_IN_ZIP" > "$FILE"
     else
       cp "$TMP_FILE" "$FILE"
     fi

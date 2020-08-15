@@ -11,14 +11,18 @@ This module creates:
 
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.49, < 4.0 |
+| kubernetes | >= 1.0, < 2.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
-| kubernetes | n/a |
+| aws | >= 2.49, < 4.0 |
+| kubernetes | >= 1.0, < 2.0 |
 
 ## Inputs
 

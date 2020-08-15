@@ -118,7 +118,7 @@ module "gitlab" {
   path        = "gitlab"
   description = "This auth method gives access to Vault to everyone who has access to our GitLab instance."
 
-  vault_domain           = "vault.example.com"
+  vault_domains          = ["vault.example.com"]
   domain                 = "gitlab.example.com"
   client_id              = "<client id generated in gitlab>"
   client_secret          = var.gitlab_client_secret
