@@ -10,7 +10,7 @@ TF_VERSION="${TF_VERSION:-13}"
 
 terraform="$(realpath "./bin/terraform-$TF_VERSION")"
 
-echo "Using Terraform $TF_VERSION binary at $terraform: $(terraform -v)"
+echo "Using Terraform $TF_VERSION binary at $terraform: $($terraform -v)"
 
 function retry_with_log() {
   $@ &>/dev/null || $@
