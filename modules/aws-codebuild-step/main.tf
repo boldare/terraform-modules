@@ -1,6 +1,6 @@
 /**
  * # AWS codebuild step
- * AWS codebuild step is very simple module for building project using just one object in terraform.
+ * AWS codebuild step is very simple module for creating CodeBuild project using just one object in terraform.
  * This module creates roles and codebuild project.
  */
 
@@ -42,7 +42,7 @@ data "aws_iam_policy_document" "task_role_assume" {
 
   statement {
     effect    = "Allow"
-    resources = ["${var.pipeline_s3_arn}/*"]
+    resources = ["${var.artifact_s3_arn}/*"]
     actions = [
       "s3:PutObject",
       "s3:GetObject",
@@ -73,7 +73,7 @@ resource "aws_iam_role_policy" "role_policy" {
   policy = data.aws_iam_policy_document.task_role_assume.json
 }
 
-resource "aws_codebuild_project" "role" {
+resource "aws_codebuild_project" "project" {
   name          = var.project_name
   description   = var.description
   build_timeout = var.build_timeout
@@ -90,7 +90,7 @@ resource "aws_codebuild_project" "role" {
     type                        = var.compute_type
     image_pull_credentials_type = "CODEBUILD"
     dynamic "environment_variable" {
-      for_each = var.environment_variable
+      for_each = var.environment_variables
 
       content {
         name  = environment_variable.value["name"]
@@ -104,7 +104,5 @@ resource "aws_codebuild_project" "role" {
     type      = "CODEPIPELINE"
   }
 
-  tags = {
-    Environment = var.environment
-  }
+  tags = var.tags
 }

@@ -8,10 +8,10 @@ variable "description" {
   description = "Description of that codebuild step visible on AWS panel"
 }
 
-variable "environment" {
-  type        = string
-  default     = "None"
-  description = "Name of environment which is added to tag"
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "Map of tags set on codebuild project"
 }
 
 variable "buildspec_path" {
@@ -30,12 +30,12 @@ variable "build_timeout" {
   description = "Time in minutes that build is going to be allowed to run"
 }
 
-variable "pipeline_s3_arn" {
+variable "artifact_s3_arn" {
   type        = string
   description = "Arn of S3 where artifacts are going to be stored to"
 }
 
-variable "environment_variable" {
+variable "environment_variables" {
   type        = list(map(string))
   default     = []
   description = "list of environment variables set inside build container"
