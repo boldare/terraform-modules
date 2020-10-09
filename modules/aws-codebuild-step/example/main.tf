@@ -7,19 +7,22 @@ module "build" {
 
   project_name    = "build-${var.environment}"
   description     = "thing_that_build"
-  environment     = var.environment
-  pipeline_s3_arn = aws_s3_bucket.codepipeline_bucket.arn
+  artifact_s3_arn = aws_s3_bucket.codepipeline_bucket.arn
 
   buildspec_path = ".aws/dev/build.yaml"
   build_image    = "node:14"
   build_timeout  = "10"
 
-  environment_variable = [
+  environment_variables = [
     {
       name  = "ITS-DANGEROUS-TO-GO-ALONE-TAKE-THIS"
       value = "Cat"
     }
   ]
+
+  tags = {
+    Environment = var.environment
+  }
 }
 
 
@@ -27,15 +30,14 @@ module "deploy" {
   source = "../"
 
   project_name    = "website-deploy-${var.environment}"
-  description     = "thing_that_deploys_whatever_we_builded"
-  environment     = var.environment
-  pipeline_s3_arn = aws_s3_bucket.codepipeline_bucket.arn
+  description     = "thing_that_deploys_whatever_we_built"
+  artifact_s3_arn = aws_s3_bucket.codepipeline_bucket.arn
 
   buildspec_path = ".aws/dev/deploy.yaml"
   build_image    = "aws/codebuild/standard:4.0"
   build_timeout  = "10"
 
-  environment_variable = [
+  environment_variables = [
     {
       name  = "BUCKET_NAME"
       value = "Awesome-website"
@@ -45,6 +47,10 @@ module "deploy" {
       value = var.cf_distribution_id
     }
   ]
+
+  tags = {
+    Environment = var.environment
+  }
 }
 
 # add policy allowing user to deploy website (s3 and cloudfront)
