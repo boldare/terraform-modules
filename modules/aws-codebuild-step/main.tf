@@ -85,9 +85,9 @@ resource "aws_codebuild_project" "role" {
   }
 
   environment {
-    compute_type                = "BUILD_GENERAL1_SMALL"
+    compute_type                = var.compute_size
     image                       = var.build_image
-    type                        = "LINUX_CONTAINER"
+    type                        = var.compute_type
     image_pull_credentials_type = "CODEBUILD"
     dynamic "environment_variable" {
       for_each = var.environment_variable
