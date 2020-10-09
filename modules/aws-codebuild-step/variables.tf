@@ -32,11 +32,23 @@ variable "build_timeout" {
 
 variable "pipeline_s3_arn" {
   type        = string
-  description = "Arn of S3 where artifacts are going to be stored to "
+  description = "Arn of S3 where artifacts are going to be stored to"
 }
 
 variable "environment_variable" {
   type        = list(map(string))
   default     = []
   description = "list of environment variables set inside build container"
+}
+
+variable "compute_size" {
+  type        = string
+  default     = "BUILD_GENERAL1_SMALL"
+  description = "Compute resources the build project will use"
+}
+
+variable "compute_type" {
+  type        = string
+  default     = "LINUX_CONTAINER"
+  description = "The type of build environment to use for related builds (linux, gpu, windows, arm)"
 }
