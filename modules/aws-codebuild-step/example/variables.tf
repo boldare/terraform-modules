@@ -4,11 +4,11 @@ variable "environment" {
 }
 
 variable "repo_owner" {
-  description = "Organization/username owning repository on github "
+  description = "Organization/username owning repository on github."
 }
 
 variable "repo_name" {
-  description = "Name of repository"
+  description = "Name of repository."
 }
 
 variable "repo_branch" {
