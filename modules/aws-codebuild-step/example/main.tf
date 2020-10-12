@@ -1,4 +1,5 @@
 provider "aws" {
+  version = ">= 3.0"
   region = "us-east-1"
 }
 
@@ -6,7 +7,7 @@ module "build" {
   source = "../"
 
   project_name    = "build-${var.environment}"
-  description     = "thing_that_build"
+  description     = "Step for building our frontend app"
   artifact_s3_arn = aws_s3_bucket.codepipeline_bucket.arn
 
   buildspec_path = ".aws/dev/build.yaml"
@@ -30,7 +31,7 @@ module "deploy" {
   source = "../"
 
   project_name    = "website-deploy-${var.environment}"
-  description     = "thing_that_deploys_whatever_we_built"
+  description     = "Step for deploying our frontend app"
   artifact_s3_arn = aws_s3_bucket.codepipeline_bucket.arn
 
   buildspec_path = ".aws/dev/deploy.yaml"
@@ -108,10 +109,10 @@ resource "aws_codepipeline" "codepipeline" {
   }
 
   stage {
-    name = "Deploy-front"
+    name = "DeployFront"
 
     action {
-      name            = "Deploy-front"
+      name            = "DeployFront"
       category        = "Build"
       owner           = "AWS"
       provider        = "CodeBuild"
