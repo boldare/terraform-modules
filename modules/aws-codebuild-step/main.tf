@@ -9,10 +9,10 @@ data "aws_region" "current" {}
 
 data "aws_iam_policy_document" "task_assume" {
   statement {
-    effect = "Allow"
+    effect  = "Allow"
     actions = ["sts:AssumeRole"]
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["codebuild.amazonaws.com"]
     }
   }
