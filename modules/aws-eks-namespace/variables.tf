@@ -3,6 +3,12 @@ variable "namespace" {
   description = "The name of namespace to be created on a cluster"
 }
 
+variable "labels" {
+  type        = map(string)
+  default     = {}
+  description = "Labels that are going to be attached to namespace"
+}
+
 variable "iam_path" {
   type        = string
   default     = null

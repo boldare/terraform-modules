@@ -40,6 +40,7 @@ This module creates:
 | developers | List of IAM user names that will be added to developers group. | `list(string)` | `[]` | no |
 | developers\_iam\_policies | { name: arn } map of policies to attach to developers group. | `map(string)` | `{}` | no |
 | iam\_path | AWS IAM base path for all resources created for namespace | `string` | `null` | no |
+| labels | Labels that are going to be attached to namespace | `map(string)` | `{}` | no |
 | namespace | The name of namespace to be created on a cluster | `string` | n/a | yes |
 
 ## Outputs
