@@ -15,9 +15,8 @@ for (const key in Header) {
 }
 
 const contentSecurityPolicyHeader = Object.entries(JSON.parse(`${csp_json_string}`))
-  .map(([key, value]) => {
-    `$${key} $${value}`;
-  }).join('; ');
+  .map(([key, value]) => `$${key} $${value}`)
+  .join('; ');
 
 const headerOverrides = JSON.parse(`${custom_headers_json_string}`) || {};
 
