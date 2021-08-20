@@ -1,5 +1,10 @@
+terraform {
+  required_providers {
+    vault = "~> 2.10"
+  }
+}
+
 provider "vault" {
-  version = "~> 2.10"
   address = "https://vault.example.com"
 }
 

@@ -1,4 +1,4 @@
-data aws_iam_policy_document "s3_policy" {
+data "aws_iam_policy_document" "s3_policy" {
   statement {
     sid    = "BucketInfo"
     effect = "Allow"
@@ -24,7 +24,7 @@ resource "aws_iam_policy" "s3_policy" {
   policy = data.aws_iam_policy_document.s3_policy.json
 }
 
-data aws_iam_policy_document "s3_read_policy" {
+data "aws_iam_policy_document" "s3_read_policy" {
   statement {
     sid    = "BucketInfo"
     effect = "Allow"

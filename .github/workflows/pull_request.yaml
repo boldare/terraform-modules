@@ -19,7 +19,7 @@ jobs:
     name: Validate
     strategy:
       matrix:
-        terraform: [12, 13]
+        terraform: [1]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

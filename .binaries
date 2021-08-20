@@ -1,4 +1,3 @@
-terraform-docs  0.9.1   https://github.com/segmentio/terraform-docs/releases/download/v{version}/terraform-docs-v{version}-{platform}-amd64
-packer          1.5.4   https://releases.hashicorp.com/packer/{version}/packer_{version}_{platform}_amd64.zip
-terraform-12    0.12.29 https://releases.hashicorp.com/terraform/{version}/terraform_{version}_{platform}_amd64.zip|terraform
-terraform-13    0.13.0 https://releases.hashicorp.com/terraform/{version}/terraform_{version}_{platform}_amd64.zip|terraform
+terraform-docs  0.15.0  https://github.com/segmentio/terraform-docs/releases/download/v{version}/terraform-docs-v{version}-{platform}-amd64.tar.gz
+packer          1.6.6   https://releases.hashicorp.com/packer/{version}/packer_{version}_{platform}_amd64.zip
+terraform-1     1.0.5   https://releases.hashicorp.com/terraform/{version}/terraform_{version}_{platform}_amd64.zip|terraform
