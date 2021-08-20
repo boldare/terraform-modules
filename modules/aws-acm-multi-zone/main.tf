@@ -6,17 +6,17 @@
 # Partly based on https://gist.github.com/chancez/dfaaf799b98698839d65ebba55db7d44
 
 locals {
-  # Produces a list of maps of domain and there zone
+  # Produces a list of maps of domains and their zone
   list_of_domains_with_zone = [
-    for zone, sans in var.certificates : {
-      for san in sans :
-      san => zone
+    for zone, domains in var.certificates : {
+      for domain in domains :
+      domain => zone
     }
   ]
   # Produces a map {domain = zone}
   domain_to_zone = merge({
-    for san, zone in merge(flatten([local.list_of_domains_with_zone])...) :
-    san => zone
+    for domain, zone in merge(flatten([local.list_of_domains_with_zone])...) :
+    domain => zone
   })
 
   # A list of domains. Sorted to ensure stability if the map order changes.
@@ -39,11 +39,11 @@ resource "aws_acm_certificate" "cert" {
 
 resource "aws_route53_record" "cert_validation" {
   for_each = {
-    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
-      name    = dvo.resource_record_name
-      record  = dvo.resource_record_value
-      type    = dvo.resource_record_type
-      zone_id = local.domain_to_zone[dvo.domain_name]
+    for option in aws_acm_certificate.cert.domain_validation_options : option.domain_name => {
+      name    = option.resource_record_name
+      record  = option.resource_record_value
+      type    = option.resource_record_type
+      zone_id = local.domain_to_zone[option.domain_name]
     }
   }
 
