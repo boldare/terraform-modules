@@ -6,7 +6,7 @@ function realpath() {
   echo "$(cd "$(dirname $1)" && pwd)/$(basename $1)"
 }
 
-TF_VERSION="${TF_VERSION:-13}"
+TF_VERSION="${TF_VERSION:-1}"
 
 terraform="$(realpath "./bin/terraform-$TF_VERSION")"
 
@@ -24,7 +24,7 @@ function validate() {
   (
     cd "$dir"
     echo "🧹 Terraform: Clean cache"
-    rm -rf ".terraform"
+    rm -rf ".terraform" ".terraform.lock.hcl"
     echo "🧵 Terraform: Init"
     retry_with_log "$terraform" init -backend=false
     echo "🪁 Terraform: Validate"

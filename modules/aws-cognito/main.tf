@@ -26,7 +26,11 @@ resource "aws_cognito_user_pool" "pool" {
   ]
 
   password_policy {
-    temporary_password_validity_days = 7
+    minimum_length    = var.password_policy.minimum_length
+    require_lowercase = var.password_policy.require_lowercase
+    require_numbers   = var.password_policy.require_numbers
+    require_symbols   = var.password_policy.require_symbols
+    require_uppercase = var.password_policy.require_uppercase
   }
 
   sms_authentication_message = var.sms_authentication_message
@@ -64,14 +68,6 @@ resource "aws_cognito_user_pool" "pool" {
   sms_configuration {
     external_id    = random_uuid.cognito_external_id.id
     sns_caller_arn = aws_iam_role.sms_role.arn
-  }
-
-  password_policy {
-    minimum_length    = var.password_policy.minimum_length
-    require_lowercase = var.password_policy.require_lowercase
-    require_numbers   = var.password_policy.require_numbers
-    require_symbols   = var.password_policy.require_symbols
-    require_uppercase = var.password_policy.require_uppercase
   }
 
   dynamic "schema" {

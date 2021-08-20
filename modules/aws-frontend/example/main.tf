@@ -1,18 +1,21 @@
-provider "aws" {
-  version = "~>3.0"
-  region  = "eu-west-1"
+terraform {
+  required_providers {
+    aws = "~>3.0"
+  }
 }
 
 provider "aws" {
-  version = "~>3.0"
-  alias   = "global"
-  region  = "us-east-1"
+  region = "eu-west-1"
 }
 
 provider "aws" {
-  version = "~>3.0"
-  alias   = "hosted_zone"
-  region  = "eu-west-1"
+  alias  = "global"
+  region = "us-east-1"
+}
+
+provider "aws" {
+  alias  = "hosted_zone"
+  region = "eu-west-1"
 }
 
 module "waf" {

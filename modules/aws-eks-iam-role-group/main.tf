@@ -3,6 +3,9 @@
  * Defines AWS IAM group connected to Kubernetes Role.
  */
 
+provider "aws" {
+  region = "global"
+}
 data "aws_caller_identity" "current" {}
 
 # ----------------------------------------------------------------------------------------------------------------------

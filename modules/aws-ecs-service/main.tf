@@ -58,28 +58,26 @@ resource "aws_ecr_lifecycle_policy" "app" {
 locals {
   secrets_list = [
     for key, value in var.secrets : {
-      "name"      = key
-      "valueFrom" = value
+      name      = key
+      valueFrom = value
     }
   ]
-}
 
-data "null_data_source" "environment" {
-  count = length(keys(var.environment))
+  environment = [
+    for key, val in var.environment :
+    {
+      name  = key
+      value = val
+    }
+  ]
 
-  inputs = {
-    name  = keys(var.environment)[count.index]
-    value = values(var.environment)[count.index]
-  }
-}
-
-data "null_data_source" "port_mappings" {
-  count = length(keys(var.port_mappings))
-
-  inputs = {
-    port     = keys(var.port_mappings)[count.index]
-    protocol = values(var.port_mappings)[count.index]
-  }
+  port_mappings = [
+    for key, val in var.port_mappings :
+    {
+      port     = key
+      protocol = val
+    }
+  ]
 }
 
 resource "aws_ecs_task_definition" "this" {
@@ -99,9 +97,9 @@ resource "aws_ecs_task_definition" "this" {
       memory      = var.fargate_memory
       networkMode = "awsvpc"
       secrets     = local.secrets_list
-      environment = data.null_data_source.environment.*.outputs
+      environment = local.environment
       portMappings = [
-        for value in data.null_data_source.port_mappings.*.outputs :
+        for value in local.port_mappings :
         {
           hostPort      = tonumber(value.port)
           containerPort = tonumber(value.port)

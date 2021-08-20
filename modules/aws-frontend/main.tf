@@ -19,16 +19,6 @@
  * environment by provisioning replacement and swapping DNS entries first.
  */
 
-provider "aws" {
-  version = "~>3.0"
-  alias   = "global"
-}
-
-provider "aws" {
-  version = "~>3.0"
-  alias   = "hosted_zone"
-}
-
 # ----------------------------------------------------------------------------------------------------------------------
 # S3 BUCKET STORING FRONTEND APP
 # ----------------------------------------------------------------------------------------------------------------------
@@ -339,10 +329,10 @@ resource "aws_lambda_function" "edge_lambda" {
 # Custom Lambda functions attached to CloudFront.
 # ----------------------------------------------------------------------------------------------------------------------
 locals {
-  headers_edge_function = var.enabled && ! var.scheduled_for_deletion ? {
+  headers_edge_function = var.enabled && !var.scheduled_for_deletion ? {
     headers = "headers"
   } : {}
-  enabled_edge_functions = var.enabled && ! var.scheduled_for_deletion ? var.edge_functions : {}
+  enabled_edge_functions = var.enabled && !var.scheduled_for_deletion ? var.edge_functions : {}
 }
 
 data "archive_file" "edge_lambda_custom" {
