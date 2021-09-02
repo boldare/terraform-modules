@@ -13,6 +13,11 @@ output "iam_role" {
   description = "AWS IAM role ID with all necessary permissions for managing Kubernetes, assumable by this group."
 }
 
+output "iam_path" {
+  value       = var.iam_path
+  description = "Temp"
+}
+
 output "kubernetes_role" {
   value       = var.kubernetes_role
   description = "Kubernetes role for this IAM group. Can be used in 'aws-auth' ConfigMap as 'username' entry."

@@ -58,6 +58,11 @@ output "developer_role" {
   description = "AWS IAM role ID with all necessary permissions for monitoring Kubernetes, assumable by developers group."
 }
 
+output "developer_iam_path" {
+  value       = module.developers.iam_path
+  description = "Temp"
+}
+
 output "developers_aws_auth_entry" {
   value       = module.developers.aws_auth_entry
   description = "An IAM-Kubernetes binding for developers group, that has to be put to 'aws-auth' ConfigMap."
