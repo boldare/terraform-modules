@@ -1,3 +1,7 @@
+locals {
+  ecr_arns = length(var.ecr_arn_list) > 0 ? var.ecr_arn_list : ["arn:aws:ecr:*:*:repository/${var.namespace_name}/*"]
+}
+
 data "aws_iam_policy_document" "ecr_policy" {
   statement {
     sid    = "RepositoryInfoAndCreation"
@@ -13,7 +17,7 @@ data "aws_iam_policy_document" "ecr_policy" {
     sid       = "RepositoryAllAccess"
     effect    = "Allow"
     actions   = ["*"]
-    resources = ["arn:aws:ecr:*:*:repository/${var.namespace_name}/*"]
+    resources = local.ecr_arns
   }
 }
 
@@ -41,7 +45,7 @@ data "aws_iam_policy_document" "ecr_read_policy" {
       "ecr:GetLifecyclePolicy",
       "ecr:DescribeImages"
     ]
-    resources = ["arn:aws:ecr:*:*:repository/${var.namespace_name}/*"]
+    resources = local.ecr_arns
   }
 }
 

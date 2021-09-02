@@ -21,6 +21,12 @@ variable "create_ci_iam_user" {
   description = "Whether to create a dedicated IAM user for CI"
 }
 
+variable "ecr_arn_list" {
+  description = "ECR repository ARN list. If not provided there will be created ECR repo with the same name as namespace"
+  type = list(string)
+  default = []
+}
+
 # ------------------
 # ADMIN GROUP
 # ------------------

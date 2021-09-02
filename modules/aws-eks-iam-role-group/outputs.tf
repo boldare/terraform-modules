@@ -31,7 +31,7 @@ output "kubernetes_namespace" {
 output "aws_auth_entry" {
   description = "An IAM-Kubernetes binding that has to be put to aws-auth ConfigMap."
   value = {
-    rolearn  = var.iam_path == null ? aws_iam_role.iam_role.arn : replace(replace(aws_iam_role.iam_role.arn, var.iam_path, ""), "/\\/{2,}/", "/")
+    rolearn  = var.iam_path == null ? aws_iam_role.iam_role.arn : replace(aws_iam_role.iam_role.arn, "/${var.iam_path}/", "/")
     username = var.kubernetes_role
     groups   = [local.kubernetes_group]
   }
