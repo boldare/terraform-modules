@@ -26,6 +26,7 @@ locals {
 module "aws_namespace" {
   source         = "./aws"
   namespace_name = local.namespace_name
+  ecr_arn_list   = var.ecr_arn_list
 }
 
 # ----------------------------------------------------------------------------------------------------------------------
