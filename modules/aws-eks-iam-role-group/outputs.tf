@@ -18,6 +18,11 @@ output "iam_path" {
   description = "Temp"
 }
 
+output "iam_role_arn" {
+  value       = aws_iam_role.iam_role.arn
+  description = "Temp"
+}
+
 output "kubernetes_role" {
   value       = var.kubernetes_role
   description = "Kubernetes role for this IAM group. Can be used in 'aws-auth' ConfigMap as 'username' entry."

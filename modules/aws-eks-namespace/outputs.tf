@@ -54,6 +54,11 @@ output "developers_group" {
 }
 
 output "developer_role" {
+  value       = module.developers.iam_role_arn
+  description = "AWS IAM role ID with all necessary permissions for monitoring Kubernetes, assumable by developers group."
+}
+
+output "developer_role_arn" {
   value       = module.developers.iam_role
   description = "AWS IAM role ID with all necessary permissions for monitoring Kubernetes, assumable by developers group."
 }
