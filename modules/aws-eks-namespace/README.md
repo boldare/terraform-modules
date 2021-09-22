@@ -54,6 +54,7 @@ This module creates:
 | <a name="input_developer_kubernetes_role_rules_extra"></a> [developer\_kubernetes\_role\_rules\_extra](#input\_developer\_kubernetes\_role\_rules\_extra) | Additional Kubernetes role rules to add to developer group. | <pre>list(object({<br>    resources  = list(string)<br>    api_groups = list(string)<br>    verbs      = list(string)<br>  }))</pre> | `[]` | no |
 | <a name="input_developers"></a> [developers](#input\_developers) | List of IAM user names that will be added to developers group. | `list(string)` | `[]` | no |
 | <a name="input_developers_iam_policies"></a> [developers\_iam\_policies](#input\_developers\_iam\_policies) | { name: arn } map of policies to attach to developers group. | `map(string)` | `{}` | no |
+| <a name="input_ecr_arn_list"></a> [ecr\_arn\_list](#input\_ecr\_arn\_list) | ECR repository ARN list. If not provided there will be created ECR repo with the same name as namespace | `list(string)` | `[]` | no |
 | <a name="input_iam_path"></a> [iam\_path](#input\_iam\_path) | AWS IAM base path for all resources created for namespace | `string` | `null` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Labels that are going to be attached to namespace | `map(string)` | `{}` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The name of namespace to be created on a cluster | `string` | n/a | yes |
