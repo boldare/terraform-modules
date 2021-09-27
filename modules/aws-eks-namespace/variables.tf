@@ -23,8 +23,8 @@ variable "create_ci_iam_user" {
 
 variable "ecr_arn_list" {
   description = "ECR repository ARN list. If not provided there will be created ECR repo with the same name as namespace"
-  type = list(string)
-  default = []
+  type        = list(string)
+  default     = []
 }
 
 # ------------------
