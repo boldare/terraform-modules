@@ -136,7 +136,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  default_root_object = "index.html"
+  default_root_object = var.default_root_object
   http_version        = "http2"
   aliases             = local.domains
   tags                = var.tags
@@ -248,7 +248,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   custom_error_response {
     error_code            = 404
-    response_page_path    = "/index.html"
+    response_page_path    = var.not_found_page_path
     response_code         = 200
     error_caching_min_ttl = 30
   }
