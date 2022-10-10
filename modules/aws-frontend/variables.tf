@@ -103,3 +103,16 @@ variable "scheduled_for_deletion" {
   default     = false
   description = "Enable this to disconnect Lambda@Edge functions from CloudFront distribution and enables force_Destroy on S3 bucket. It's necessary to proceed with module deletion."
 }
+
+variable "default_root_object" {
+  type        = string
+  description = "The object that you want CloudFront to return when an end user requests the root URL." 
+  default     = "index.html"
+}
+
+variable "not_found_page_path" {
+  type        = string
+  description = "Fallback file to return when 404 error is encountered" 
+  default     = "/index.html"
+}
+
