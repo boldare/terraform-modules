@@ -314,7 +314,7 @@ resource "aws_lambda_function" "edge_lambda" {
   function_name    = "${var.name}-lambda-edge"
   handler          = "index.handler"
   role             = aws_iam_role.edge_lambda[0].arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs18.x"
   timeout          = 5
   filename         = data.archive_file.edge_lambda[0].output_path
   source_code_hash = data.archive_file.edge_lambda[0].output_base64sha256
